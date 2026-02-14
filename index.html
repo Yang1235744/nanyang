@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>关于我们 - 南阳数码工作室</title>
+<title>南阳数码工作室</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box;font-family:"Microsoft YaHei",sans-serif;}
 body{background:url(https://picsum.photos/id/1036/1920/1080) no-repeat center center fixed;background-size:cover;position:relative;min-height:100vh;color:#fff;}
@@ -12,27 +12,104 @@ body::before{content:"";position:absolute;top:0;left:0;width:100%;height:100%;ba
 .nav .logo{font-size:22px;font-weight:bold;color:#87CEEB;}
 .nav .menu a{color:#ccc;text-decoration:none;margin-left:25px;font-size:16px;}
 .nav .menu a:hover{color:#fff;}
-.container{width:100%;max-width:800px;margin:0 auto;padding:140px 20px 80px;text-align:center;}
-.container h1{font-size:36px;color:#87CEEB;margin-bottom:30px;}
-.about-text{background:rgba(0,0,0,0.4);border:1px solid #444;border-radius:12px;padding:40px;text-align:left;line-height:2;font-size:17px;}
+.container{width:100%;max-width:900px;margin:0 auto;padding:120px 20px 50px;text-align:center;}
+.container h1{font-size:38px;color:#87CEEB;margin-bottom:20px;}
+.container .desc{font-size:18px;color:#eee;line-height:1.6;margin-bottom:40px;}
+.btn-box{display:flex;flex-wrap:wrap;justify-content:center;gap:15px;margin-bottom:30px;}
+.btn{padding:12px 24px;border-radius:6px;text-decoration:none;font-weight:bold;font-size:16px;color:#fff;border:none;cursor:pointer;}
+.btn-red{background:#dc3545;}
+.btn-blue{background:#007bff;}
+.btn-green{background:#28a745;}
+.btn-cyan{background:#00bcd4;}
+.dropdown{position:relative;display:inline-block;}
+.dropdown-content{display:none;position:absolute;top:100%;left:0;background-color:#222;min-width:220px;border-radius:6px;box-shadow:0 8px 16px rgba(0,0,0,0.3);z-index:1000;margin-top:5px;}
+.dropdown-content a{color:#fff;padding:12px 16px;text-decoration:none;display:block;text-align:left;font-size:14px;}
+.dropdown-content a:hover{background:#007bff;}
+.divider{height:1px;background:#444;margin:4px 0;}
+.dropdown:hover .dropdown-content{display:block;}
+.triangle{font-size:12px;}
+.tip{color:#ffd700;font-size:15px;line-height:1.8;margin-bottom:20px;}
+.tool-pw{color:#ffc107;font-size:16px;font-weight:bold;margin-top:10px;}
+.pe-info{color:#fff;font-size:14px;margin-top:8px;}
+.modal{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.6);z-index:998;align-items:center;justify-content:center;}
+.modal.show{display:flex;}
+.modal-content{background:#1a1a1a;border:1px solid #444;border-radius:10px;width:90%;max-width:700px;padding:30px;text-align:center;}
 </style>
 </head>
 <body>
+
 <div class="nav">
   <div class="logo">南阳数码工作室</div>
   <div class="menu">
     <a href="./index.html">首页</a>
     <a href="https://www.microsoft.com" target="_blank">微软官方地址</a>
-    <a href="./index.html" onclick="openModal()">系统镜像下载</a>
+    <a onclick="openModal()">系统镜像下载</a>
     <a href="./about.html">关于我们</a>
   </div>
 </div>
-<div class="container">
-  <h1>关于我们</h1>
-  <div class="about-text">
-    欢迎使用南阳数码工作室提供的官方镜像与魔改镜像，还有 PE，欢迎使用，使完记得好评哟。<br><br>
-    记住这个官网，我们永远支持您对我们的支持，我们不会像那些流氓官网似的，我们是纯净官网。
+
+<div class="modal" id="modal">
+  <div class="modal-content">
+    <h2 style="margin-bottom:20px">系统镜像下载</h2>
+    <div class="btn-box">
+      <a href="https://www.microsoft.com/zh-cn/software-download/windows11" class="btn btn-red" target="_blank">微软 Windows 11 官方下载</a>
+      <div class="dropdown">
+        <button class="btn btn-blue">下载更多 Windows 系统经典版、魔改版 <span class="triangle">▼</span></button>
+        <div class="dropdown-content">
+          <a href="#" target="_blank">Windows 7 纯净版</a>
+          <a href="#" target="_blank">Windows 10 LTSC 精简版</a>
+          <a href="#" target="_blank">Windows 11 魔改优化版</a>
+          <a href="#" target="_blank">Windows XP 怀旧版</a>
+          <a href="#" target="_blank">Windows Server 2019 服务器版</a>
+          <div class="divider"></div>
+          <a href="https://www.123684.com/s/s9H3Td-6tQg" target="_blank">123云盘下载</a>
+          <a href="https://pan.xunlei.com/s/VOlQYgS0mqDUNwzd6BEig76UA1#" target="_blank">迅雷云盘下载（提取码：6h6d）</a>
+        </div>
+      </div>
+    </div>
+    <div class="btn-box">
+      <a href="https://wwwbfp.lanzout.com/iyXKk3ihaz8" class="btn btn-green" target="_blank">下载激活工具</a>
+      <a href="https://www.123865.com/s/s9H3Td-TiQg" class="btn btn-cyan" target="_blank">新手PE下载</a>
+    </div>
+    <p class="tool-pw">激活工具解压密码：c2xm</p>
+    <p class="pe-info">新手小白不会安装PE，可直接点击上方「新手PE下载」</p>
   </div>
 </div>
+
+<div class="container">
+  <h1>南阳数码工作室</h1>
+  <p class="desc">专注电脑维修、系统魔改、刷机、服务器搭建<br>提供纯净Windows系统镜像，无捆绑、无篡改</p>
+  <div class="btn-box">
+    <a href="https://www.microsoft.com/zh-cn/software-download/windows11" class="btn btn-red" target="_blank">微软 Windows 11 官方下载</a>
+    <div class="dropdown">
+      <button class="btn btn-blue">下载更多 Windows 系统经典版、魔改版 <span class="triangle">▼</span></button>
+      <div class="dropdown-content">
+        <a href="#" target="_blank">Windows 7 纯净版</a>
+        <a href="#" target="_blank">Windows 10 LTSC 精简版</a>
+        <a href="#" target="_blank">Windows 11 魔改优化版</a>
+        <a href="#" target="_blank">Windows XP 怀旧版</a>
+        <a href="#" target="_blank">Windows Server 2019 服务器版</a>
+        <div class="divider"></div>
+        <a href="https://www.123684.com/s/s9H3Td-6tQg" target="_blank">123云盘下载</a>
+        <a href="https://pan.xunlei.com/s/VOlQYgS0mqDUNwzd6BEig76UA1#" target="_blank">迅雷云盘下载（提取码：6h6d）</a>
+      </div>
+    </div>
+  </div>
+  <p class="tip">此网站提供官方原版镜像，无任何捆绑软件，纯净无广告。<br>如无系统激活密钥，可下载下方激活工具，使用前请临时关闭安全管家/Windows Defender，避免被误报删除。</p>
+  <div class="btn-box">
+    <a href="https://wwwbfp.lanzout.com/iyXKk3ihaz8" class="btn btn-green" target="_blank">下载激活工具</a>
+    <a href="https://www.123865.com/s/s9H3Td-TiQg" class="btn btn-cyan" target="_blank">新手PE下载</a>
+  </div>
+  <p class="tool-pw">激活工具解压密码：c2xm</p>
+  <p class="pe-info">新手小白不会安装PE，可直接点击上方「新手PE下载」</p>
+</div>
+
+<script>
+function openModal(){document.getElementById('modal').classList.add('show');}
+document.getElementById('modal').addEventListener('click',function(e){
+  if(e.target === this) this.classList.remove('show');
+});
+</script>
 </body>
 </html>
+
