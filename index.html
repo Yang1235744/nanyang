@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>南阳数码工作室</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            background: #000 url("https://picsum.photos/id/1018/1920/1080") center center / cover no-repeat fixed;
+            color: #fff;
+            font-family: "Microsoft YaHei", sans-serif;
+            text-align: center;
+            padding-top: 100px;
+        }
+        /* 背景遮罩+淡入动画 */
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            animation: fadeIn 2s ease-in-out;
+            z-index: -1;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        /* 顶部导航栏+下滑动画 */
+        .top-nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 20px;
+            background-color: rgba(17, 17, 17, 0.8);
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            animation: slideDown 1s ease-out;
+            z-index: 999;
+        }
+        @keyframes slideDown {
+            from { transform: translateY(-100%); }
+            to { transform: translateY(0); }
+        }
+        .top-nav .left {
+            color: #ccc;
+            font-size: 14px;
+        }
+        .top-nav .right a {
+            color: #ccc;
+            text-decoration: none;
+            margin-left: 20px;
+            font-size: 14px;
+            transition: color 0.3s;
+        }
+        .top-nav .right a:hover {
+            color: #fff;
+        }
+        /* 标题副标题+上滑淡入动画 */
+        h1 {
+            font-size: 28px;
+            margin-top: 30px;
+            margin-bottom: 10px;
+            color: #87CEEB;
+            animation: fadeInUp 1.5s ease-out;
+        }
+        .subtitle {
+            font-size: 14px;
+            color: #ccc;
+            margin-bottom: 30px;
+            animation: fadeInUp 1.8s ease-out;
+        }
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        /* 按钮组+上滑淡入动画 */
+        .btn-group {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-bottom: 20px;
+            animation: fadeInUp 2.1s ease-out;
+        }
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            color: #fff;
+            font-size: 14px;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+        .btn-blue {
+            background-color: #007bff;
+        }
+        .btn-red {
+            background-color: #dc3545;
+        }
+        .btn-green {
+            background-color: #28a745;
+        }
+        /* 按钮悬浮动画 */
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+        /* 说明文字+上滑淡入动画 */
+        .desc {
+            max-width: 800px;
+            margin: 0 auto 20px;
+            color: #ffd700;
+            line-height: 1.5;
+            font-size: 13px;
+            animation: fadeInUp 2.4s ease-out;
+        }
+        /* 激活工具按钮动画 */
+        .active-tool {
+            animation: fadeInUp 2.7s ease-out;
+        }
+    </style>
+</head>
+<body>
+    <!-- 顶部导航栏 -->
+    <div class="top-nav">
+        <div class="left">南阳数码工作室</div>
+        <div class="right">
+            <a href="index.html">首页</a>
+            <a href="about.html">关于我们</a>
+            <a href="https://www.microsoft.com/zh-cn">微软官网</a>
+        </div>
+    </div>
+
+    <h1>南阳数码工作室</h1>
+    <p class="subtitle">专注电脑维修、系统魔改、刷机、服务器搭建</p>
+
+    <div class="btn-group">
+        <!-- 微软官方 Windows 11 下载 -->
+        <a href="https://www.microsoft.com/zh-cn/software-download/windows11" class="btn btn-red">微软 Windows 11 官方下载</a>
+        <!-- 更多Windows系统下载，已替换为指定链接 -->
+        <a href="https://www.123684.com/s/s9H3Td-ztQg" class="btn btn-blue">下载更多 Windows 系统经典版、魔改版</a>
+    </div>
+
+    <div class="desc">
+        <p>此网站提供官方镜像，安心下载，无捆绑软件，纯净系统。</p>
+        <p>如无激活密钥，可下载下方激活工具，记得关闭安全管家，否则会自动删除。</p>
+    </div>
+
+    <div class="active-tool">
+        <a href="#" class="btn btn-green">下载激活工具</a>
+    </div>
+</body>
+</html>
