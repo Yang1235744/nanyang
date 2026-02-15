@@ -7,7 +7,6 @@
 <style>
 *{margin:0;padding:0;box-sizing:border-box;font-family:"Microsoft YaHei",sans-serif;}
 
-/* 这里加了背景图 + 黑色半透明遮罩 */
 body{
   background:url(https://picsum.photos/id/1036/1920/1080) no-repeat center center fixed;
   background-size:cover;
@@ -36,10 +35,10 @@ body::before{
 .message.ai{justify-content:flex-start;}
 .message-content{max-width:75%;padding:12px 18px;border-radius:18px;line-height:1.6;}
 .message.user .message-content{background:#007bff;border-bottom-right-radius:4px;}
-.message.ai .message-content{background:#1a1a1a;border:1px solid #333;border-bottom-left-radius:4px;}
+.message.ai{background:#1a1a1a;border:1px solid #333;border-bottom-left-radius:4px;}
 
 .input-container{display:flex;gap:10px;}
-#user-input{flex:1;padding:14px 20px;border-radius:25px;border:none;background:rgba(255,255,255,0.1);color:#fff;font-size:16px;outline:none;backdrop-filter:blur(8px);}
+#user-input{flex:1;padding:14px 20px;border-radius:25px;border:none;background:rgba(255,255,255,0.1);color:#fff;font-size:16px;outline:none;}
 #send-btn{padding:14px 24px;border-radius:25px;border:none;background:#00bcd4;color:#fff;font-weight:bold;cursor:pointer;}
 
 .typing-indicator{display:none;padding:12px 18px;background:#1a1a1a;border-radius:18px;}
@@ -63,7 +62,7 @@ body::before{
 <div class="chat-container">
   <div class="chat-messages" id="chat-messages">
     <div class="message ai">
-      <div class="message-content">你好！我是南阳数码智能AI，已连接服务器！</div>
+      <div class="message-content">你好！双模式已启动，自动识别本地/外网</div>
     </div>
   </div>
   <div class="typing-indicator" id="typing-indicator">
@@ -76,52 +75,81 @@ body::before{
 </div>
 
 <script>
-const chat = document.getElementById('chat-messages');
-const input = document.getElementById('user-input');
-const btn = document.getElementById('send-btn');
-const typing = document.getElementById('typing-indicator');
+// ===================== 你要的：自动检测 + 双模式 =====================
+// 在外 → 用你上传 GitHub 的服务
+// 在家 → 用你本地电脑的服务
+class AIClient {
+  constructor() {
+    this.chat = document.getElementById('chat-messages');
+    this.input = document.getElementById('user-input');
+    this.btn = document.getElementById('send-btn');
+    this.typing = document.getElementById('typing-indicator');
 
-function send() {
-  let text = input.value.trim();
-  if(!text) return;
-  addMsg(text, true);
-  input.value = '';
-  typing.style.display = 'block';
+    // 优先本地，失败自动用你上传的外网服务
+    this.serverList = [
+      "http://192.168.1.55:5000/api/chat",  // 家里本地
+      "/api/chat"                           // 你上传的外网服务
+    ];
 
-  // 你的服务器IP
-  fetch('/api/chat', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ message: text })
-  })
-  .then(res => res.json())
-  .then(data => {
-    typing.style.display = 'none';
-    addMsg(data.reply, false);
-  })
-  .catch(err => {
-    typing.style.display = 'none';
-    addMsg("服务器连接失败，请检查服务是否启动。", false);
-    console.error(err);
-  });
+    this.bind();
+  }
+
+  bind() {
+    this.btn.onclick = () => this.send();
+    this.input.onkeypress = (e) => e.key === 'Enter' && this.send();
+  }
+
+  addMsg(text, isUser) {
+    const div = document.createElement('div');
+    div.className = `message ${isUser ? 'user' : 'ai'}`;
+    const c = document.createElement('div');
+    c.className = 'message-content';
+    c.innerText = text;
+    div.appendChild(c);
+    this.chat.appendChild(div);
+    this.chat.scrollTop = this.chat.scrollHeight;
+  }
+
+  async send() {
+    const text = this.input.value.trim();
+    if (!text) return;
+
+    this.addMsg(text, true);
+    this.input.value = '';
+    this.typing.style.display = 'block';
+
+    this.tryConnect(text, 0);
+  }
+
+  // 自动检测：先试本地，不行就用你上传的服务
+  async tryConnect(text, index) {
+    if (index >= this.serverList.length) {
+      this.typing.style.display = 'none';
+      this.addMsg("服务未启动，请检查后台", false);
+      return;
+    }
+
+    const url = this.serverList[index];
+    try {
+      const res = await fetch(url, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ message: text })
+      });
+      const data = await res.json();
+      this.typing.style.display = 'none';
+      this.addMsg(data.reply, false);
+    } catch (e) {
+      this.tryConnect(text, index + 1);
+    }
+  }
 }
 
-function addMsg(text, isUser) {
-  let div = document.createElement('div');
-  div.className = `message ${isUser ? 'user' : 'ai'}`;
-  let c = document.createElement('div');
-  c.className = 'message-content';
-  c.innerText = text;
-  div.appendChild(c);
-  chat.appendChild(div);
-  chat.scrollTop = chat.scrollHeight;
-}
-
-btn.addEventListener('click', send);
-input.addEventListener('keypress', e => e.key === 'Enter' && send());
+new AIClient();
 </script>
 </body>
 </html>
+
 
 
 
