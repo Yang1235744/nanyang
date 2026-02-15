@@ -40,16 +40,16 @@ body::before{
 }
 #send-btn{
   width:44px;height:44px;border-radius:50%;
-  background:#38bdf8;color:#fff;border:none;
+  background:#38bdf8;color:#fff;border:none;cursor:pointer;
 }
-#think-btn{
+#deepseek-btn{
   padding:8px 14px;border-radius:18px;
-  background:#252d3a;color:#e6e6e6;border:none;font-size:13px;
+  background:#252d3a;color:#e6e6e6;border:none;font-size:13px;cursor:pointer;
 }
-#think-btn.on{background:#38bdf8;color:#fff;}
+#deepseek-btn.on{background:#38bdf8;color:#fff;}
 #camera-btn{
   display:none;width:44px;height:44px;
-  border-radius:50%;background:#252d3a;color:#fff;border:none;font-size:18px;
+  border-radius:50%;background:#252d3a;color:#fff;border:none;font-size:18px;cursor:pointer;
 }
 .msg{margin:14px 0;display:flex;}
 .msg.user{justify-content:flex-end;}
@@ -73,12 +73,93 @@ body::before{
 </div>
 <div class="chat-box" id="chat-box"></div>
 <div class="input-bar">
-  <button id="think-btn">深度思考</button>
+  <button id="deepseek-btn">深度思考</button>
   <input id="input-text" placeholder="输入问题...">
   <button id="camera-btn">📷</button>
   <button id="send-btn">➤</button>
 </div>
 <iframe id="core-frame"></iframe>
-<script>(function(){const e=document,t=e.getElementById("chat-box"),o=e.getElementById("input-text"),n=e.getElementById("send-btn"),i=e.getElementById("think-btn"),a=e.getElementById("camera-btn"),r=/Android|iPhone|iPad|iPod/.test(navigator.userAgent);r&&(a.style.display="block");let s=!1;function c(e,t){const o=e.createElement("div");o.className=t?"msg user":"msg ai";const n=e.createElement("div");n.className="msg-bubble";n.innerText=e;o.appendChild(n);t.appendChild(o);t.scrollTop=t.scrollHeight}c("你好，我是南阳数码工作室的 AI 分身，为您提供帮助。",!1,t);function d(e){const t=e.toLowerCase().trim();if(t.includes("难过")||t.includes("不开心")||t.includes("烦"))return"我在这里陪着你，有什么都可以慢慢说，我会一直听。";if(t.includes("开心")||t.includes("好棒"))return"太好了！听到你这么说我也特别开心～";if(t.includes("蓝屏"))return"蓝屏一般是驱动、内存接触不良或系统问题，可以重插内存，更新官方驱动，或安装纯净系统。";if(t.includes("卡顿")||t.includes("慢"))return"电脑卡通常是C盘空间不足、开机自启太多，换固态、关自启就能明显变快。";if(t.includes("黑屏")||t.includes("没信号"))return"黑屏先检查视频线和内存，独显要接显卡接口，重新插紧内存基本能解决。";if(t.includes("装系统"))return"用8G以上U盘制作启动盘，新电脑用UEFI+GPT，安装纯净系统最稳定。";if(t.includes("你好")||t.includes("在吗"))return"你好，我是南阳分身助手，很高兴为你服务。";return s?"【深度分析】我已全面分析你的问题，确保准确好用，有需要可以继续问我细节。":"我在呢，你继续说，我认真听。"}i.onclick=function(){s=!s;i.classList.toggle("on",s);i.innerText=s?"深度思考 ON":"深度思考"};n.onclick=function(){const e=o.value.trim();e&&(c(e,!0,t),o.value="",setTimeout(()=>c(d(e),!1,t),700))};o.onkeypress=function(e){e.key==="Enter"&&n.click()};a.onclick=function(){const e=document.createElement("input");e.type="file";e.accept="image/*";e.capture="environment";e.onchange=function(){c("已收到图片，正在分析电脑问题...",!1,t);setTimeout(()=>{const e=["看起来是蓝屏/驱动问题，建议重装官方驱动。","看起来是黑屏/线材问题，检查视频线和内存。","看起来是系统卡顿，清理C盘或更换固态。","看起来是机箱内部接触不良，重新插紧硬件。"];c(e[Math.floor(Math.random()*e.length)],!1,t)},1500)};e.click()}})()</script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const chatBox = document.getElementById('chat-box');
+  const inputText = document.getElementById('input-text');
+  const sendBtn = document.getElementById('send-btn');
+  const deepseekBtn = document.getElementById('deepseek-btn');
+  const cameraBtn = document.getElementById('camera-btn');
+  const isMobile = /Android|iPhone|iPad|iPod/.test(navigator.userAgent);
+  
+  // 手机显示相机
+  if (isMobile) cameraBtn.style.display = 'block';
+  
+  let deepseekOn = false;
+  
+  // 发送消息函数
+  function addMessage(text, isUser) {
+    const msgDiv = document.createElement('div');
+    msgDiv.className = isUser ? 'msg user' : 'msg ai';
+    const bubble = document.createElement('div');
+    bubble.className = 'msg-bubble';
+    bubble.textContent = text;
+    msgDiv.appendChild(bubble);
+    chatBox.appendChild(msgDiv);
+    chatBox.scrollTop = chatBox.scrollHeight;
+  }
+  
+  // 初始欢迎语
+  addMessage('你好，我是南阳数码工作室的 AI 分身，为您提供帮助。', false);
+  
+  // AI回复逻辑
+  function getReply(input) {
+    const txt = input.toLowerCase().trim();
+    if (txt.includes('蓝屏')) return '蓝屏多为驱动/内存问题，重插内存、装纯净驱动即可';
+    if (txt.includes('卡顿')) return '电脑卡：清C盘、关自启、换固态，立竿见影';
+    if (txt.includes('黑屏')) return '黑屏先查视频线/内存，独显接显卡接口，重插内存';
+    if (txt.includes('装系统')) return '用8G+U盘做启动盘，UEFI+GPT，装纯净系统最稳';
+    if (txt.includes('你好') || txt.includes('在吗')) return '你好，我是南阳分身助手，随时为你服务';
+    return deepseekOn ? '【深度分析】已全面分析，确保准确，可继续问细节' : '我在呢，你继续说';
+  }
+  
+  // 深度思考按钮
+  deepseekBtn.addEventListener('click', function() {
+    deepseekOn = !deepseekOn;
+    deepseekBtn.classList.toggle('on', deepseekOn);
+    deepseekBtn.textContent = deepseekOn ? '深度思考 ON' : '深度思考';
+  });
+  
+  // 发送按钮
+  sendBtn.addEventListener('click', function() {
+    const val = inputText.value.trim();
+    if (!val) return;
+    addMessage(val, true);
+    inputText.value = '';
+    setTimeout(() => addMessage(getReply(val), false), 600);
+  });
+  
+  // 回车发送
+  inputText.addEventListener('keypress', function(e) {
+    if (e.key === 'Enter') sendBtn.click();
+  });
+  
+  // 相机按钮（修复版）
+  cameraBtn.addEventListener('click', function() {
+    const fileInput = document.createElement('input');
+    fileInput.type = 'file';
+    fileInput.accept = 'image/*';
+    fileInput.onchange = function() {
+      addMessage('已收到图片，正在分析...', false);
+      setTimeout(() => {
+        const replies = [
+          '看起来是蓝屏/驱动问题，建议重装官方纯净驱动',
+          '看起来是黑屏/线材问题，检查视频线与内存',
+          '看起来是系统卡顿，清理C盘或更换固态',
+          '看起来是硬件接触不良，重新插紧内存/显卡'
+        ];
+        addMessage(replies[Math.floor(Math.random()*replies.length)], false);
+      }, 1200);
+    };
+    fileInput.click();
+  });
+});
+</script>
 </body>
 </html>
