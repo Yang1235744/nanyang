@@ -1,3 +1,86 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>南阳数码智能AI</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:"Microsoft YaHei",sans-serif;}
+
+/* 这里加了背景图 + 黑色半透明遮罩 */
+body{
+  background:url(https://picsum.photos/id/1036/1920/1080) no-repeat center center fixed;
+  background-size:cover;
+  position:relative;
+  min-height:100vh;
+  color:#fff;
+}
+body::before{
+  content:"";
+  position:fixed;
+  top:0;left:0;
+  width:100%;height:100%;
+  background:rgba(0,0,0,0.7);
+  z-index:-1;
+}
+
+.nav{position:fixed;top:0;left:0;width:100%;padding:15px 30px;background:rgba(0,0,0,0.9);display:flex;justify-content:space-between;align-items:center;z-index:999;}
+.nav .logo{font-size:22px;font-weight:bold;color:#00bcd4;}
+.nav .menu a{color:#ccc;text-decoration:none;margin-left:25px;font-size:16px;}
+.nav .menu a:hover{color:#00bcd4;}
+
+.chat-container{width:100%;max-width:900px;margin:90px auto 0;padding:20px;display:flex;flex-direction:column;height:calc(100vh - 90px);}
+.chat-messages{flex:1;overflow-y:auto;margin-bottom:20px;padding-right:10px;}
+.message{margin-bottom:15px;display:flex;}
+.message.user{justify-content:flex-end;}
+.message.ai{justify-content:flex-start;}
+.message-content{max-width:75%;padding:12px 18px;border-radius:18px;line-height:1.6;}
+.message.user .message-content{background:#007bff;border-bottom-right-radius:4px;}
+.message.ai .message-content{background:#1a1a1a;border:1px solid #333;border-bottom-left-radius:4px;}
+
+.input-container{display:flex;gap:10px;}
+#user-input{flex:1;padding:14px 20px;border-radius:25px;border:none;background:rgba(255,255,255,0.1);color:#fff;font-size:16px;outline:none;backdrop-filter:blur(8px);}
+#send-btn{padding:14px 24px;border-radius:25px;border:none;background:#00bcd4;color:#fff;font-weight:bold;cursor:pointer;}
+
+.typing-indicator{display:none;padding:12px 18px;background:#1a1a1a;border-radius:18px;}
+.typing-indicator span{display:inline-block;width:8px;height:8px;border-radius:50%;background:#00bcd4;margin:0 2px;animation:typing 1.4s infinite;}
+.typing-indicator span:nth-child(2){animation-delay:0.2s;}
+.typing-indicator span:nth-child(3){animation-delay:0.4s;}
+@keyframes typing{0%,60%,100%{transform:translateY(0);opacity:0.7;}30%{transform:translateY(-6px);opacity:1;}}
+</style>
+</head>
+<body>
+
+<div class="nav">
+  <div class="logo">南阳数码工作室</div>
+  <div class="menu">
+    <a href="index.html">首页</a>
+    <a href="about.html">关于我们</a>
+    <a href="ai.html">AI助手</a>
+  </div>
+</div>
+
+<div class="chat-container">
+  <div class="chat-messages" id="chat-messages">
+    <div class="message ai">
+      <div class="message-content">你好！我是南阳数码智能AI，已连接服务器！</div>
+    </div>
+  </div>
+  <div class="typing-indicator" id="typing-indicator">
+    <span></span><span></span><span></span>
+  </div>
+  <div class="input-container">
+    <input type="text" id="user-input" placeholder="输入你的问题..." autocomplete="off">
+    <button id="send-btn">发送</button>
+  </div>
+</div>
+
+<script>
+const chat = document.getElementById('chat-messages');
+const input = document.getElementById('user-input');
+const btn = document.getElementById('send-btn');
+const typing = document.getElementById('typing-indicator');
+
 function send() {
   let text = input.value.trim();
   if(!text) return;
@@ -5,12 +88,10 @@ function send() {
   input.value = '';
   typing.style.display = 'block';
 
-  // 这里用你服务器的IP地址
+  // 你的服务器IP
   fetch('http://192.168.1.55:5000/api/chat', {
     method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
+    headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ message: text })
   })
   .then(res => res.json())
@@ -24,6 +105,22 @@ function send() {
     console.error(err);
   });
 }
+
+function addMsg(text, isUser) {
+  let div = document.createElement('div');
+  div.className = `message ${isUser ? 'user' : 'ai'}`;
+  let c = document.createElement('div');
+  c.className = 'message-content';
+  c.innerText = text;
+  div.appendChild(c);
+  chat.appendChild(div);
+  chat.scrollTop = chat.scrollHeight;
 }
+
+btn.addEventListener('click', send);
+input.addEventListener('keypress', e => e.key === 'Enter' && send());
+</script>
+</body>
+</html>
 
 
