@@ -34,6 +34,20 @@ body::before{content:"";position:absolute;top:0;left:0;width:100%;height:100%;ba
 .modal{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.6);z-index:998;align-items:center;justify-content:center;}
 .modal.show{display:flex;}
 .modal-content{background:#1a1a1a;border:1px solid #444;border-radius:10px;width:90%;max-width:700px;padding:30px;text-align:center;}
+
+/* AI 头像样式 */
+.ai-avatar{
+  position:fixed;
+  right:20px;
+  bottom:20px;
+  width:60px;
+  height:60px;
+  border-radius:50%;
+  border:3px solid #00bcd4;
+  object-fit:cover;
+  cursor:pointer;
+  z-index:999;
+}
 </style>
 </head>
 <body>
@@ -45,6 +59,7 @@ body::before{content:"";position:absolute;top:0;left:0;width:100%;height:100%;ba
     <a href="https://www.microsoft.com" target="_blank">微软官方地址</a>
     <a onclick="openModal()">系统镜像下载</a>
     <a href="./about.html">关于我们</a>
+    <a href="./ai.html">AI 助手</a>
   </div>
 </div>
 
@@ -104,6 +119,9 @@ body::before{content:"";position:absolute;top:0;left:0;width:100%;height:100%;ba
   <p class="pe-info">新手小白不会安装PE，可直接点击上方「新手PE下载」</p>
 </div>
 
+<!-- AI 头像 → 点击跳 AI 页面 -->
+<img src="https://picsum.photos/id/1036/80/80" class="ai-avatar" onclick="location.href='./ai.html'">
+
 <script>
 function openModal(){document.getElementById('modal').classList.add('show');}
 document.getElementById('modal').addEventListener('click',function(e){
@@ -112,4 +130,5 @@ document.getElementById('modal').addEventListener('click',function(e){
 </script>
 </body>
 </html>
+
 
