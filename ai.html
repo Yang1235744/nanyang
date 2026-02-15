@@ -9,155 +9,203 @@
 html,body{height:100%;color:#fff;}
 body{
   background:url(https://picsum.photos/id/1036/1920/1080) no-repeat center center fixed;
-  background-size:cover;position:relative;
+  background-size:cover;
+  position:relative;
 }
 body::before{
-  content:"";position:fixed;top:0;left:0;width:100%;height:100%;
-  background:rgba(0,0,0,0.75);z-index:-1;
+  content:"";
+  position:fixed;
+  top:0;left:0;
+  width:100%;height:100%;
+  background:rgba(0,0,0,0.75);
+  z-index:-1;
 }
+
 .topbar{
-  position:fixed;top:0;left:0;width:100%;height:56px;
-  background:rgba(20,26,40,0.9);display:flex;align-items:center;
-  padding:0 20px;z-index:99;
+  position:fixed; top:0; left:0; width:100%; height:56px;
+  background:rgba(20,26,40,0.9);
+  display:flex; align-items:center;
+  padding:0 20px; z-index:99;
 }
-.logo{font-size:18px;color:#38bdf8;font-weight:600;}
-.menu{margin-left:auto;display:flex;gap:16px;}
-.menu a{color:#c0c6d6;text-decoration:none;font-size:14px;}
-.chat-box{
-  position:fixed;top:56px;left:0;width:100%;
+.logo{font-size:18px; color:#38bdf8; font-weight:600;}
+.menu{margin-left:auto; display:flex; gap:16px;}
+.menu a{color:#c0c6d6; text-decoration:none; font-size:14px;}
+
+.chat-container{
+  position:fixed; top:56px; left:0; width:100%;
   height:calc(100% - 124px);
-  padding:15px;overflow-y:auto;
+  padding:15px; overflow-y:auto;
 }
+
+.welcome{
+  background:rgba(30,37,50,0.9);
+  padding:12px 16px; border-radius:12px;
+  margin-bottom:15px; text-align:center;
+}
+.download-btn{
+  display:inline-block; margin-top:8px;
+  background:#38bdf8; color:#fff;
+  padding:8px 16px; border-radius:8px;
+  text-decoration:none; font-size:14px;
+}
+
 .input-bar{
-  position:fixed;bottom:0;left:0;width:100%;height:68px;
-  background:rgba(20,26,40,0.9);display:flex;align-items:center;
-  padding:0 15px;gap:10px;
+  position:fixed; bottom:0; left:0; width:100%; height:68px;
+  background:rgba(20,26,40,0.9);
+  display:flex; align-items:center;
+  padding:0 15px; gap:10px;
 }
 #input-text{
-  flex:1;height:44px;border-radius:22px;
-  border:none;background:rgba(30,37,50,0.9);
-  color:#fff;padding:0 18px;font-size:15px;outline:none;
+  flex:1; height:44px; border-radius:22px;
+  border:none; background:rgba(30,37,50,0.9);
+  color:#fff; padding:0 18px;
+  font-size:15px; outline:none;
 }
 #send-btn{
-  width:44px;height:44px;border-radius:50%;
-  background:#38bdf8;color:#fff;border:none;cursor:pointer;
+  width:44px; height:44px; border-radius:50%;
+  background:#38bdf8; color:#fff; border:none; cursor:pointer;
+}
+#camera-btn{
+  display:none; width:44px; height:44px;
+  border-radius:50%; background:#252d3a;
+  color:#fff; border:none; font-size:18px; cursor:pointer;
 }
 #deepseek-btn{
-  padding:8px 14px;border-radius:18px;
-  background:#252d3a;color:#e6e6e6;border:none;font-size:13px;cursor:pointer;
+  padding:8px 12px; border-radius:18px;
+  background:#252d3a; color:#fff; border:none;
+  font-size:13px; cursor:pointer;
 }
-#deepseek-btn.on{background:#38bdf8;color:#fff;}
-#camera-btn{
-  display:none;width:44px;height:44px;
-  border-radius:50%;background:#252d3a;color:#fff;border:none;font-size:18px;cursor:pointer;
+#deepseek-btn.on{
+  background:#38bdf8;
 }
-.msg{margin:14px 0;display:flex;}
+
+.msg{margin:14px 0; display:flex; align-items:flex-start; gap:8px;}
 .msg.user{justify-content:flex-end;}
-.msg-bubble{
-  max-width:75%;padding:10px 14px;
-  border-radius:18px;line-height:1.5;font-size:15px;
+.avatar{
+  width:36px; height:36px; border-radius:50%;
+  background:url(https://picsum.photos/id/1036/200/200) center center / cover;
+  flex-shrink:0;
 }
-.msg.user .msg-bubble{background:#38bdf8;color:#fff;border-bottom-right-radius:6px;}
-.msg.ai .msg-bubble{background:rgba(30,37,50,0.9);color:#e6e6e6;border-bottom-left-radius:6px;}
-#core-frame{position:fixed;opacity:0;pointer-events:none;width:1px;height:1px;top:-100px;left:-100px;z-index:-999;}
+.msg-bubble{
+  max-width:70%; padding:10px 14px;
+  border-radius:18px; line-height:1.5; font-size:15px;
+  white-space: pre-wrap;
+}
+.msg.user .msg-bubble{
+  background:#38bdf8; color:#fff; border-bottom-right-radius:6px;
+}
+.msg.ai .msg-bubble{
+  background:rgba(30,37,50,0.9); color:#e6e6e6; border-bottom-left-radius:6px;
+}
 </style>
 </head>
 <body>
+
 <div class="topbar">
-  <div class="logo">南阳数码工作室</div>
+  <div class="logo">南阳数码分身助手为您提供服务</div>
   <div class="menu">
     <a href="index.html">首页</a>
     <a href="about.html">关于我们</a>
     <a href="ai.html">AI助手</a>
   </div>
 </div>
-<div class="chat-box" id="chat-box"></div>
+
+<div class="chat-container" id="chat-container">
+  <div class="welcome">
+    <div>系统镜像下载</div>
+    <a href="#" class="download-btn" id="auto_download">点击获取镜像</a>
+  </div>
+</div>
+
 <div class="input-bar">
   <button id="deepseek-btn">深度思考</button>
   <input id="input-text" placeholder="输入问题...">
   <button id="camera-btn">📷</button>
   <button id="send-btn">➤</button>
 </div>
-<iframe id="core-frame"></iframe>
+
 <script>
-document.addEventListener('DOMContentLoaded', function() {
-  const chatBox = document.getElementById('chat-box');
-  const inputText = document.getElementById('input-text');
-  const sendBtn = document.getElementById('send-btn');
-  const deepseekBtn = document.getElementById('deepseek-btn');
+document.addEventListener('DOMContentLoaded', function(){
+  const chat = document.getElementById('chat-container');
+  const input = document.getElementById('input-text');
+  const send = document.getElementById('send-btn');
   const cameraBtn = document.getElementById('camera-btn');
+  const deepseekBtn = document.getElementById('deepseek-btn');
+  const downloadLink = document.getElementById('auto_download');
+
+  let deepseek = false;
   const isMobile = /Android|iPhone|iPad|iPod/.test(navigator.userAgent);
-  
-  // 手机显示相机
   if (isMobile) cameraBtn.style.display = 'block';
-  
-  let deepseekOn = false;
-  
-  // 发送消息函数
-  function addMessage(text, isUser) {
-    const msgDiv = document.createElement('div');
-    msgDiv.className = isUser ? 'msg user' : 'msg ai';
+
+  downloadLink.href = 'https://www.baidu.com/s?wd=南阳数码 系统镜像下载';
+
+  function addMsg(text, isUser){
+    const div = document.createElement('div');
+    div.className = isUser ? 'msg user' : 'msg ai';
+    if(!isUser) div.innerHTML = '<div class="avatar"></div>';
     const bubble = document.createElement('div');
     bubble.className = 'msg-bubble';
-    bubble.textContent = text;
-    msgDiv.appendChild(bubble);
-    chatBox.appendChild(msgDiv);
-    chatBox.scrollTop = chatBox.scrollHeight;
+    bubble.innerText = text;
+    div.appendChild(bubble);
+    chat.appendChild(div);
+    chat.scrollTop = chat.scrollHeight;
   }
-  
-  // 初始欢迎语
-  addMessage('你好，我是南阳数码工作室的 AI 分身，为您提供帮助。', false);
-  
-  // AI回复逻辑
-  function getReply(input) {
-    const txt = input.toLowerCase().trim();
-    if (txt.includes('蓝屏')) return '蓝屏多为驱动/内存问题，重插内存、装纯净驱动即可';
-    if (txt.includes('卡顿')) return '电脑卡：清C盘、关自启、换固态，立竿见影';
-    if (txt.includes('黑屏')) return '黑屏先查视频线/内存，独显接显卡接口，重插内存';
-    if (txt.includes('装系统')) return '用8G+U盘做启动盘，UEFI+GPT，装纯净系统最稳';
-    if (txt.includes('你好') || txt.includes('在吗')) return '你好，我是南阳分身助手，随时为你服务';
-    return deepseekOn ? '【深度分析】已全面分析，确保准确，可继续问细节' : '我在呢，你继续说';
+
+  function aiReply(text){
+    const t = text.toLowerCase().trim();
+    if(t.includes('你是谁') || t.includes('你叫什么')){
+      return '我是南阳数码分身助手呀';
+    }
+    if(t.includes('镜像') || t.includes('下载') || t.includes('系统')){
+      return '点击上方按钮即可下载南阳数码纯净系统镜像';
+    }
+    if(t.includes('编程') || t.includes('代码') || t.includes('写程序') || t.includes('html')){
+      return deepseek 
+       ? '【深度思考·编程】\n我可以帮你写：HTML、JS、CSS、批处理、系统脚本、简单软件。\n你要写什么？'
+        : '我可以帮你写代码、编程、做网页脚本。';
+    }
+    if(t.includes('蓝屏') || t.includes('卡') || t.includes('死机') || t.includes('电脑')){
+      return '检查驱动、关闭多余启动项、用纯净系统，基本都能解决。';
+    }
+    if(t.includes('谢谢') || t.includes('感谢')){
+      return '不客气，我是南阳数码分身助手，随时为您服务。';
+    }
+    if(t.includes('你会什么') || t.includes('能干什么')){
+      return '我会：系统解答、镜像下载、编程写代码、电脑维修指导。';
+    }
+    return deepseek 
+      ? '【深度思考】\n我已认真分析你的问题，会更详细为你解答。'
+      : '我是南阳数码分身助手，很高兴为您提供帮助。';
   }
-  
-  // 深度思考按钮
-  deepseekBtn.addEventListener('click', function() {
-    deepseekOn = !deepseekOn;
-    deepseekBtn.classList.toggle('on', deepseekOn);
-    deepseekBtn.textContent = deepseekOn ? '深度思考 ON' : '深度思考';
+
+  deepseekBtn.addEventListener('click', function(){
+    deepseek = !deepseek;
+    deepseekBtn.classList.toggle('on', deepseek);
+    deepseekBtn.textContent = deepseek ? '深度思考 ON' : '深度思考';
   });
-  
-  // 发送按钮
-  sendBtn.addEventListener('click', function() {
-    const val = inputText.value.trim();
-    if (!val) return;
-    addMessage(val, true);
-    inputText.value = '';
-    setTimeout(() => addMessage(getReply(val), false), 600);
+
+  function sendMsg(){
+    const val = input.value.trim();
+    if(!val) return;
+    addMsg(val, true);
+    input.value = '';
+    setTimeout(()=>addMsg(aiReply(val), false), 600);
+  }
+
+  send.addEventListener('click', sendMsg);
+  input.addEventListener('keypress', function(e){
+    if(e.key === 'Enter') sendMsg();
   });
-  
-  // 回车发送
-  inputText.addEventListener('keypress', function(e) {
-    if (e.key === 'Enter') sendBtn.click();
-  });
-  
-  // 相机按钮（修复版）
-  cameraBtn.addEventListener('click', function() {
-    const fileInput = document.createElement('input');
-    fileInput.type = 'file';
-    fileInput.accept = 'image/*';
-    fileInput.onchange = function() {
-      addMessage('已收到图片，正在分析...', false);
-      setTimeout(() => {
-        const replies = [
-          '看起来是蓝屏/驱动问题，建议重装官方纯净驱动',
-          '看起来是黑屏/线材问题，检查视频线与内存',
-          '看起来是系统卡顿，清理C盘或更换固态',
-          '看起来是硬件接触不良，重新插紧内存/显卡'
-        ];
-        addMessage(replies[Math.floor(Math.random()*replies.length)], false);
-      }, 1200);
+
+  cameraBtn.addEventListener('click', function(){
+    const inp = document.createElement('input');
+    inp.type = 'file';
+    inp.accept = 'image/*';
+    inp.onchange = () => {
+      addMsg('[已发送图片]', true);
+      setTimeout(()=>addMsg('图片已收到，我会帮你分析。', false), 600);
     };
-    fileInput.click();
+    inp.click();
   });
 });
 </script>
