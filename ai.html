@@ -3,26 +3,36 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AI 助手 - 南阳数码工作室</title>
+<title>南阳数码智能AI助手</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box;font-family:"Microsoft YaHei",sans-serif;}
 body{background:url(https://picsum.photos/id/1036/1920/1080) no-repeat center center fixed;background-size:cover;position:relative;min-height:100vh;color:#fff;}
-body::before{content:"";position:absolute;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.6);z-index:-1;}
-.nav{position:fixed;top:0;left:0;width:100%;padding:15px 30px;background:rgba(0,0,0,0.85);display:flex;justify-content:space-between;align-items:center;z-index:999;}
-.nav .logo{font-size:22px;font-weight:bold;color:#87CEEB;}
+body::before{content:"";position:absolute;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.65);z-index:-1;}
+.nav{position:fixed;top:0;left:0;width:100%;padding:15px 30px;background:rgba(0,0,0,0.9);display:flex;justify-content:space-between;align-items:center;z-index:999;}
+.nav .logo{font-size:22px;font-weight:bold;color:#00bcd4;}
 .nav .menu a{color:#ccc;text-decoration:none;margin-left:25px;font-size:16px;}
-.nav .menu a:hover{color:#fff;}
-.container{width:100%;max-width:800px;margin:0 auto;padding:120px 20px 50px;}
-.container h1{font-size:32px;color:#87CEEB;margin-bottom:20px;text-align:center;}
-.version{text-align:center;color:#ccc;font-size:14px;margin-bottom:20px;}
-.chat-box{background:rgba(0,0,0,0.5);border:1px solid #00bcd4;border-radius:10px;padding:20px;height:500px;overflow-y:auto;margin-bottom:15px;}
-.chat-user{text-align:right;margin:10px 0;}
-.chat-user span{background:#007bff;color:#fff;padding:10px 14px;border-radius:8px;display:inline-block;max-width:75%;line-height:1.6;}
-.chat-ai{text-align:left;margin:10px 0;}
-.chat-ai span{background:#222;color:#fff;padding:10px 14px;border-radius:8px;display:inline-block;max-width:75%;line-height:1.6;border:1px solid #00bcd4;}
-.think{color:#00bcd4;font-size:14px;margin:5px 0;padding-left:5px;}
-.chat-input{width:100%;padding:12px 15px;border-radius:8px;border:none;background:#222;color:#fff;font-size:16px;outline:none;}
-.send-btn{width:100%;background:#00bcd4;color:#fff;border:none;padding:12px;border-radius:8px;margin-top:10px;font-size:16px;cursor:pointer;}
+.nav .menu a:hover{color:#00bcd4;}
+.chat-container{width:100%;max-width:900px;margin:90px auto 0;padding:20px;display:flex;flex-direction:column;height:calc(100vh - 90px);}
+.chat-messages{flex:1;overflow-y:auto;margin-bottom:20px;padding-right:10px;}
+.chat-messages::-webkit-scrollbar{width:6px;}
+.chat-messages::-webkit-scrollbar-thumb{background:#00bcd4;border-radius:3px;}
+.message{margin-bottom:15px;display:flex;animation:fadeIn 0.3s ease;}
+@keyframes fadeIn{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:translateY(0);}}
+.message.user{justify-content:flex-end;}
+.message.ai{justify-content:flex-start;}
+.message-content{max-width:75%;padding:12px 18px;border-radius:18px;line-height:1.6;}
+.message.user .message-content{background:#007bff;border-bottom-right-radius:4px;}
+.message.ai .message-content{background:#1a1a1a;border:1px solid #333;border-bottom-left-radius:4px;}
+.input-container{display:flex;gap:10px;}
+#user-input{flex:1;padding:14px 20px;border-radius:25px;border:none;background:rgba(255,255,255,0.1);color:#fff;font-size:16px;outline:none;backdrop-filter:blur(10px);}
+#user-input::placeholder{color:#aaa;}
+#send-btn{padding:14px 24px;border-radius:25px;border:none;background:#00bcd4;color:#fff;font-weight:bold;cursor:pointer;transition:all 0.2s;}
+#send-btn:hover{background:#00a0b0;transform:scale(1.03);}
+.typing-indicator{display:none;padding:12px 18px;background:#1a1a1a;border-radius:18px;border-bottom-left-radius:4px;max-width:70px;}
+.typing-indicator span{display:inline-block;width:8px;height:8px;border-radius:50%;background:#00bcd4;margin:0 2px;animation:typing 1.4s infinite;}
+.typing-indicator span:nth-child(2){animation-delay:0.2s;}
+.typing-indicator span:nth-child(3){animation-delay:0.4s;}
+@keyframes typing{0%,60%,100%{transform:translateY(0);opacity:0.7;}30%{transform:translateY(-10px);opacity:1;}}
 </style>
 </head>
 <body>
@@ -32,230 +42,153 @@ body::before{content:"";position:absolute;top:0;left:0;width:100%;height:100%;ba
   <div class="menu">
     <a href="./index.html">首页</a>
     <a href="https://www.microsoft.com" target="_blank">微软官方地址</a>
-    <a href="./index.html">系统镜像下载</a>
     <a href="./about.html">关于我们</a>
     <a href="./ai.html">AI 助手</a>
   </div>
 </div>
 
-<div class="container">
-  <h1>南洋数码 AI 助手</h1>
-  <div class="version">beta · DeepSeek 深度思考 · 全网知识库</div>
-
-  <div class="chat-box" id="chatBox">
-    <div class="chat-ai"><span>你好！我是南阳数码智能AI，内置全网电脑故障知识库，有任何电脑问题都可以问我！</span></div>
+<div class="chat-container">
+  <div class="chat-messages" id="chat-messages">
+    <div class="message ai">
+      <div class="message-content">
+        你好！我是南阳数码智能AI，有任何问题都可以问我！
+      </div>
+    </div>
   </div>
-
-  <input type="text" class="chat-input" id="msgInput" placeholder="输入你的问题..." autocomplete="off">
-  <button class="send-btn" onclick="sendMsg()">发送</button>
+  <div class="typing-indicator" id="typing-indicator">
+    <span></span><span></span><span></span>
+  </div>
+  <div class="input-container">
+    <input type="text" id="user-input" placeholder="输入你的问题..." autocomplete="off">
+    <button id="send-btn">发送</button>
+  </div>
 </div>
 
 <script>
-// 全网电脑维修知识库引擎文档
-const knowledgeBase = {
-  // 问候
-  greet: [
-    "你好！我是南阳数码智能AI，内置全网电脑故障知识库，有任何电脑问题都可以问我！",
-    "哈喽！我是南阳数码AI助手，随时为你解答系统、硬件、故障等问题。",
-    "你好！我在呢，电脑有什么状况直接说，我来帮你分析。"
-  ],
-  // 官网信息
-  official: [
-    "我们是南阳数码工作室，专注提供纯净版Windows系统、官方镜像、魔改优化版、PE工具、系统激活工具，所有资源均为纯净版本，安全无捆绑，免费使用。",
-    "官网提供：Windows 11官方原版、Windows 10 LTSC、Windows 7纯净版、Windows XP怀旧版、Windows Server服务器版，支持123云盘、迅雷云盘下载，安全稳定。",
-    "激活工具在首页下载，解压密码：c2xm。使用前可临时关闭系统防护，避免误报。",
-    "我们提供新手专用纯净PE工具，适合小白一键制作U盘启动盘、安装系统，操作简单、兼容性强、无额外捆绑。",
-    "本站所有系统与工具均为纯净版本，不添加任何额外内容，保证系统流畅、稳定、安全。"
-  ],
-  // 蓝屏故障
-  blueScreen: [
-    "【蓝屏维修教程】\n1. 先记录蓝屏代码，不同代码对应不同故障。\n2. 0x0000007B：硬盘模式或系统引导损坏，进BIOS改硬盘模式为AHCI，或重装系统。\n3. 0x00000116：显卡驱动崩溃，卸载显卡驱动，安装官方稳定版。\n4. 0x000000D1：网卡/声卡驱动冲突，更新驱动。\n5. 0x00000050：内存错误，拔插内存、清理金手指。\n6. 通用方案：最近装过软件就卸载，更新所有硬件官方驱动，检查内存硬盘，重装纯净系统。"
-  ],
-  // 卡顿、慢
-  slow: [
-    "【电脑卡顿维修教程】\n1. 任务管理器查看CPU、内存、磁盘占用。\n2. 关闭开机自启项目。\n3. 清理C盘垃圾、临时文件。\n4. 桌面文件不要太多，转移到D盘。\n5. 机械硬盘换成固态硬盘，速度提升巨大。\n6. 增加内存条，至少8G起步。\n7. 杀毒、清理异常程序。\n8. 最彻底：重装纯净版系统。"
-  ],
-  // 不开机、黑屏
-  noPower: [
-    "【不开机/黑屏维修教程】\n1. 检查电源插座、电源线、显示器线是否插紧。\n2. 台式机：拔插内存，擦金手指；检查显卡是否松动。\n3. 笔记本：拔掉电源、电池，长按开机键30秒放电。\n4. 听是否有报警声，判断内存/显卡故障。\n5. 替换法测试电源、内存、显卡。\n6. 硬件正常则是系统损坏，进PE重装系统。"
-  ],
-  // 没网、连不上网
-  noNet: [
-    "【网络故障维修教程】\n1. 重启路由器、光猫。\n2. 检查网线是否插好、损坏。\n3. 右键网络图标，疑难解答自动修复。\n4. 重装官方网卡驱动。\n5. 设置IP和DNS为自动获取。\n6. 禁用再启用网卡。\n7. 检查是否网络被限制、宽带欠费。\n8. 仍不行：可能是网卡硬件损坏。"
-  ],
-  // 没声音、声音异常
-  noSound: [
-    "【声音故障维修教程】\n1. 检查音量是否开启，是否静音。\n2. 确认选择正确的播放设备（耳机/扬声器）。\n3. 重启Windows音频服务。\n4. 卸载并安装官方声卡驱动。\n5. 检查耳机/音响是否损坏。\n6. 前置面板没声音：进BIOS打开HD Audio前置。"
-  ],
-  // C盘满、变红
-  cFull: [
-    "【C盘爆满维修教程】\n1. 删除系统临时文件：C:\\Windows\\Temp、%temp%。\n2. 关闭系统休眠：powercfg -h off。\n3. 转移虚拟内存到D盘。\n4. 卸载安装在C盘的大型软件。\n5. 清理系统更新缓存。\n6. 使用纯净工具扩展C盘分区大小。\n7. 桌面、文档、下载文件夹移动到D盘。"
-  ],
-  // 驱动问题
-  drive: [
-    "【驱动故障维修教程】\n1. 驱动异常会导致：蓝屏、卡顿、没声音、没网、分辨率异常。\n2. 优先去硬件官网下载官方原版驱动。\n3. 显卡驱动崩溃：进安全模式卸载驱动，再安装稳定版。\n4. Unknown Device：未识别设备，需安装主板芯片组驱动。\n5. 不建议使用自动驱动工具，容易装错。"
-  ],
-  // 自动重启、自动关机
-  restart: [
-    "【自动重启/关机维修教程】\n1. 温度过高：CPU风扇不转、灰尘太多、散热不良。\n2. 电源功率不足或损坏。\n3. 系统设置：取消“系统失败自动重启”。\n4. 病毒或系统文件损坏。\n5. 内存、硬盘故障。\n6. 台式机检查CPU供电线，笔记本检查电池与电源适配器。"
-  ],
-  // 进不去系统、卡在logo
-  noSystem: [
-    "【进不去系统维修教程】\n1. 开机按F8尝试进入安全模式。\n2. 安全模式进不去：系统文件损坏。\n3. 使用PE启动盘，修复引导、修复系统。\n4. 检查硬盘是否有坏道。\n5. 备份资料后，重装纯净版系统最稳妥。"
-  ],
-  // 硬盘故障
-  disk: [
-    "【硬盘故障维修教程】\n1. 硬盘异响：磁头损坏，立刻断电，不要再开机，防止数据彻底丢失。\n2. 硬盘不识别：检查SATA线、供电，换接口测试。\n3. 坏道检测：用硬盘工具扫描坏道。\n4. 有坏道：尽快备份数据，更换硬盘。\n5. 固态硬盘掉速：擦除或恢复出厂，严重则更换。"
-  ],
-  // 风扇响、噪音大、温度高
-  fan: [
-    "【风扇/温度高维修教程】\n1. 灰尘太多：拆机清灰。\n2. 风扇缺油、老化：更换风扇。\n3. 硅脂干了：重新涂抹导热硅脂。\n4. 笔记本：垫高机身，保证通风。\n5. 设置风扇智能转速。\n6. 温度长期过高会导致死机、蓝屏、硬件损坏。"
-  ],
-  // U盘装PE（全网最详细版）
-  pe: [
-    "【U盘安装PE系统 全网最详细教程】\n\n" +
-    "一、准备工作\n" +
-    "1. 硬件：8GB及以上空U盘（重要：数据会被清空，请提前备份）。\n" +
-    "2. 软件：从南阳数码工作室官网下载【纯净版PE工具】和对应系统镜像（ISO文件）。\n\n" +
-    "二、制作U盘启动盘\n" +
-    "1. 插入U盘，右键点击“此电脑”，确认U盘盘符（如：F:）。\n" +
-    "2. 解压下载的纯净版PE工具，以管理员身份运行主程序。\n" +
-    "3. 在程序界面中，选择你的U盘盘符，勾选“格式化U盘”选项。\n" +
-    "4. 点击“开始制作”，等待进度条完成（约3-5分钟）。\n" +
-    "5. 制作完成后，将系统镜像（ISO文件）复制到U盘根目录。\n\n" +
-    "三、设置电脑从U盘启动\n" +
-    "1. 插入制作好的U盘，重启电脑。\n" +
-    "2. 开机时快速按下启动热键（常见：F12、F2、ESC、Del，不同品牌主板不同）。\n" +
-    "3. 在启动菜单中，选择你的U盘名称（通常显示为U盘品牌或“USB HDD”）。\n" +
-    "4. 回车确认，电脑将从U盘启动，进入PE系统。\n\n" +
-    "四、进入PE后的操作\n" +
-    "1. 进入PE桌面后，可进行：安装系统、修复引导、备份/恢复数据、分区管理等操作。\n" +
-    "2. 安装系统：运行PE内的“CGI备份还原”或“WinNTSetup”工具，选择系统镜像和目标分区，点击“开始”。\n" +
-    "3. 修复引导：使用“引导修复”工具，自动修复系统启动项。\n\n" +
-    "五、常见问题排查\n" +
-    "1. 制作失败：尝试更换U盘或USB接口，关闭杀毒软件后重试。\n" +
-    "2. 无法从U盘启动：检查BIOS中是否开启了“USB启动”，或尝试更换启动热键。\n" +
-    "3. 进入PE后找不到硬盘：进BIOS修改硬盘模式为AHCI，或加载PE内的磁盘驱动。"
-  ],
-  // 磁盘严重掉盘
-  diskDrop: [
-    "【磁盘严重掉盘维修教程】\n1. 立刻备份重要数据，防止彻底损坏。\n2. 检查SATA/PCIe接口和线缆是否松动，重新插拔。\n3. 使用硬盘检测工具扫描坏道和健康状态。\n4. 若为固态硬盘，尝试安全擦除或更新固件。\n5. 健康度低于50%或有大量坏道，建议立即更换硬盘。\n6. 频繁掉盘可能是电源供电不稳或主板兼容性问题。"
-  ],
-  // 显示器/显示问题
-  display: [
-    "【显示器/显示故障维修教程】\n1. 无信号：检查视频线（HDMI/DP/VGA）是否插紧，更换线材测试。\n2. 花屏/闪屏：更新显卡驱动，检查显卡是否松动，或显卡硬件损坏。\n3. 分辨率异常：安装显卡驱动，在显示设置中调整正确分辨率。\n4. 屏幕闪烁：更新显卡驱动，检查刷新率设置，或更换显示器。\n5. 笔记本屏幕不亮：按Fn+亮度键，或外接显示器判断是屏幕还是显卡问题。"
-  ],
-  // 电池/电源问题
-  battery: [
-    "【电池/电源故障维修教程】\n1. 笔记本不充电：检查电源适配器是否损坏，更换适配器测试。\n2. 电池鼓包：立即停止使用，更换新电池，防止漏液。\n3. 续航骤降：电池老化，更换电池；或关闭后台耗电程序。\n4. 台式机断电：检查电源供电线，更换电源测试。\n5. 电源指示灯不亮：电源损坏或主板供电故障。"
-  ],
-  // 主板/BIOS问题
-  bios: [
-    "【主板/BIOS故障维修教程】\n1. 进不去BIOS：清空CMOS电池，短接CMOS针脚重置。\n2. BIOS乱码：更新BIOS版本，或主板电池没电。\n3. 启动项丢失：进BIOS重新设置硬盘为第一启动项。\n4. 主板报警：根据报警声判断内存/显卡/CPU故障。\n5. 主板不识别硬件：更新BIOS，检查硬件兼容性。"
-  ],
-  // 通用回答
-  general: [
-    "我明白你的意思了，这个问题通常可以从驱动、系统、硬件三个方向排查，你先试试重装官方驱动，不行再考虑系统。",
-    "你这个情况很常见，大多是系统或设置问题，你可以先重启试试，不行再用纯净版系统修复。",
-    "这个问题我知道，按照电脑维修经验，先检查软件设置，再看硬件是否正常，一步步来就能解决。",
-    "你描述的情况，大概率是系统文件或驱动问题，重装纯净系统一般都能解决。",
-    "这个故障我遇到很多，先按简单的来：重启、检查驱动、清理垃圾，不行再考虑硬件。",
-    "我理解你说的情况，你可以先从最常见的原因排查：系统、驱动、硬盘、内存，按这个顺序来。",
-    "这个问题不用急，按照维修思路，先软后硬，先弄系统和驱动，再看硬件。",
-    "你这个问题比较常见，我给你说最简单有效的方法：先修复系统，不行就重装纯净版。",
-    "我懂你意思了，这种情况一般是设置或兼容性问题，调整一下就能正常。",
-    "根据电脑维修经验，你这个问题优先考虑系统和驱动，这两个是最容易出问题的。"
-  ],
-  // 感谢
-  thanks: [
-    "不客气！能帮到你就好。",
-    "没事！有问题再来找我就行。",
-    "不客气！祝你电脑一直流畅稳定。"
-  ],
-  // 无关问题拦截
-  irrelevant: "这是南洋数码工作室提供的AI智能AI，我无法为您提供这些问题。"
+const AIEngine = {
+  knowledge: {
+    msDownload: {
+      keywords: ["微软镜像","微软系统","win11官方","win10官方","微软官网下载"],
+      reply: "你需要我为你提供微软官方的镜像下载链接吗？让我帮助您下载吗？"
+    },
+    system: {
+      keywords: ["系统下载","镜像","win11","win10","win7","xp","纯净版"],
+      reply: "首页点击「系统镜像下载」即可获取官方原版、魔改优化版系统，无捆绑无广告。"
+    },
+    activate: {
+      keywords: ["激活","工具","密钥","c2xm","解压密码"],
+      reply: "激活工具解压密码：c2xm，使用前请临时关闭杀毒软件。"
+    },
+    pe: {
+      keywords: ["pe","启动盘","重装系统","u盘","新手pe"],
+      reply: "首页可直接下载新手PE，一键制作U盘启动，适合小白安装系统。"
+    },
+    fix: {
+      keywords: ["电脑故障","蓝屏","死机","卡顿","黑屏","重启","报错"],
+      reply: "先排查软件（驱动、系统、病毒），再检查硬件（内存、硬盘、散热、电源）。"
+    },
+    time: {
+      keywords: ["时间","几点","现在","日期","几号","星期"],
+      reply: () => {
+        let d = new Date();
+        let y = d.getFullYear();
+        let m = d.getMonth()+1;
+        let day = d.getDate();
+        let h = d.getHours();
+        let mi = String(d.getMinutes()).padStart(2,'0');
+        let week = "星期"+"日一二三四五六"[d.getDay()];
+        return `现在时间：${y}年${m}月${day}日 ${h}:${mi} ${week}`;
+      }
+    },
+    server: {
+      keywords: ["服务器","搭建","linux","宝塔","网站","mc","我的世界"],
+      reply: "支持Linux服务器搭建、宝塔面板、网站部署、MC服务器、无政府服搭建。"
+    },
+    disk: {
+      keywords: ["硬盘","坏道","修复","数据恢复","ssd","hdd"],
+      reply: "机械硬盘可修复坏道，固态可量产，重要文件请先备份！"
+    }
+  },
+
+  think(input) {
+    input = input.toLowerCase().trim();
+    let best = null;
+    let max = 0;
+
+    for(let key in this.knowledge) {
+      let item = this.knowledge[key];
+      let score = 0;
+      item.keywords.forEach(w => {
+        if(input.includes(w)) score++;
+      });
+      if(score > max) {
+        max = score;
+        best = item;
+      }
+    }
+
+    if(best) {
+      return typeof best.reply === "function" ? best.reply() : best.reply;
+    }
+
+    return "我是南阳数码智能AI，你可以问我电脑、系统、下载、维修、服务器等任何问题！";
+  }
 };
 
-// 随机获取回答
-function getRandomAnswer(ary) {
-  return ary[Math.floor(Math.random() * ary.length)];
-}
+const chat = document.getElementById('chat-messages');
+const input = document.getElementById('user-input');
+const btn = document.getElementById('send-btn');
+const typing = document.getElementById('typing-indicator');
 
-// 智能意图识别引擎
-function smartAI(input) {
-  input = input.toLowerCase().trim();
+let waitForDownloadConfirm = false;
 
-  // 问候
-  if (/你好|在吗|嗨|哈喽|喂/.test(input)) return getRandomAnswer(knowledgeBase.greet);
-  // 感谢
-  if (/谢谢|感谢|不客气/.test(input)) return getRandomAnswer(knowledgeBase.thanks);
-  // 官网信息
-  if (/官网|工作室|介绍|干什么|下载|系统|镜像|激活|pe|纯净/.test(input)) return getRandomAnswer(knowledgeBase.official);
-  // 蓝屏
-  if (/蓝屏|代码|0x000/.test(input)) return getRandomAnswer(knowledgeBase.blueScreen);
-  // 卡顿
-  if (/卡|慢|卡顿|延迟/.test(input)) return getRandomAnswer(knowledgeBase.slow);
-  // 不开机
-  if (/不开机|黑屏|开机没反应/.test(input)) return getRandomAnswer(knowledgeBase.noPower);
-  // 没网
-  if (/没网|连不上网|网络|wifi/.test(input)) return getRandomAnswer(knowledgeBase.noNet);
-  // 没声音
-  if (/没声音|声卡|音频/.test(input)) return getRandomAnswer(knowledgeBase.noSound);
-  // C盘满
-  if (/c盘|满|红|空间不足/.test(input)) return getRandomAnswer(knowledgeBase.cFull);
-  // 驱动
-  if (/驱动|显卡驱动|主板驱动/.test(input)) return getRandomAnswer(knowledgeBase.drive);
-  // 自动重启
-  if (/自动重启|自动关机|断电/.test(input)) return getRandomAnswer(knowledgeBase.restart);
-  // 进不去系统
-  if (/进不去系统|logo|自动修复/.test(input)) return getRandomAnswer(knowledgeBase.noSystem);
-  // 硬盘/掉盘
-  if (/硬盘|固态|坏道|掉盘|磁盘严重掉盘/.test(input)) return getRandomAnswer(knowledgeBase.diskDrop);
-  // 风扇/温度
-  if (/风扇|温度|噪音|响/.test(input)) return getRandomAnswer(knowledgeBase.fan);
-  // U盘装PE
-  if (/u盘|pe|启动盘/.test(input)) return getRandomAnswer(knowledgeBase.pe);
-  // 显示器/显示
-  if (/显示器|屏幕|花屏|闪屏|分辨率|无信号/.test(input)) return getRandomAnswer(knowledgeBase.display);
-  // 电池/电源
-  if (/电池|充电|续航|电源适配器|鼓包/.test(input)) return getRandomAnswer(knowledgeBase.battery);
-  // 主板/BIOS
-  if (/主板|bios|cmos|启动项|报警声/.test(input)) return getRandomAnswer(knowledgeBase.bios);
-
-  // 无关问题拦截
-  if (/日常|干什么|吃什么|喜欢什么|爱好|睡觉|玩什么|屁|吃饭|喝水|旅游|游戏|电影|音乐/.test(input)) {
-    return knowledgeBase.irrelevant;
-  }
-
-  // 默认回答
-  return getRandomAnswer(knowledgeBase.general);
-}
-
-function sendMsg() {
-  const ipt = document.getElementById("msgInput");
-  const box = document.getElementById("chatBox");
-  const text = ipt.value.trim();
-  if (!text) return;
-
-  box.innerHTML += `<div class="chat-user"><span>${text}</span></div>`;
-  ipt.value = "";
-  box.scrollTop = box.scrollHeight;
-
-  const thinkId = "think-" + Date.now();
-  box.innerHTML += `<div class="think" id="${thinkId}">🧠 AI 深度思考中...</div>`;
-  box.scrollTop = box.scrollHeight;
+function send() {
+  let text = input.value.trim();
+  if(!text) return;
+  addMsg(text, true);
+  input.value = '';
+  typing.style.display = 'block';
 
   setTimeout(() => {
-    document.getElementById(thinkId).remove();
-    const ans = smartAI(text);
-    box.innerHTML += `<div class="chat-ai"><span>${ans}</span></div>`;
-    box.scrollTop = box.scrollHeight;
-  }, 700);
+    typing.style.display = 'none';
+    let lower = text.toLowerCase();
+
+    // 微软镜像逻辑
+    if (lower.includes("微软") && (lower.includes("镜像") || lower.includes("系统")) && lower.includes("下载")) {
+      waitForDownloadConfirm = true;
+      addMsg("你需要我为你提供微软官方的镜像下载链接吗？让我帮助您下载吗？", false);
+      return;
+    }
+
+    // 用户同意下载
+    if (waitForDownloadConfirm && (lower.includes("要") || lower.includes("好") || lower.includes("可以") || lower.includes("下载") || lower.includes("行") || lower.includes("yes"))) {
+      waitForDownloadConfirm = false;
+      addMsg("正在为您启动微软官方镜像下载……\n链接已生效，24小时内未下载将自动收回，请尽快保存。", false);
+      setTimeout(() => {
+        window.open("https://www.microsoft.com/zh-cn/software-download/windows11", "_blank");
+      }, 1000);
+      return;
+    }
+
+    // 正常AI回答
+    let ans = AIEngine.think(text);
+    addMsg(ans, false);
+  }, 700 + Math.random()*800);
 }
 
-document.getElementById("msgInput").addEventListener("keydown", e => {
-  if (e.key === "Enter") sendMsg();
-});
+function addMsg(text, isUser) {
+  let div = document.createElement('div');
+  div.className = `message ${isUser ? 'user' : 'ai'}`;
+  let c = document.createElement('div');
+  c.className = 'message-content';
+  c.innerText = text;
+  div.appendChild(c);
+  chat.appendChild(div);
+  chat.scrollTop = chat.scrollHeight;
+}
+
+btn.addEventListener('click', send);
+input.addEventListener('keypress', e => e.key === 'Enter' && send());
 </script>
 </body>
 </html>
