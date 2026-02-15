@@ -8,7 +8,7 @@
 *{margin:0;padding:0;box-sizing:border-box;font-family:"Microsoft YaHei",sans-serif;}
 
 body{
-  background:url(https://picsum.photos/id/1036/1920) no-repeat center center fixed;
+  background:url(https://picsum.photos/id/1036/1920/1080) no-repeat center center fixed;
   background-size:cover;
   position:relative;
   min-height:100vh;
@@ -62,7 +62,7 @@ body::before{
 <div class="chat-container">
   <div class="chat-messages" id="chat-messages">
     <div class="message ai">
-      <div class="message-content">你好！双模式本地AI已启动～</div>
+      <div class="message-content">你好！我是南阳数码AI，已完全内置在网页中～</div>
     </div>
   </div>
   <div class="typing-indicator" id="typing-indicator">
@@ -75,60 +75,127 @@ body::before{
 </div>
 
 <script>
-class AIClient {
-  constructor() {
-    this.chat = document.getElementById('chat-messages');
-    this.input = document.getElementById('user-input');
-    this.btn = document.getElementById('send-btn');
-    this.typing = document.getElementById('typing-indicator');
+// ====================== AI 核心逻辑直接写在页面底层 ======================
+// 不需要后台！不需要Python！不需要服务器！
+const DOWNLOAD_URL = "请到南洋数码工作室官网下载库获取所有资源";
 
-    // 只走你本地电脑的AI，不走云端
-    this.localUrl = "http://192.168.1.55:5000/api/chat";
+const knowledge_base = {
+  "装机": [
+    "装机注意CPU与主板兼容，内存插紧，散热器涂硅脂，电源线插满。",
+    `系统镜像、PE工具、驱动请到官网下载库：${DOWNLOAD_URL}`
+  ],
+  "装系统": [
+    "用8G以上U盘做启动盘，新电脑用UEFI+GPT，装纯净版系统。",
+    `纯净系统镜像下载：${DOWNLOAD_URL}`
+  ],
+  "驱动": [
+    "驱动异常会导致没声音、没网、蓝屏、花屏，优先装官方驱动。",
+    `万能网卡驱动、驱动合集：${DOWNLOAD_URL}`
+  ],
+  "蓝屏": [
+    "蓝屏常见原因：驱动冲突、内存不稳、硬盘坏道、温度高。",
+    `纯净系统可减少蓝屏：${DOWNLOAD_URL}`
+  ],
+  "卡顿": [
+    "卡顿优先换固态、清C盘、关自启、装纯净系统。",
+    `纯净系统下载：${DOWNLOAD_URL}`
+  ],
+  "网络": [
+    "上不了网先查驱动、网线、路由器，DNS可设223.5.5.5。",
+    `万能网卡驱动：${DOWNLOAD_URL}`
+  ],
+  "黑屏": [
+    "黑屏先重插内存，独显要接显卡，别接主板。",
+    `系统修复工具：${DOWNLOAD_URL}`
+  ],
+  "没声音": [
+    "没声音先查音量和驱动，台式机前面板需禁用检测。",
+    `声卡驱动：${DOWNLOAD_URL}`
+  ],
+  "密码": [
+    "忘记密码用PE清除，不删文件。",
+    `PE工具箱：${DOWNLOAD_URL}`
+  ]
+};
 
-    this.bind();
-  }
+const greetings = ["你好","您好","嗨","哈喽","在吗","在不在","在","喂","哎","你好啊","您好啊","有人吗","在呢"];
+const greet_replies = [
+  "你好呀！有什么电脑问题可以问我～",
+  "您好！我是南阳数码助手，随时为您服务。",
+  "哈喽！我在呢，你说～",
+  "你好！需要修电脑、装系统都可以告诉我。",
+  "嗨！有什么可以帮你的吗？"
+];
+const default_replies = [
+  "我没太明白你的意思，可以说具体一点哦。",
+  "你可以问我电脑相关的问题，比如蓝屏、卡顿、装系统～",
+  "这个我暂时不太清楚，换个问题试试吧。",
+  "你说的我没听懂，再说清楚一点呗。"
+];
 
-  bind() {
-    this.btn.onclick = () => this.send();
-    this.input.onkeypress = (e) => e.key === 'Enter' && this.send();
-  }
+const keywords = {
+  "装机": ["装机", "组装", "装电脑"],
+  "装系统": ["装系统", "重装", "镜像"],
+  "驱动": ["驱动", "显卡驱动", "声卡驱动", "网卡驱动"],
+  "蓝屏": ["蓝屏", "崩溃"],
+  "卡顿": ["卡", "卡顿", "慢"],
+  "网络": ["网", "上网", "wifi", "网线"],
+  "黑屏": ["黑屏", "没信号"],
+  "没声音": ["声音", "没声音"],
+  "密码": ["密码", "忘记密码"]
+};
 
-  addMsg(text, isUser) {
-    const div = document.createElement('div');
-    div.className = `message ${isUser ? 'user' : 'ai'}`;
-    const c = document.createElement('div');
-    c.className = 'message-content';
-    c.innerText = text;
-    div.appendChild(c);
-    this.chat.appendChild(div);
-    this.chat.scrollTop = this.chat.scrollHeight;
-  }
-
-  async send() {
-    const text = this.input.value.trim();
-    if (!text) return;
-
-    this.addMsg(text, true);
-    this.input.value = '';
-    this.typing.style.display = 'block';
-
-    try {
-      const res = await fetch(this.localUrl, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ message: text })
-      });
-      const data = await res.json();
-      this.typing.style.display = 'none';
-      this.addMsg(data.reply, false);
-    } catch (err) {
-      this.typing.style.display = 'none';
-      this.addMsg("请在电脑上启动本地 ai_server.py，然后再使用", false);
+function getReply(msg) {
+  msg = msg.trim().toLowerCase();
+  for (let g of greetings) {
+    if (msg.includes(g)) {
+      return greet_replies[Math.floor(Math.random() * greet_replies.length)];
     }
   }
+  for (let key in keywords) {
+    for (let kw of keywords[key]) {
+      if (msg.includes(kw)) {
+        let arr = knowledge_base[key];
+        return arr[Math.floor(Math.random() * arr.length)];
+      }
+    }
+  }
+  return default_replies[Math.floor(Math.random() * default_replies.length)];
 }
 
-new AIClient();
+// ====================== 聊天界面 ======================
+const chat = document.getElementById('chat-messages');
+const input = document.getElementById('user-input');
+const btn = document.getElementById('send-btn');
+const typing = document.getElementById('typing-indicator');
+
+function addMsg(text, isUser) {
+  const div = document.createElement('div');
+  div.className = `message ${isUser ? 'user' : 'ai'}`;
+  const c = document.createElement('div');
+  c.className = 'message-content';
+  c.innerText = text;
+  div.appendChild(c);
+  chat.appendChild(div);
+  chat.scrollTop = chat.scrollHeight;
+}
+
+function send() {
+  const text = input.value.trim();
+  if (!text) return;
+  addMsg(text, true);
+  input.value = '';
+  typing.style.display = 'block';
+
+  setTimeout(() => {
+    const reply = getReply(text);
+    typing.style.display = 'none';
+    addMsg(reply, false);
+  }, 800);
+}
+
+btn.onclick = send;
+input.onkeypress = e => e.key === 'Enter' && send();
 </script>
 </body>
 </html>
