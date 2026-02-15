@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
-<head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>南阳数码智能AI</title>
@@ -98,8 +97,6 @@ body::before{
   background:rgba(30,37,50,0.9); color:#e6e6e6; border-bottom-left-radius:6px;
 }
 </style>
-</head>
-<body>
 
 <div class="topbar">
   <div class="logo">南阳数码分身助手为您提供服务</div>
@@ -113,7 +110,7 @@ body::before{
 <div class="chat-container" id="chat-container">
   <div class="welcome">
     <div>系统镜像下载</div>
-    <a href="#" class="download-btn" id="auto_download">点击获取镜像</a>
+    <a href="https://www.123684.com/s/s9H3Td-PiQg" class="download-btn" target="_blank">点击获取镜像</a>
   </div>
 </div>
 
@@ -131,13 +128,10 @@ document.addEventListener('DOMContentLoaded', function(){
   const send = document.getElementById('send-btn');
   const cameraBtn = document.getElementById('camera-btn');
   const deepseekBtn = document.getElementById('deepseek-btn');
-  const downloadLink = document.getElementById('auto_download');
 
   let deepseek = false;
   const isMobile = /Android|iPhone|iPad|iPod/.test(navigator.userAgent);
   if (isMobile) cameraBtn.style.display = 'block';
-
-  downloadLink.href = 'https://www.baidu.com/s?wd=南阳数码 系统镜像下载';
 
   function addMsg(text, isUser){
     const div = document.createElement('div');
@@ -209,5 +203,4 @@ document.addEventListener('DOMContentLoaded', function(){
   });
 });
 </script>
-</body>
 </html>
