@@ -89,7 +89,7 @@ function send() {
   typing.style.display = 'block';
 
   // 你的服务器IP
-  fetch('http://192.168.1.55:5000/api/chat', {
+  fetch('/api/chat', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ message: text })
@@ -122,5 +122,6 @@ input.addEventListener('keypress', e => e.key === 'Enter' && send());
 </script>
 </body>
 </html>
+
 
 
