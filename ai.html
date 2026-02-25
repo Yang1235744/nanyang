@@ -96,6 +96,19 @@ body::before{
 .msg.ai .msg-bubble{
   background:rgba(30,37,50,0.9); color:#e6e6e6; border-bottom-left-radius:6px;
 }
+/* 加载状态样式 */
+.loading{
+  color:#999; font-size:14px;
+  display:flex; align-items:center; gap:6px;
+}
+.loading span{
+  display:inline-block; width:8px; height:8px;
+  border-radius:50%; background:#38bdf8;
+  animation: load 1s infinite alternate;
+}
+.loading span:nth-child(2){animation-delay:0.2s;}
+.loading span:nth-child(3){animation-delay:0.4s;}
+@keyframes load {from{opacity:0.3;transform:scale(0.8);}to{opacity:1;transform:scale(1);}}
 </style>
 
 <div class="topbar">
@@ -130,74 +143,95 @@ document.addEventListener('DOMContentLoaded', function(){
   const deepseekBtn = document.getElementById('deepseek-btn');
 
   let deepseek = false;
+  // 你的Linux服务器地址（核心修改：内网IP）
+  const SERVER_IP = 'http://192.168.1.78:5000';
   const isMobile = /Android|iPhone|iPad|iPod/.test(navigator.userAgent);
   if (isMobile) cameraBtn.style.display = 'block';
 
-  function addMsg(text, isUser){
+  // 添加消息（保留原功能）
+  function addMsg(text, isUser, isLoading = false){
     const div = document.createElement('div');
     div.className = isUser ? 'msg user' : 'msg ai';
     if(!isUser) div.innerHTML = '<div class="avatar"></div>';
     const bubble = document.createElement('div');
-    bubble.className = 'msg-bubble';
-    bubble.innerText = text;
+    bubble.className = isLoading ? 'loading' : 'msg-bubble';
+    if(isLoading){
+      bubble.innerHTML = '<span></span><span></span><span></span>正在思考...';
+    }else{
+      bubble.innerText = text;
+    }
     div.appendChild(bubble);
     chat.appendChild(div);
     chat.scrollTop = chat.scrollHeight;
+    return bubble;
   }
 
-  function aiReply(text){
-    const t = text.toLowerCase().trim();
-    if(t.includes('你是谁') || t.includes('你叫什么')){
-      return '我是南阳数码分身助手呀';
+  // 核心修改：删除本地假数据库，替换为请求服务器接口
+  async function getAIServerReply(text){
+    try {
+      // 向你的Linux服务器发送请求，携带问题和深度思考状态
+      const res = await fetch(`${SERVER_IP}/api/ai/reply`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          question: text,
+          deepseek: deepseek
+        })
+      });
+      const data = await res.json();
+      // 服务器返回的回复内容
+      return data.reply || '服务器已收到问题，暂未返回回答~';
+    } catch (err) {
+      // 连接失败提示（方便你排查服务器问题）
+      return `连接服务器失败！\n请检查：\n1. 服务器192.168.1.78是否开机\n2. 5000端口是否开启\n3. 内网穿透是否配置`;
     }
-    if(t.includes('镜像') || t.includes('下载') || t.includes('系统')){
-      return '点击上方按钮即可下载南阳数码纯净系统镜像';
-    }
-    if(t.includes('编程') || t.includes('代码') || t.includes('写程序') || t.includes('html')){
-      return deepseek 
-       ? '【深度思考·编程】\n我可以帮你写：HTML、JS、CSS、批处理、系统脚本、简单软件。\n你要写什么？'
-        : '我可以帮你写代码、编程、做网页脚本。';
-    }
-    if(t.includes('蓝屏') || t.includes('卡') || t.includes('死机') || t.includes('电脑')){
-      return '检查驱动、关闭多余启动项、用纯净系统，基本都能解决。';
-    }
-    if(t.includes('谢谢') || t.includes('感谢')){
-      return '不客气，我是南阳数码分身助手，随时为您服务。';
-    }
-    if(t.includes('你会什么') || t.includes('能干什么')){
-      return '我会：系统解答、镜像下载、编程写代码、电脑维修指导。';
-    }
-    return deepseek 
-      ? '【深度思考】\n我已认真分析你的问题，会更详细为你解答。'
-      : '我是南阳数码分身助手，很高兴为您提供帮助。';
   }
 
+  // 深度思考按钮（保留原功能）
   deepseekBtn.addEventListener('click', function(){
     deepseek = !deepseek;
     deepseekBtn.classList.toggle('on', deepseek);
     deepseekBtn.textContent = deepseek ? '深度思考 ON' : '深度思考';
   });
 
-  function sendMsg(){
+  // 发送消息（修改为请求服务器）
+  async function sendMsg(){
     const val = input.value.trim();
     if(!val) return;
+    // 添加用户消息
     addMsg(val, true);
     input.value = '';
-    setTimeout(()=>addMsg(aiReply(val), false), 600);
+    // 添加加载状态
+    const loadingBubble = addMsg('', false, true);
+    // 请求服务器获取真实回复
+    const serverReply = await getAIServerReply(val);
+    // 替换加载状态为真实回复
+    loadingBubble.className = 'msg-bubble';
+    loadingBubble.innerText = serverReply;
+    chat.scrollTop = chat.scrollHeight;
   }
 
+  // 发送按钮+回车（保留原功能）
   send.addEventListener('click', sendMsg);
   input.addEventListener('keypress', function(e){
     if(e.key === 'Enter') sendMsg();
   });
 
+  // 相机按钮（保留原功能，可后续扩展上传到服务器）
   cameraBtn.addEventListener('click', function(){
     const inp = document.createElement('input');
     inp.type = 'file';
     inp.accept = 'image/*';
     inp.onchange = () => {
       addMsg('[已发送图片]', true);
-      setTimeout(()=>addMsg('图片已收到，我会帮你分析。', false), 600);
+      const loadingBubble = addMsg('', false, true);
+      // 后续可加图片上传服务器的代码，这里先保留原提示
+      setTimeout(()=>{
+        loadingBubble.className = 'msg-bubble';
+        loadingBubble.innerText = '图片已收到，我会帮你分析。';
+      }, 600);
     };
     inp.click();
   });
