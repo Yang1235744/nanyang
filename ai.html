@@ -20,6 +20,7 @@ body::before{
   z-index:-1;
 }
 
+/* 顶部导航栏 保留原样式 */
 .topbar{
   position:fixed; top:0; left:0; width:100%; height:56px;
   background:rgba(20,26,40,0.9);
@@ -30,6 +31,7 @@ body::before{
 .menu{margin-left:auto; display:flex; gap:16px;}
 .menu a{color:#c0c6d6; text-decoration:none; font-size:14px;}
 
+/* 聊天容器 保留原样式 */
 .chat-container{
   position:fixed; top:56px; left:0; width:100%;
   height:calc(100% - 124px);
@@ -48,6 +50,7 @@ body::before{
   text-decoration:none; font-size:14px;
 }
 
+/* 输入栏 保留原样式 */
 .input-bar{
   position:fixed; bottom:0; left:0; width:100%; height:68px;
   background:rgba(20,26,40,0.9);
@@ -78,6 +81,7 @@ body::before{
   background:#38bdf8;
 }
 
+/* 消息样式 保留原样式 */
 .msg{margin:14px 0; display:flex; align-items:flex-start; gap:8px;}
 .msg.user{justify-content:flex-end;}
 .avatar{
@@ -96,7 +100,35 @@ body::before{
 .msg.ai .msg-bubble{
   background:rgba(30,37,50,0.9); color:#e6e6e6; border-bottom-left-radius:6px;
 }
-/* 加载状态样式 */
+
+/* 核心：Windows风格 全屏维护封锁层 */
+.maintain-mask{
+  position:fixed; top:0; left:0; width:100%; height:100%;
+  background:rgba(0,0,0,0.85); /* 深色遮罩，盖住所有内容 */
+  z-index:999; /* 最高层级，压过所有元素 */
+  display:flex; align-items:center; justify-content:center;
+}
+/* Windows蓝框白字提示框 */
+.maintain-box{
+  border:2px solid #0078d4; /* 经典Windows蓝边 */
+  background:#fff; /* 白框 */
+  padding:40px 50px;
+  max-width:500px;
+  width:90%;
+  text-align:center;
+}
+.maintain-title{
+  font-size:24px;
+  color:#0078d4; /* 蓝色标题 */
+  font-weight:bold;
+  margin-bottom:20px;
+}
+.maintain-text{
+  font-size:18px;
+  color:#333; /* 黑色正文 */
+  line-height:1.8;
+}
+/* 加载动画 保留（备用） */
 .loading{
   color:#999; font-size:14px;
   display:flex; align-items:center; gap:6px;
@@ -111,6 +143,7 @@ body::before{
 @keyframes load {from{opacity:0.3;transform:scale(0.8);}to{opacity:1;transform:scale(1);}}
 </style>
 
+<!-- 顶部导航 保留原内容 -->
 <div class="topbar">
   <div class="logo">南阳数码分身助手为您提供服务</div>
   <div class="menu">
@@ -120,6 +153,7 @@ body::before{
   </div>
 </div>
 
+<!-- 聊天容器 保留原内容 -->
 <div class="chat-container" id="chat-container">
   <div class="welcome">
     <div>系统镜像下载</div>
@@ -127,11 +161,24 @@ body::before{
   </div>
 </div>
 
+<!-- 输入栏 保留原内容 -->
 <div class="input-bar">
   <button id="deepseek-btn">深度思考</button>
   <input id="input-text" placeholder="输入问题...">
   <button id="camera-btn">📷</button>
   <button id="send-btn">➤</button>
+</div>
+
+<!-- 核心：Windows风格 全屏维护封锁框 -->
+<div class="maintain-mask">
+  <div class="maintain-box">
+    <div class="maintain-title">AI服务维护中</div>
+    <div class="maintain-text">
+      南阳数码智能AI正在升级维护<br>
+      预计<span style="color:#0078d4; font-weight:bold;">24小时后</span>恢复正常使用<br>
+      给您带来不便，敬请谅解！
+    </div>
+  </div>
 </div>
 
 <script>
@@ -143,12 +190,11 @@ document.addEventListener('DOMContentLoaded', function(){
   const deepseekBtn = document.getElementById('deepseek-btn');
 
   let deepseek = false;
-  // 你的Linux服务器地址（核心修改：内网IP）
   const SERVER_IP = 'http://192.168.1.78:5000';
   const isMobile = /Android|iPhone|iPad|iPod/.test(navigator.userAgent);
   if (isMobile) cameraBtn.style.display = 'block';
 
-  // 添加消息（保留原功能）
+  // 所有原功能保留（解封时直接删维护层代码即可）
   function addMsg(text, isUser, isLoading = false){
     const div = document.createElement('div');
     div.className = isUser ? 'msg user' : 'msg ai';
@@ -166,60 +212,43 @@ document.addEventListener('DOMContentLoaded', function(){
     return bubble;
   }
 
-  // 核心修改：删除本地假数据库，替换为请求服务器接口
   async function getAIServerReply(text){
     try {
-      // 向你的Linux服务器发送请求，携带问题和深度思考状态
       const res = await fetch(`${SERVER_IP}/api/ai/reply`, {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          question: text,
-          deepseek: deepseek
-        })
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({question: text, deepseek: deepseek})
       });
       const data = await res.json();
-      // 服务器返回的回复内容
       return data.reply || '服务器已收到问题，暂未返回回答~';
     } catch (err) {
-      // 连接失败提示（方便你排查服务器问题）
-      return `连接服务器失败！\n请检查：\n1. 服务器192.168.1.78是否开机\n2. 5000端口是否开启\n3. 内网穿透是否配置`;
+      return '南阳数码智能AI正在维护升级中，暂时无法提供服务，请稍后再试。';
     }
   }
 
-  // 深度思考按钮（保留原功能）
   deepseekBtn.addEventListener('click', function(){
     deepseek = !deepseek;
     deepseekBtn.classList.toggle('on', deepseek);
     deepseekBtn.textContent = deepseek ? '深度思考 ON' : '深度思考';
   });
 
-  // 发送消息（修改为请求服务器）
   async function sendMsg(){
     const val = input.value.trim();
     if(!val) return;
-    // 添加用户消息
     addMsg(val, true);
     input.value = '';
-    // 添加加载状态
     const loadingBubble = addMsg('', false, true);
-    // 请求服务器获取真实回复
     const serverReply = await getAIServerReply(val);
-    // 替换加载状态为真实回复
     loadingBubble.className = 'msg-bubble';
     loadingBubble.innerText = serverReply;
     chat.scrollTop = chat.scrollHeight;
   }
 
-  // 发送按钮+回车（保留原功能）
   send.addEventListener('click', sendMsg);
   input.addEventListener('keypress', function(e){
     if(e.key === 'Enter') sendMsg();
   });
 
-  // 相机按钮（保留原功能，可后续扩展上传到服务器）
   cameraBtn.addEventListener('click', function(){
     const inp = document.createElement('input');
     inp.type = 'file';
@@ -227,7 +256,6 @@ document.addEventListener('DOMContentLoaded', function(){
     inp.onchange = () => {
       addMsg('[已发送图片]', true);
       const loadingBubble = addMsg('', false, true);
-      // 后续可加图片上传服务器的代码，这里先保留原提示
       setTimeout(()=>{
         loadingBubble.className = 'msg-bubble';
         loadingBubble.innerText = '图片已收到，我会帮你分析。';
