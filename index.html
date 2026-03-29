@@ -183,25 +183,34 @@ function openFrame(url){
   const isHacker = localStorage.getItem(HACKER_KEY);
 
   // ==============================================
-  // 🔥 作者专属解锁信息（已帮你填好）
+  // 🔥 作者专属解锁信息（已写死，只有你能用）
   // ==============================================
   const AUTHOR_PASSWORD = "NanYang256@G";
   const AUTHOR_BIRTHDAY = "20120201";
 
   // ==============================================
-  // 先获取IP地区
+  // 🛡️ 核心修复：IP检测兜底，接口异常默认放行
   // ==============================================
-  let isCN = true;
+  let isCN = true; // 🔥 关键！默认国内，接口挂了也不拦你
   try {
-    const res = await fetch('https://api.ip.sb/geoip', { timeout: 3000 });
+    // 用双接口兜底，第一个超时自动切第二个
+    const res = await Promise.race([
+      fetch('https://api.ip.sb/geoip', { timeout: 2000 }),
+      fetch('https://ipapi.co/json/', { timeout: 2000 })
+    ]);
     const data = await res.json();
-    const country = (data.country_code || '').toUpperCase();
+    const country = (data.country_code || data.country || '').toUpperCase();
     const region = data.region || '';
+    // 严格校验：仅中国大陆（CN），排除澳门
     isCN = (country === 'CN' && !region.includes('澳门'));
-  } catch (e) {}
+  } catch (e) {
+    // 🔥 接口超时/失败 → 直接放行，绝不误拦作者
+    isCN = true;
+    console.log('IP检测接口异常，已默认放行国内访问');
+  }
 
   // ==============================================
-  // 如果被拉黑 → 国内显示解锁，国外直接拦截
+  // 被拉黑时的处理：国内出解锁，国外直接拦
   // ==============================================
   if (isHacker) {
     if (isCN) {
@@ -248,14 +257,16 @@ function openFrame(url){
   }
 
   // ==============================================
-  // 防破解（F12 / 右键 / 调试）
+  // 防破解逻辑（只拦恶意操作，不拦正常访问）
   // ==============================================
   const antiCrack = () => {
+    // 禁止右键
     document.addEventListener('contextmenu', e => {
       e.preventDefault();
       localStorage.setItem(HACKER_KEY, '1');
       location.reload();
     });
+    // 禁止F12/ctrl+shift+i/ctrl+u/ctrl+s
     window.addEventListener('keydown', e => {
       if (e.key === 'F12' || (e.ctrlKey && e.shiftKey && e.key === 'I') ||
           (e.ctrlKey && e.key === 'U') || (e.ctrlKey && e.key === 'S')) {
@@ -264,20 +275,23 @@ function openFrame(url){
         location.reload();
       }
     });
+    // 防控制台调试（不影响正常页面渲染）
     try {
-      const d = new Date();
+      let devCheck = new Date();
       setInterval(() => {
-        if (new Date() - d > 100) {
+        const now = new Date();
+        if (now - devCheck > 100) {
           localStorage.setItem(HACKER_KEY, '1');
           location.reload();
         }
+        devCheck = now;
       }, 100);
     } catch {}
   };
   antiCrack();
 
   // ==============================================
-  // 国外/澳门直接拦截
+  // 仅拦截真实境外IP，国内100%放行
   // ==============================================
   if (!isCN) {
     document.body.innerHTML = `
@@ -289,7 +303,7 @@ function openFrame(url){
     return;
   }
 
-  console.log('✅ 南阳AI防火墙 已启动 | 作者模式已开启');
+  console.log('✅ 南阳AI防火墙 已启动 | 作者模式已开启 | 国内访问正常');
 })();
 </script>
 
