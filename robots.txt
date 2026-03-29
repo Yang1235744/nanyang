@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://yang1235744.github.io/nanyang/sitemap.xml
