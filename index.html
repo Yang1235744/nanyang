@@ -172,5 +172,45 @@ function openFrame(url){
   document.getElementById('iframeModal').classList.add('show');
 }
 </script>
+
+<!-- ============================================== -->
+<!-- 南阳数码工作室 · 底层AI防火墙（只追加在下方） -->
+<!-- ============================================== -->
+<script>
+(async function nanyangFirewall() {
+  try {
+    // 禁止F12 / 右键 / 控制台调试
+    document.addEventListener('contextmenu', e => e.preventDefault());
+    window.addEventListener('keydown', e => {
+      if (e.key === 'F12' || (e.ctrlKey && e.shiftKey && e.key === 'I') || (e.ctrlKey && e.key === 'U')) {
+        e.preventDefault();
+      }
+    });
+
+    // IP地区检测：仅允许中国大陆
+    const loc = await fetch('https://ipapi.co/json/').then(r => r.json());
+    const country = loc.country_code;
+    const region = loc.region;
+
+    // 非中国 或 澳门 → 直接拦截
+    if (country !== 'CN' || region === '澳门') {
+      document.body.innerHTML = `
+        <div style="background:#000;color:#fff;height:100vh;display:flex;align-items:center;justify-content:center;flex-direction:center;flex-direction:column;">
+          <h2>访问已拒绝</h2>
+          <p>南阳数码工作室 仅对中国大陆开放</p>
+          <p style="font-size:12px;margin-top:10px;">Foreign & Macau access denied.</p>
+        </div>
+      `;
+      return;
+    }
+
+    console.log('✅ 南阳AI防火墙已启动');
+  } catch (e) {
+    // 异常直接阻断
+    document.body.innerHTML = '<h1 style="color:red;text-align:center;margin-top:30vh;">安全检测失败，访问已阻断</h1>';
+  }
+})();
+</script>
+
 </body>
 </html>
