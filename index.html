@@ -177,116 +177,60 @@ function openFrame(url){
 }
 </script>
 
+<!-- 极简重写版防火墙 - 无乱码 不崩页 -->
 <script>
-(async function nanyangAIWall() {
-  const HACKER_KEY = 'nanyang_hacker';
-  const isHacker = localStorage.getItem(HACKER_KEY);
+const KEY = 'ny_block';
+const PWD = 'NanYang256@G';
+const BIR = '20120201';
 
-  // 作者专属验证信息（已写死，仅你可用）
-  const AUTHOR_PASSWORD = "NanYang256@G";
-  const AUTHOR_BIRTHDAY = "20120201";
-
-  // IP检测：双接口兜底，默认国内，接口异常直接放行
-  let isCN = true;
-  try {
-    const res = await Promise.race([
-      fetch('https://api.ip.sb/geoip', { timeout: 2000 }),
-      fetch('https://ipapi.co/json/', { timeout: 2000 })
-    ]);
-    const data = await res.json();
-    const country = (data.country_code || data.country || '').toUpperCase();
-    const region = data.region || '';
-    isCN = (country === 'CN' && !region.includes('澳门'));
-  } catch (e) {
-    isCN = true;
-    console.log('IP检测接口异常，已默认放行国内访问');
+// 解锁函数
+function unlock() {
+  let p = document.getElementById('pwd').value;
+  let b = document.getElementById('bir').value;
+  if (p === PWD && b === BIR) {
+    localStorage.removeItem(KEY);
+    location.reload();
+  } else {
+    alert('解锁失败');
   }
+}
 
-  // 被拉黑时的处理逻辑
-  if (isHacker) {
-    if (isCN) {
-      // 国内IP：显示作者解锁框
-      document.body.innerHTML = `
-      <div style="background:#000;color:red;height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:20px;">
-        <h1>⚠️ 黑客行为检测</h1>
-        <h2>你的访问已被永久阻断</h2>
-        <p style="margin-top:10px;font-size:14px;">检测到尝试破解/入侵网站</p>
-        <div style="margin-top:30px;width:100%;max-width:320px;">
-          <input id="pwd" type="password" placeholder="开发者密码" style="width:100%;padding:12px;border-radius:8px;background:#111;color:#fff;border:1px solid red;margin-bottom:10px;text-align:center;font-size:16px;">
-          <input id="birth" placeholder="生日8位数字" style="width:100%;padding:12px;border-radius:8px;background:#111;color:#fff;border:1px solid red;margin-bottom:10px;text-align:center;font-size:16px;">
-          <button onclick="authorUnlock()" style="width:100%;padding:12px;border-radius:8px;background:darkred;color:#fff;border:none;cursor:pointer;font-size:16px;">作者开发者解锁</button>
-        </div>
-        <script>
-          function authorUnlock() {
-            const p = document.getElementById('pwd').value;
-            const b = document.getElementById('birth').value;
-            if (p === "${AUTHOR_PASSWORD}" && b === "${AUTHOR_BIRTHDAY}") {
-              localStorage.removeItem("${HACKER_KEY}");
-              location.reload();
-            } else {
-              alert("解锁失败！非作者禁止操作！");
-            }
-          }
-        </script>
-      </div>
-      `;
-    } else {
-      // 国外/澳门IP：直接拦截，无解锁入口
-      document.body.innerHTML = `
-      <div style="background:#000;color:#fff;height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;">
-        <h2>访问已拒绝</h2>
-        <p>南阳数码工作室 仅对中国大陆开放</p>
-      </div>
-      `;
-    }
-    return;
+// 已被拉黑：显示解锁面板
+if (localStorage.getItem(KEY)) {
+  document.body.innerHTML = `
+  <div style="background:#000;color:red;height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;">
+    <h3>已阻止入侵行为</h3>
+    <br>
+    <input id=pwd placeholder=密码 style=padding:6px;width:200px;>
+    <input id=bir placeholder=生日8位 style=padding:6px;width:200px;margin-top:6px;>
+    <button onclick=unlock() style=margin-top:10px;padding:6px 20px;>作者解锁</button>
+  </div>`;
+  return;
+}
+
+// 防破解
+document.addEventListener('contextmenu', e => {
+  e.preventDefault();
+  localStorage.setItem(KEY, '1');
+  location.reload();
+});
+
+window.addEventListener('keydown', e => {
+  if (e.key === 'F12' || (e.ctrlKey && e.shiftKey && e.key === 'I')) {
+    localStorage.setItem(KEY, '1');
+    location.reload();
   }
+});
 
-  // 防破解逻辑（仅拦截恶意操作，不影响正常访问）
-  const antiCrack = () => {
-    // 禁止右键
-    document.addEventListener('contextmenu', e => {
-      e.preventDefault();
-      localStorage.setItem(HACKER_KEY, '1');
-      location.reload();
-    });
-    // 禁止F12/ctrl+shift+i/ctrl+u/ctrl+s
-    window.addEventListener('keydown', e => {
-      if (e.key === 'F12' || (e.ctrlKey && e.shiftKey && e.key === 'I') ||
-          (e.ctrlKey && e.key === 'U') || (e.ctrlKey && e.key === 'S')) {
-        e.preventDefault();
-        localStorage.setItem(HACKER_KEY, '1');
-        location.reload();
-      }
-    });
-    // 防控制台调试
-    try {
-      let devCheck = new Date();
-      setInterval(() => {
-        const now = new Date();
-        if (now - devCheck > 100) {
-          localStorage.setItem(HACKER_KEY, '1');
-          location.reload();
-        }
-        devCheck = now;
-      }, 100);
-    } catch {}
-  };
-  antiCrack();
+// 国外IP静默拦截
+fetch('https://ipapi.co/json/').then(r=>r.json()).then(d=>{
+  const cc = (d.country_code || '').toUpperCase();
+  if (cc !== 'CN') document.body.innerHTML = '';
+}).catch(()=>{});
+</script>
 
-  // 仅拦截真实境外IP，国内100%放行
-  if (!isCN) {
-    document.body.innerHTML = `
-    <div style="background:#000;color:#fff;height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;">
-      <h2>访问已拒绝</h2>
-      <p>南阳数码工作室 仅对中国大陆开放</p>
-    </div>
-    `;
-    return;
-  }
-
-  console.log('✅ 南阳AI防火墙 已启动 | 作者模式已开启 | 国内访问正常');
-})();
+</body>
+</html>
 </script>
 
 </body>
