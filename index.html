@@ -87,11 +87,9 @@ body::before{content:"";position:absolute;top:0;left:0;width:100%;height:100%;ba
   position:fixed;right:20px;bottom:20px;width:60px;height:60px;border-radius:50%;border:3px solid #00bcd4;object-fit:cover;cursor:pointer;z-index:999;
 }
 </style>
-<!-- 虚假IP伪装：向黑客返回随机虚假服务器IP，隐藏真实地址 -->
 <meta name="server-ip" content="192.168.1.100">
 <meta name="X-Real-IP" content="10.0.0.5">
 <meta name="X-Forwarded-For" content="172.16.0.8">
-<!-- 防爬虫/防破解头部 -->
 <meta name="robots" content="noindex, nofollow, noarchive">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Cache-Control" content="no-store, no-cache, must-revalidate">
@@ -109,7 +107,6 @@ body::before{content:"";position:absolute;top:0;left:0;width:100%;height:100%;ba
   </div>
 </div>
 
-<!-- 左侧下载区（含所有PE链接，内置浏览器打开） -->
 <div class="left-sidebar">
   <h3>下载区</h3>
   <a onclick="openFrame('https://www.microsoft.com/zh-cn/software-download/windows11')">Windows 11 官方</a>
@@ -170,7 +167,6 @@ body::before{content:"";position:absolute;top:0;left:0;width:100%;height:100%;ba
 <img src="https://picsum.photos/id/1036/80/80" class="ai-avatar" onclick="location.href='./ai.html'">
 
 <script>
-// 原有内置浏览器/弹窗功能（未做任何修改）
 function openModal(){document.getElementById('modal').classList.add('show');}
 document.getElementById('modal').addEventListener('click',function(e){
   if(e.target === this) this.classList.remove('show');
@@ -181,93 +177,119 @@ function openFrame(url){
 }
 </script>
 
-<!-- ============================================== -->
-<!-- 🔥 AI智能防火墙：防黑客/防破解/精准拦截 终极版 -->
-<!-- 1. 国内IP正常访问 | 境外/澳门永久拦截 -->
-<!-- 2. 防F12/右键/控制台/浏览器破解 -->
-<!-- 3. 破解行为检测 → 立即永久阻断访问 -->
-<!-- 4. 虚假IP伪装 → 隐藏服务器真实地址 -->
-<!-- ============================================== -->
 <script>
 (async function nanyangAIWall() {
-  // 本地缓存标记：破解者永久拉黑，无法再次访问
-  const isHacker = localStorage.getItem('nanyang_hacker');
+  const HACKER_KEY = 'nanyang_hacker';
+  const isHacker = localStorage.getItem(HACKER_KEY);
+
+  // ==============================================
+  // 🔥 作者专属解锁信息（已帮你填好）
+  // ==============================================
+  const AUTHOR_PASSWORD = "NanYang256@G";
+  const AUTHOR_BIRTHDAY = "20120201";
+
+  // ==============================================
+  // 先获取IP地区
+  // ==============================================
+  let isCN = true;
+  try {
+    const res = await fetch('https://api.ip.sb/geoip', { timeout: 3000 });
+    const data = await res.json();
+    const country = (data.country_code || '').toUpperCase();
+    const region = data.region || '';
+    isCN = (country === 'CN' && !region.includes('澳门'));
+  } catch (e) {}
+
+  // ==============================================
+  // 如果被拉黑 → 国内显示解锁，国外直接拦截
+  // ==============================================
   if (isHacker) {
-    document.body.innerHTML = `
+    if (isCN) {
+      document.body.innerHTML = `
       <div style="background:#000;color:red;height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:20px;">
         <h1>⚠️ 黑客行为检测</h1>
         <h2>你的访问已被永久阻断</h2>
-        <p style="margin-top:20px;font-size:14px;">检测到尝试破解/入侵网站，IP已被永久拉黑</p>
-        <p style="margin-top:10px;font-size:12px;color:#666;">Nanyang Digital Studio · AI Firewall</p>
+        <p style="margin-top:10px;font-size:14px;">检测到尝试破解/入侵网站</p>
+
+        <div style="margin-top:30px;width:100%;max-width:320px;">
+          <input id="pwd" type="password" placeholder="开发者密码"
+            style="width:100%;padding:12px;border-radius:8px;background:#111;color:#fff;border:1px solid red;margin-bottom:10px;text-align:center;font-size:16px;">
+          <input id="birth" placeholder="生日8位数字"
+            style="width:100%;padding:12px;border-radius:8px;background:#111;color:#fff;border:1px solid red;margin-bottom:10px;text-align:center;font-size:16px;">
+          <button onclick="authorUnlock()"
+            style="width:100%;padding:12px;border-radius:8px;background:darkred;color:#fff;border:none;cursor:pointer;font-size:16px;">
+            作者开发者解锁
+          </button>
+        </div>
+
+        <script>
+        function authorUnlock(){
+          const p = document.getElementById('pwd').value;
+          const b = document.getElementById('birth').value;
+          if(p === "${AUTHOR_PASSWORD}" && b === "${AUTHOR_BIRTHDAY}"){
+            localStorage.removeItem("${HACKER_KEY}");
+            location.reload();
+          }else{
+            alert("解锁失败！非作者禁止操作！");
+          }
+        }
+        </script>
       </div>
+      `;
+    } else {
+      document.body.innerHTML = `
+      <div style="background:#000;color:#fff;height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;">
+        <h2>访问已拒绝</h2>
+        <p>南阳数码工作室 仅对中国大陆开放</p>
+      </div>
+      `;
+    }
+    return;
+  }
+
+  // ==============================================
+  // 防破解（F12 / 右键 / 调试）
+  // ==============================================
+  const antiCrack = () => {
+    document.addEventListener('contextmenu', e => {
+      e.preventDefault();
+      localStorage.setItem(HACKER_KEY, '1');
+      location.reload();
+    });
+    window.addEventListener('keydown', e => {
+      if (e.key === 'F12' || (e.ctrlKey && e.shiftKey && e.key === 'I') ||
+          (e.ctrlKey && e.key === 'U') || (e.ctrlKey && e.key === 'S')) {
+        e.preventDefault();
+        localStorage.setItem(HACKER_KEY, '1');
+        location.reload();
+      }
+    });
+    try {
+      const d = new Date();
+      setInterval(() => {
+        if (new Date() - d > 100) {
+          localStorage.setItem(HACKER_KEY, '1');
+          location.reload();
+        }
+      }, 100);
+    } catch {}
+  };
+  antiCrack();
+
+  // ==============================================
+  // 国外/澳门直接拦截
+  // ==============================================
+  if (!isCN) {
+    document.body.innerHTML = `
+    <div style="background:#000;color:#fff;height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;">
+      <h2>访问已拒绝</h2>
+      <p>南阳数码工作室 仅对中国大陆开放</p>
+    </div>
     `;
     return;
   }
 
-  // 第一层防护：防破解（F12/右键/控制台/审查元素）
-  const antiCrack = () => {
-    // 禁止右键
-    document.addEventListener('contextmenu', e => {
-      e.preventDefault();
-      localStorage.setItem('nanyang_hacker', '1');
-      location.reload(); // 检测到右键，标记黑客并刷新阻断
-    });
-    // 禁止F12/ctrl+shift+i/ctrl+u/ctrl+s
-    window.addEventListener('keydown', e => {
-      if (e.key === 'F12' || (e.ctrlKey && e.shiftKey && e.key === 'I') || 
-          (e.ctrlKey && e.key === 'U') || (e.ctrlKey && e.key === 'S')) {
-        e.preventDefault();
-        localStorage.setItem('nanyang_hacker', '1');
-        location.reload(); // 检测到破解操作，标记黑客并刷新阻断
-      }
-    });
-    // 禁止控制台调试（防浏览器破解）
-    if (window.debugger) {
-      setInterval(() => {
-        debugger;
-        localStorage.setItem('nanyang_hacker', '1');
-        location.reload();
-      }, 1000);
-    }
-    // 防页面篡改（检测DOM修改即阻断）
-    const observer = new MutationObserver(() => {
-      observer.disconnect();
-      localStorage.setItem('nanyang_hacker', '1');
-      location.reload();
-    });
-    observer.observe(document.body, { childList: true, subtree: true, attributes: true });
-  };
-  antiCrack();
-
-  // 第二层防护：IP精准检测（稳定接口，无虞误判）
-  try {
-    // 备用稳定IP检测接口，优先国内节点，避免误判
-    const res = await fetch('https://api.ip.sb/geoip', { timeout: 3000 });
-    const data = await res.json();
-    const country = data.country_code || '';
-    const region = data.region || '';
-
-    // 仅允许：中国大陆（CN），非CN/澳门 直接拦截
-    if (country.toUpperCase() !== 'CN' || region.includes('澳门')) {
-      document.body.innerHTML = `
-        <div style="background:#000;color:#fff;height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;">
-          <h2>访问已拒绝</h2>
-          <p>南阳数码工作室 仅对中国大陆开放</p>
-          <p style="font-size:12px;margin-top:10px;">Foreign & Macau access denied.</p>
-        </div>
-      `;
-      return;
-    }
-  } catch (err) {
-    // 接口异常时：跳过IP检测，仅保留防破解防护，国内正常访问（杜绝误拦）
-    console.log('IP检测接口备用，防破解防护正常运行');
-  }
-
-  // 第三层防护：虚假IP伪装（向黑客/爬虫返回随机虚假IP）
-  window.__SERVER_IP__ = `192.168.${Math.floor(Math.random()*255)}.${Math.floor(Math.random()*255)}`;
-  window.__CLIENT_IP__ = `10.${Math.floor(Math.random()*255)}.${Math.floor(Math.random()*255)}.${Math.floor(Math.random()*255)}`;
-
-  console.log('✅ 南阳AI防火墙启动成功 | 国内访问正常 | 防破解/防黑客已开启');
+  console.log('✅ 南阳AI防火墙 已启动 | 作者模式已开启');
 })();
 </script>
 
