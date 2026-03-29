@@ -114,7 +114,7 @@ body::before{content:"";position:absolute;top:0;left:0;width:100%;height:100%;ba
   <a onclick="openFrame('https://pan.xunlei.com/s/VOlQYgS0mqDUNwzd6BEig76UA1#')">Windows 新系统镜像（提取码：6h6d）</a>
   <a onclick="openFrame('https://www.123865.com/s/s9H3Td-TiQg')">小白PE云盘下载</a>
   <a onclick="openFrame('https://www.wepe.com.cn')">微PE 官网</a>
-  <a onclick="openFrame('https://www.itsk.com/thread/431283')">优启通 PE 官网</a>
+  <a onclick="openFrame('https://www.itsk.com/thread-431283')">优启通 PE 官网</a>
   <a onclick="openFrame('https://firpe.cn/page-247')">FIRPE 维护系统（神通Win11 PE）</a>
   <a onclick="openFrame('https://www.huorong.cn')">火绒官网</a>
 
@@ -182,18 +182,13 @@ function openFrame(url){
   const HACKER_KEY = 'nanyang_hacker';
   const isHacker = localStorage.getItem(HACKER_KEY);
 
-  // ==============================================
-  // 🔥 作者专属解锁信息（已写死，只有你能用）
-  // ==============================================
+  // 作者专属验证信息（已写死，仅你可用）
   const AUTHOR_PASSWORD = "NanYang256@G";
   const AUTHOR_BIRTHDAY = "20120201";
 
-  // ==============================================
-  // 🛡️ 核心修复：IP检测兜底，接口异常默认放行
-  // ==============================================
-  let isCN = true; // 🔥 关键！默认国内，接口挂了也不拦你
+  // IP检测：双接口兜底，默认国内，接口异常直接放行
+  let isCN = true;
   try {
-    // 用双接口兜底，第一个超时自动切第二个
     const res = await Promise.race([
       fetch('https://api.ip.sb/geoip', { timeout: 2000 }),
       fetch('https://ipapi.co/json/', { timeout: 2000 })
@@ -201,51 +196,42 @@ function openFrame(url){
     const data = await res.json();
     const country = (data.country_code || data.country || '').toUpperCase();
     const region = data.region || '';
-    // 严格校验：仅中国大陆（CN），排除澳门
     isCN = (country === 'CN' && !region.includes('澳门'));
   } catch (e) {
-    // 🔥 接口超时/失败 → 直接放行，绝不误拦作者
     isCN = true;
     console.log('IP检测接口异常，已默认放行国内访问');
   }
 
-  // ==============================================
-  // 被拉黑时的处理：国内出解锁，国外直接拦
-  // ==============================================
+  // 被拉黑时的处理逻辑
   if (isHacker) {
     if (isCN) {
+      // 国内IP：显示作者解锁框
       document.body.innerHTML = `
       <div style="background:#000;color:red;height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:20px;">
         <h1>⚠️ 黑客行为检测</h1>
         <h2>你的访问已被永久阻断</h2>
         <p style="margin-top:10px;font-size:14px;">检测到尝试破解/入侵网站</p>
-
         <div style="margin-top:30px;width:100%;max-width:320px;">
-          <input id="pwd" type="password" placeholder="开发者密码"
-            style="width:100%;padding:12px;border-radius:8px;background:#111;color:#fff;border:1px solid red;margin-bottom:10px;text-align:center;font-size:16px;">
-          <input id="birth" placeholder="生日8位数字"
-            style="width:100%;padding:12px;border-radius:8px;background:#111;color:#fff;border:1px solid red;margin-bottom:10px;text-align:center;font-size:16px;">
-          <button onclick="authorUnlock()"
-            style="width:100%;padding:12px;border-radius:8px;background:darkred;color:#fff;border:none;cursor:pointer;font-size:16px;">
-            作者开发者解锁
-          </button>
+          <input id="pwd" type="password" placeholder="开发者密码" style="width:100%;padding:12px;border-radius:8px;background:#111;color:#fff;border:1px solid red;margin-bottom:10px;text-align:center;font-size:16px;">
+          <input id="birth" placeholder="生日8位数字" style="width:100%;padding:12px;border-radius:8px;background:#111;color:#fff;border:1px solid red;margin-bottom:10px;text-align:center;font-size:16px;">
+          <button onclick="authorUnlock()" style="width:100%;padding:12px;border-radius:8px;background:darkred;color:#fff;border:none;cursor:pointer;font-size:16px;">作者开发者解锁</button>
         </div>
-
         <script>
-        function authorUnlock(){
-          const p = document.getElementById('pwd').value;
-          const b = document.getElementById('birth').value;
-          if(p === "${AUTHOR_PASSWORD}" && b === "${AUTHOR_BIRTHDAY}"){
-            localStorage.removeItem("${HACKER_KEY}");
-            location.reload();
-          }else{
-            alert("解锁失败！非作者禁止操作！");
+          function authorUnlock() {
+            const p = document.getElementById('pwd').value;
+            const b = document.getElementById('birth').value;
+            if (p === "${AUTHOR_PASSWORD}" && b === "${AUTHOR_BIRTHDAY}") {
+              localStorage.removeItem("${HACKER_KEY}");
+              location.reload();
+            } else {
+              alert("解锁失败！非作者禁止操作！");
+            }
           }
-        }
         </script>
       </div>
       `;
     } else {
+      // 国外/澳门IP：直接拦截，无解锁入口
       document.body.innerHTML = `
       <div style="background:#000;color:#fff;height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;">
         <h2>访问已拒绝</h2>
@@ -256,9 +242,7 @@ function openFrame(url){
     return;
   }
 
-  // ==============================================
-  // 防破解逻辑（只拦恶意操作，不拦正常访问）
-  // ==============================================
+  // 防破解逻辑（仅拦截恶意操作，不影响正常访问）
   const antiCrack = () => {
     // 禁止右键
     document.addEventListener('contextmenu', e => {
@@ -275,7 +259,7 @@ function openFrame(url){
         location.reload();
       }
     });
-    // 防控制台调试（不影响正常页面渲染）
+    // 防控制台调试
     try {
       let devCheck = new Date();
       setInterval(() => {
@@ -290,9 +274,7 @@ function openFrame(url){
   };
   antiCrack();
 
-  // ==============================================
   // 仅拦截真实境外IP，国内100%放行
-  // ==============================================
   if (!isCN) {
     document.body.innerHTML = `
     <div style="background:#000;color:#fff;height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;">
