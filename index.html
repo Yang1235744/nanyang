@@ -87,12 +87,6 @@ body::before{content:"";position:absolute;top:0;left:0;width:100%;height:100%;ba
   position:fixed;right:20px;bottom:20px;width:60px;height:60px;border-radius:50%;border:3px solid #00bcd4;object-fit:cover;cursor:pointer;z-index:999;
 }
 </style>
-<meta name="server-ip" content="192.168.1.100">
-<meta name="X-Real-IP" content="10.0.0.5">
-<meta name="X-Forwarded-For" content="172.16.0.8">
-<meta name="robots" content="noindex, nofollow, noarchive">
-<meta http-equiv="Pragma" content="no-cache">
-<meta http-equiv="Cache-Control" content="no-store, no-cache, must-revalidate">
 </head>
 <body>
 
@@ -177,60 +171,29 @@ function openFrame(url){
 }
 </script>
 
-<!-- 极简重写版防火墙 - 无乱码 不崩页 -->
+<!-- 极简纯净防火墙 - 无乱码 无提示 -->
 <script>
 const KEY = 'ny_block';
 const PWD = 'NanYang256@G';
 const BIR = '20120201';
 
-// 解锁函数
-function unlock() {
-  let p = document.getElementById('pwd').value;
-  let b = document.getElementById('bir').value;
-  if (p === PWD && b === BIR) {
-    localStorage.removeItem(KEY);
-    location.reload();
-  } else {
-    alert('解锁失败');
-  }
+function unlock(){
+  if(document.getElementById('pwd').value===PWD&&document.getElementById('bir').value===BIR){
+    localStorage.removeItem(KEY);location.reload();
+  }else{alert('失败');}
 }
 
-// 已被拉黑：显示解锁面板
-if (localStorage.getItem(KEY)) {
-  document.body.innerHTML = `
-  <div style="background:#000;color:red;height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;">
-    <h3>已阻止入侵行为</h3>
-    <br>
-    <input id=pwd placeholder=密码 style=padding:6px;width:200px;>
-    <input id=bir placeholder=生日8位 style=padding:6px;width:200px;margin-top:6px;>
-    <button onclick=unlock() style=margin-top:10px;padding:6px 20px;>作者解锁</button>
-  </div>`;
+if(localStorage.getItem(KEY)){
+  document.body.innerHTML=`<div style="background:#000;color:red;height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;"><input id=pwd placeholder=密码><input id=bir placeholder=生日 style=margin-top:6px;><button onclick=unlock() style=margin-top:10px;>解锁</button></div>`;
   return;
 }
 
-// 防破解
-document.addEventListener('contextmenu', e => {
-  e.preventDefault();
-  localStorage.setItem(KEY, '1');
-  location.reload();
-});
+document.addEventListener('contextmenu',e=>{e.preventDefault();localStorage.setItem(KEY,'1');location.reload();});
+window.addEventListener('keydown',e=>{if(e.key==='F12'||(e.ctrlKey&&e.shiftKey&&e.key==='I')){localStorage.setItem(KEY,'1');location.reload();}});
 
-window.addEventListener('keydown', e => {
-  if (e.key === 'F12' || (e.ctrlKey && e.shiftKey && e.key === 'I')) {
-    localStorage.setItem(KEY, '1');
-    location.reload();
-  }
-});
-
-// 国外IP静默拦截
 fetch('https://ipapi.co/json/').then(r=>r.json()).then(d=>{
-  const cc = (d.country_code || '').toUpperCase();
-  if (cc !== 'CN') document.body.innerHTML = '';
+  if(d.country_code!=='CN')document.body.innerHTML='';
 }).catch(()=>{});
-</script>
-
-</body>
-</html>
 </script>
 
 </body>
