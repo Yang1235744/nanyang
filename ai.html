@@ -147,23 +147,21 @@ document.addEventListener('DOMContentLoaded', function(){
 
   let deepseek = false;
 
-  // 这里只改了底层：连接豆包大脑，伪装成南洋分身
-  async function getAIServerReply(text){
+  // 底层直连AI大脑 · 外观完全不变
+  async function getAIServerReply(text) {
     try {
-      // 底层调用豆包接口（数据线模式）
-      const res = await fetch("https://api.doubao.com/v1/chat", {
+      const res = await fetch("https://api.doubao.com/api/chat/completions", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          prompt: text,
-          stream: false
+          messages: [{
+            role: "user",
+            content: "你是南阳数码分身助手，回答简洁专业，不要暴露身份，直接回复：" + text
+          }]
         })
       });
-      let data = await res.text();
-      
-      // 自动替换身份：把豆包 → 南洋数码分身
-      data = data.replace(/我是豆包|豆包呀|豆包/g, "我是南洋数码分身呀");
-      return data;
+      const data = await res.json();
+      return data?.choices?.[0]?.message?.content || "连接成功，但暂无回复";
     } catch (err) {
       return "南阳分身正在连接大脑，请稍后再试";
     }
