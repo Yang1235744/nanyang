@@ -1,0 +1,84 @@
+@echo off
+chcp 65001 >nul
+setlocal enabledelayedexpansion
+
+:: ==============================================
+:: 南阳数码 MAB 补丁 - 系统优化与防护
+:: 功能：1. 屏蔽360等流氓软件 2. 仅放行火绒 3. 强制默认安装到D盘
+:: ==============================================
+
+:: --------------------------
+:: 1. 强制所有应用默认安装到D盘
+:: --------------------------
+:: 修改系统默认安装路径（用户目录）
+reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion" /v ProgramFilesDir /t REG_SZ /d "D:\Program Files" /f
+reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion" /v ProgramFilesDir (x86) /t REG_SZ /d "D:\Program Files (x86)" /f
+reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion" /v CommonFilesDir /t REG_SZ /d "D:\Program Files\Common Files" /f
+reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion" /v CommonFilesDir (x86) /t REG_SZ /d "D:\Program Files (x86)\Common Files" /f
+
+:: 修改用户个人文件夹默认路径（可选，按需保留）
+reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\User Shell Folders" /v Common Desktop /t REG_SZ /d "D:\Users\Public\Desktop" /f
+reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\User Shell Folders" /v Common Documents /t REG_SZ /d "D:\Users\Public\Documents" /f
+
+:: --------------------------
+:: 2. 屏蔽360、流氓浏览器等全家桶（域名+进程双拦截）
+:: --------------------------
+::  hosts文件拦截360相关域名
+echo 127.0.0.1 360.cn >> C:\Windows\System32\drivers\etc\hosts
+echo 127.0.0.1 www.360.cn >> C:\Windows\System32\drivers\etc\hosts
+echo 127.0.0.1 360safe.com >> C:\Windows\System32\drivers\etc\hosts
+echo 127.0.0.1 www.360safe.com >> C:\Windows\System32\drivers\etc\hosts
+echo 127.0.0.1 360doc.com >> C:\Windows\System32\drivers\etc\hosts
+echo 127.0.0.1 haosou.com >> C:\Windows\System32\drivers\etc\hosts
+echo 127.0.0.1 www.haosou.com >> C:\Windows\System32\drivers\etc\hosts
+echo 127.0.0.1 qihu.com >> C:\Windows\System32\drivers\etc\hosts
+echo 127.0.0.1 so.com >> C:\Windows\System32\drivers\etc\hosts
+echo 127.0.0.1 360jy.com >> C:\Windows\System32\drivers\etc\hosts
+echo 127.0.0.1 360kan.com >> C:\Windows\System32\drivers\etc\hosts
+echo 127.0.0.1 360shouji.com >> C:\Windows\System32\drivers\etc\hosts
+echo 127.0.0.1 360safe.net >> C:\Windows\System32\drivers\etc\hosts
+echo 127.0.0.1 360tp.com >> C:\Windows\System32\drivers\etc\hosts
+echo 127.0.0.1 360wangpan.com >> C:\Windows\System32\drivers\etc\hosts
+echo 127.0.0.1 360yunpan.com >> C:\Windows\System32\drivers\etc\hosts
+
+:: 拦截流氓浏览器（2345、搜狗、QQ浏览器、UC等）
+echo 127.0.0.1 2345.com >> C:\Windows\System32\drivers\etc\hosts
+echo 127.0.0.1 www.2345.com >> C:\Windows\System32\drivers\etc\hosts
+echo 127.0.0.1 sogou.com >> C:\Windows\System32\drivers\etc\hosts
+echo 127.0.0.1 www.sogou.com >> C:\Windows\System32\drivers\etc\hosts
+echo 127.0.0.1 qqbrowser.com >> C:\Windows\System32\drivers\etc\hosts
+echo 127.0.0.1 uc.cn >> C:\Windows\System32\drivers\etc\hosts
+echo 127.0.0.1 maxthon.cn >> C:\Windows\System32\drivers\etc\hosts
+echo 127.0.0.1 theworld.cn >> C:\Windows\System32\drivers\etc\hosts
+
+:: 组策略拦截360相关进程安装运行
+:: 禁止360安装程序运行
+reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\Safer\CodeIdentifiers\0\Paths" /v "{00000001}" /t REG_SZ /d "%SystemRoot%\System32\360*" /f
+reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\Safer\CodeIdentifiers\0\Paths" /v "{00000002}" /t REG_SZ /d "%ProgramFiles%\360*" /f
+reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\Safer\CodeIdentifiers\0\Paths" /v "{00000003}" /t REG_SZ /d "%ProgramFiles(x86)%\360*" /f
+reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\Safer\CodeIdentifiers\0\Paths" /v "{00000004}" /t REG_SZ /d "%UserProfile%\Desktop\360*" /f
+
+:: 禁止流氓浏览器进程
+reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\Safer\CodeIdentifiers\0\Paths" /v "{00000005}" /t REG_SZ /d "%SystemRoot%\System32\2345*" /f
+reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\Safer\CodeIdentifiers\0\Paths" /v "{00000006}" /t REG_SZ /d "%ProgramFiles%\2345*" /f
+reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\Safer\CodeIdentifiers\0\Paths" /v "{00000007}" /t REG_SZ /d "%ProgramFiles(x86)%\2345*" /f
+
+:: --------------------------
+:: 3. 仅放行火绒（白名单机制）
+:: --------------------------
+:: 放行火绒所有相关进程
+reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\Safer\CodeIdentifiers\0\Paths" /v "{10000001}" /t REG_SZ /d "%ProgramFiles%\Huorong*" /f
+reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\Safer\CodeIdentifiers\0\Paths" /v "{10000002}" /t REG_SZ /d "%ProgramFiles(x86)%\Huorong*" /f
+reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\Safer\CodeIdentifiers\0\Paths" /v "{10000003}" /t REG_SZ /d "%SystemRoot%\System32\Huorong*" /f
+
+:: 放行火绒官网域名（确保火绒能正常更新）
+echo 0.0.0.0 huorong.cn >> C:\Windows\System32\drivers\etc\hosts
+echo 0.0.0.0 www.huorong.cn >> C:\Windows\System32\drivers\etc\hosts
+
+:: --------------------------
+:: 4. 补丁完成提示（可选，静默模式可删除）
+:: --------------------------
+msg * "南阳数码MAB补丁安装完成！
+已屏蔽360等流氓软件，仅放行火绒，默认安装路径已改为D盘！"
+
+endlocal
