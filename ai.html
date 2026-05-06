@@ -265,8 +265,8 @@ body {
 <body>
 
 <div class="mac-top">
-  <!-- 修复：换成点击刷新，完美生效 -->
-  <div class="back-btn" onclick="location.reload()">返回首页</div>
+  <!-- 修复：直接跳转到你的主官网地址 -->
+  <a href="https://yang1235744.github.io/nanyang/" class="back-btn">返回主页</a>
   <div class="opacity-group">
     <span>毛玻璃透明度</span>
     <input type="range" min="0" max="1" step="0.01" value="1" class="glass-slider" id="glassSlider">
@@ -339,7 +339,6 @@ function newWin(url,key){
   const wrap = document.createElement('div');
   wrap.className = 'mac-window';
   wrap.style.zIndex = zIdx;
-  // 直接嵌入官方完整QQ音乐网页版
   wrap.innerHTML = `
       <div class="win-top">
         <div class="win-btn win-close"></div>
