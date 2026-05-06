@@ -41,6 +41,7 @@ body {
   background: rgba(255,255,255,0.08);
   text-decoration: none;
   transition: all 0.3s ease;
+  cursor: pointer;
 }
 .back-btn:hover {
   background: rgba(255,255,255,0.2);
@@ -172,7 +173,6 @@ body {
   gap: 8px;
   cursor: move;
 }
-/* 重点：三个按钮提升点击层级，百分百能点 */
 .win-btn {
   width: 14px;height: 14px;
   border-radius: 50%;
@@ -260,15 +260,13 @@ body {
 }
 @keyframes macFadeIn {from {opacity: 0;}to {opacity: 1;}}
 @keyframes iconAppear {from {opacity: 0; transform: translateY(20px);}to {opacity: 1;}}
-/* QQ音乐唱片旋转动画 */
-@keyframes rotateDisk{0%{transform:rotate(0deg)}100%{transform:rotate(360deg)}}
-@keyframes breathLight{0%,100%{opacity:0.6}50%{opacity:1}}
 </style>
 </head>
 <body>
 
 <div class="mac-top">
-  <a href="#" class="back-btn">返回首页</a>
+  <!-- 修复：换成点击刷新，完美生效 -->
+  <div class="back-btn" onclick="location.reload()">返回首页</div>
   <div class="opacity-group">
     <span>毛玻璃透明度</span>
     <input type="range" min="0" max="1" step="0.01" value="1" class="glass-slider" id="glassSlider">
@@ -292,8 +290,7 @@ body {
     <div class="icon-box">🤖</div>
     <div class="icon-text">南阳AI<br><span class="dev-text">正在开发中</span></div>
   </div>
-  <!-- 新增QQ音乐桌面图标 -->
-  <div class="icon-item" data-url="qqmusic-inner" data-key="qqmusic">
+  <div class="icon-item" data-url="https://y.qq.com/" data-key="qqmusic">
     <div class="icon-box">🎵</div>
     <div class="icon-text">QQ音乐</div>
   </div>
@@ -310,7 +307,6 @@ body {
   <div class="dock-icon" id="dockAi">🤖</div>
   <div class="dock-icon" id="dockYuanbao">💬</div>
   <div class="dock-icon" id="dockKimi">🔮</div>
-  <!-- 新增QQ音乐Dock图标 -->
   <div class="dock-icon" id="dockQqmusic">🎵</div>
   <div class="dock-icon" id="dockSet">⚙️</div>
 </div>
@@ -327,24 +323,8 @@ const appPool = {};
 let zIdx = 20;
 let rightWin = null;
 
-// 自定义QQ音乐动画页面HTML
-const qqMusicHtml = `
-<div style="width:100%;height:100%;background:linear-gradient(145deg,#121c22,#1a2933);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px;box-sizing:border-box;">
-  <div style="width:200px;height:200px;border-radius:50%;background:#222;border:10px solid #2b3842;animation:rotateDisk 10s linear infinite;box-shadow:0 0 40px #2ec77044;display:flex;align-items:center;justify-content:center;">
-    <div style="width:50px;height:50px;background:#ffffff22;border-radius:50%;"></div>
-  </div>
-  <div style="color:#2ec77c;font-size:17px;margin-top:30px;animation:breathLight 2s ease-in-out infinite;letter-spacing:2px;">QQ音乐 · 动态播放面板</div>
-  <div style="display:flex;gap:22px;margin-top:35px;">
-    <button style="width:48px;height:48px;border-radius:50%;border:none;background:#2ec77c20;color:#2ec77c;cursor:pointer;transition:all 0.3s ease;">上一曲</button>
-    <button style="width:60px;height:60px;border-radius:50%;border:none;background:#2ec77c;color:#fff;cursor:pointer;transition:all 0.3s ease;box-shadow:0 0 20px #2ec77055;">播放</button>
-    <button style="width:48px;height:48px;border-radius:50%;border:none;background:#2ec77c20;color:#2ec77c;cursor:pointer;transition:all 0.3s ease;">下一曲</button>
-  </div>
-</div>
-`;
-
 function newWin(url,key){
   if(appPool[key]){
-    // 已经存在：最小化就恢复，显示就最小化
     let w = appPool[key];
     if(w.classList.contains('minify')){
       w.classList.remove('minify');
@@ -359,32 +339,20 @@ function newWin(url,key){
   const wrap = document.createElement('div');
   wrap.className = 'mac-window';
   wrap.style.zIndex = zIdx;
-  // 判断是否是QQ音乐，不用iframe，用内置动画面板
-  if(url === 'qqmusic-inner'){
-    wrap.innerHTML = `
+  // 直接嵌入官方完整QQ音乐网页版
+  wrap.innerHTML = `
       <div class="win-top">
         <div class="win-btn win-close"></div>
         <div class="win-btn win-min"></div>
         <div class="win-btn win-max"></div>
       </div>
-      ${qqMusicHtml}
-    `;
-  }else{
-    wrap.innerHTML = `
-      <div class="win-top">
-        <div class="win-btn win-close"></div>
-        <div class="win-btn win-min"></div>
-        <div class="win-btn win-max"></div>
-      </div>
-      <iframe class="win-iframe" src="${url}"></iframe>
-    `;
-  }
+      <iframe class="win-iframe" src="${url}" allowfullscreen></iframe>
+  `;
   document.body.appendChild(wrap);
   setTimeout(()=>wrap.classList.add('active'),10);
   appPool[key] = wrap;
   refreshDock();
 
-  // 三个按钮单独绑定，百分百可点击
   wrap.querySelector('.win-close').onclick=()=>{
     wrap.classList.add('minify');
     setTimeout(()=>{wrap.remove();delete appPool[key];refreshDock();},380);
@@ -402,11 +370,9 @@ function newWin(url,key){
     document.getElementById('rightMenu').style.display='block';
   };
 
-  // 正常拖拽，不卡死、不误关闭
   let drag = false,x1,y1,l,t;
   const bar = wrap.querySelector('.win-top');
   bar.onmousedown=e=>{
-    // 点三个按钮时，不触发拖拽
     if(e.target.classList.contains('win-btn')) return;
     drag=true;
     x1=e.clientX;y1=e.clientY;
@@ -450,8 +416,7 @@ dockHome.onclick=()=>location.reload();
 dockAi.onclick=()=>newWin('https://www.doubao.com','nyai');
 dockYuanbao.onclick=()=>newWin('https://yuanbao.tencent.com','yuanbao');
 dockKimi.onclick=()=>newWin('https://kimi.moonshot.cn','kimi');
-// QQ音乐Dock点击事件
-dockQqmusic.onclick=()=>newWin('qqmusic-inner','qqmusic');
+dockQqmusic.onclick=()=>newWin('https://y.qq.com/','qqmusic');
 dockSet.onclick=()=>newWin('','set');
 </script>
 
