@@ -111,6 +111,7 @@ body {
 .icon-item:nth-child(2){animation-delay:0.2s;}
 .icon-item:nth-child(3){animation-delay:0.3s;}
 .icon-item:nth-child(4){animation-delay:0.4s;}
+.icon-item:nth-child(5){animation-delay:0.5s;}
 .icon-box {
   width: 58px;height: 58px;
   border-radius: 14px;
@@ -259,6 +260,9 @@ body {
 }
 @keyframes macFadeIn {from {opacity: 0;}to {opacity: 1;}}
 @keyframes iconAppear {from {opacity: 0; transform: translateY(20px);}to {opacity: 1;}}
+/* QQ音乐唱片旋转动画 */
+@keyframes rotateDisk{0%{transform:rotate(0deg)}100%{transform:rotate(360deg)}}
+@keyframes breathLight{0%,100%{opacity:0.6}50%{opacity:1}}
 </style>
 </head>
 <body>
@@ -288,6 +292,11 @@ body {
     <div class="icon-box">🤖</div>
     <div class="icon-text">南阳AI<br><span class="dev-text">正在开发中</span></div>
   </div>
+  <!-- 新增QQ音乐桌面图标 -->
+  <div class="icon-item" data-url="qqmusic-inner" data-key="qqmusic">
+    <div class="icon-box">🎵</div>
+    <div class="icon-text">QQ音乐</div>
+  </div>
 </div>
 
 <div class="right-menu" id="rightMenu">
@@ -301,6 +310,8 @@ body {
   <div class="dock-icon" id="dockAi">🤖</div>
   <div class="dock-icon" id="dockYuanbao">💬</div>
   <div class="dock-icon" id="dockKimi">🔮</div>
+  <!-- 新增QQ音乐Dock图标 -->
+  <div class="dock-icon" id="dockQqmusic">🎵</div>
   <div class="dock-icon" id="dockSet">⚙️</div>
 </div>
 
@@ -315,6 +326,21 @@ slider.oninput=()=>setOp(slider.value);
 const appPool = {};
 let zIdx = 20;
 let rightWin = null;
+
+// 自定义QQ音乐动画页面HTML
+const qqMusicHtml = `
+<div style="width:100%;height:100%;background:linear-gradient(145deg,#121c22,#1a2933);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px;box-sizing:border-box;">
+  <div style="width:200px;height:200px;border-radius:50%;background:#222;border:10px solid #2b3842;animation:rotateDisk 10s linear infinite;box-shadow:0 0 40px #2ec77044;display:flex;align-items:center;justify-content:center;">
+    <div style="width:50px;height:50px;background:#ffffff22;border-radius:50%;"></div>
+  </div>
+  <div style="color:#2ec77c;font-size:17px;margin-top:30px;animation:breathLight 2s ease-in-out infinite;letter-spacing:2px;">QQ音乐 · 动态播放面板</div>
+  <div style="display:flex;gap:22px;margin-top:35px;">
+    <button style="width:48px;height:48px;border-radius:50%;border:none;background:#2ec77c20;color:#2ec77c;cursor:pointer;transition:all 0.3s ease;">上一曲</button>
+    <button style="width:60px;height:60px;border-radius:50%;border:none;background:#2ec77c;color:#fff;cursor:pointer;transition:all 0.3s ease;box-shadow:0 0 20px #2ec77055;">播放</button>
+    <button style="width:48px;height:48px;border-radius:50%;border:none;background:#2ec77c20;color:#2ec77c;cursor:pointer;transition:all 0.3s ease;">下一曲</button>
+  </div>
+</div>
+`;
 
 function newWin(url,key){
   if(appPool[key]){
@@ -333,14 +359,26 @@ function newWin(url,key){
   const wrap = document.createElement('div');
   wrap.className = 'mac-window';
   wrap.style.zIndex = zIdx;
-  wrap.innerHTML = `
-    <div class="win-top">
-      <div class="win-btn win-close"></div>
-      <div class="win-btn win-min"></div>
-      <div class="win-btn win-max"></div>
-    </div>
-    <iframe class="win-iframe" src="${url}"></iframe>
-  `;
+  // 判断是否是QQ音乐，不用iframe，用内置动画面板
+  if(url === 'qqmusic-inner'){
+    wrap.innerHTML = `
+      <div class="win-top">
+        <div class="win-btn win-close"></div>
+        <div class="win-btn win-min"></div>
+        <div class="win-btn win-max"></div>
+      </div>
+      ${qqMusicHtml}
+    `;
+  }else{
+    wrap.innerHTML = `
+      <div class="win-top">
+        <div class="win-btn win-close"></div>
+        <div class="win-btn win-min"></div>
+        <div class="win-btn win-max"></div>
+      </div>
+      <iframe class="win-iframe" src="${url}"></iframe>
+    `;
+  }
   document.body.appendChild(wrap);
   setTimeout(()=>wrap.classList.add('active'),10);
   appPool[key] = wrap;
@@ -391,6 +429,7 @@ function refreshDock(){
   if(appPool.yuanbao) dockYuanbao.classList.add('running');
   if(appPool.kimi) dockKimi.classList.add('running');
   if(appPool.nyai) dockAi.classList.add('running');
+  if(appPool.qqmusic) dockQqmusic.classList.add('running');
 }
 
 document.querySelectorAll('.icon-item').forEach(i=>{
@@ -411,6 +450,8 @@ dockHome.onclick=()=>location.reload();
 dockAi.onclick=()=>newWin('https://www.doubao.com','nyai');
 dockYuanbao.onclick=()=>newWin('https://yuanbao.tencent.com','yuanbao');
 dockKimi.onclick=()=>newWin('https://kimi.moonshot.cn','kimi');
+// QQ音乐Dock点击事件
+dockQqmusic.onclick=()=>newWin('qqmusic-inner','qqmusic');
 dockSet.onclick=()=>newWin('','set');
 </script>
 
