@@ -168,9 +168,9 @@ select{
     font-size:15px;
 }
 
-/* 底部抖音关注板块 */
-.douyin-box{
-    margin-top:45px;
+/* 成员卡片通用样式 */
+.user-card{
+    margin-top:30px;
     padding:25px;
     background:rgba(0,0,0,0.4);
     border:1px solid #444;
@@ -180,22 +180,22 @@ select{
     justify-content:center;
     gap:25px;
 }
-.douyin-avatar{
+.card-avatar{
     width:80px;
     height:80px;
     border-radius:50%;
     object-fit:cover;
     border:2px solid #87CEEB;
 }
-.douyin-info{
+.card-info{
     text-align:left;
 }
-.douyin-name{
+.card-name{
     font-size:18px;
     color:#87CEEB;
     margin-bottom:8px;
 }
-.douyin-tip{
+.card-desc{
     font-size:14px;
     color:#ccc;
 }
@@ -234,6 +234,24 @@ select{
     <div class="info-item" id="hardInfo">等待读取设备硬件基础信息</div>
     <button class="test-btn" onclick="startHardwareTest()">启动硬件检测跑分</button>
     <div class="result-text" id="scoreResult"></div>
+</div>
+
+<!-- 共创成员 鹿黑 -->
+<div class="user-card">
+    <img src="测试图（本人不喜欢）.jpg" class="card-avatar" alt="鹿黑头像">
+    <div class="card-info">
+        <div class="card-name">鹿黑</div>
+        <div class="card-desc">工作室共创成员</div>
+    </div>
+</div>
+
+<!-- 主页主账号 -->
+<div class="user-card">
+    <img src="Screenshot_20260523_083637.jpg" class="card-avatar" alt="账号头像">
+    <div class="card-info">
+        <div class="card-name">南阳数码 主科技原开发</div>
+        <div class="card-desc">抖音搜索关注南阳数码工作室</div>
+    </div>
 </div>
 
 <!-- Win7系统升级适配弹窗 -->
@@ -278,15 +296,6 @@ select{
         </div>
 
         <button class="pop-close" onclick="closePop()">确认配置关闭面板</button>
-    </div>
-</div>
-
-<!-- 底部抖音账号展示区域 -->
-<div class="douyin-box">
-    <img src="Screenshot_20260523_083637.jpg" class="douyin-avatar" alt="账号头像">
-    <div class="douyin-info">
-        <div class="douyin-name">南阳数码</div>
-        <div class="douyin-tip">抖音搜索关注南阳数码工作室</div>
     </div>
 </div>
 
