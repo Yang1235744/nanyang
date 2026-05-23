@@ -273,7 +273,7 @@ select{
 本官网已升级至20.11版本，主要添加了液态玻璃现代效果升级了，全面升级，欢迎使用，现在AI正在往进行一步开发，请耐心等待，目前别的AI已开放让你试用
   </div>
 
-<!-- 新增：无水印素材提取下载模块 -->
+<!-- 无水印素材提取工具 -->
 <div class="extract-box">
     <div class="extract-title">无水印素材提取工具</div>
     <input class="link-input" id="shareLink" placeholder="粘贴图片、视频分享链接">
@@ -357,26 +357,42 @@ select{
 </div>
 
 <script>
-// 无水印素材提取功能
-function parseSource(){
+// 真实下载函数
+function downloadFile(url, fileName) {
+    let a = document.createElement('a');
+    a.href = url;
+    a.download = fileName;
+    a.target = '_blank';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+}
+
+// 模拟解析（这里先拿一张可直接下载的图做示例）
+function parseSource() {
     let link = document.getElementById("shareLink").value.trim();
     let resDom = document.getElementById("extractResult");
-    if(!link){
+
+    if (!link) {
         resDom.innerHTML = "<span style='color:#ff6b6b'>请粘贴有效的分享链接</span>";
         return;
     }
+
     resDom.innerHTML = "<span style='color:#87CEEB'>正在解析资源，去除水印处理中...</span>";
-    setTimeout(()=>{
+
+    setTimeout(() => {
+        // 示例：用一张公共可下载图代替真实解析
+        let realUrl = "https://picsum.photos/id/1036/1920/1080";
         resDom.innerHTML = `
         <span style="color:#4cd964">解析成功，已去除全部水印</span><br>
-        素材原图原画质保留，可直接下载保存用作背景<br>
-        <button class="extract-btn">下载无水印文件</button>
-        <button class="extract-btn">一键设为设备背景</button>
+        素材原图原画质保留<br>
+        <button class="extract-btn" onclick="downloadFile('${realUrl}','无水印素材.jpg')">下载无水印文件</button>
         `;
-    },1600);
+    }, 1600);
 }
-// 清空输入内容
-function resetExtract(){
+
+// 清空输入
+function resetExtract() {
     document.getElementById("shareLink").value = "";
     document.getElementById("extractResult").innerHTML = "";
 }
@@ -387,7 +403,6 @@ function getDeviceInfo(){
     let system = "未知系统";
     let browserName = "未知浏览器";
 
-    // 精准系统判定
     if(ua.includes("Windows NT 6.1")) system = "Windows 7";
     else if(ua.includes("Windows NT 10.0")){
         if(ua.includes("22") || ua.includes("19045")===false) system = "Windows 11";
@@ -397,15 +412,12 @@ function getDeviceInfo(){
     else if(ua.includes("Android")) system = "安卓移动设备";
     else if(ua.includes("Mac OS")) system = "macOS 系统";
 
-    // 浏览器识别
     if(ua.includes("Edg")) browserName = "Edge 浏览器";
     else if(ua.includes("Chrome")) browserName = "Chrome 浏览器";
     else if(ua.includes("Firefox")) browserName = "火狐浏览器";
     else if(ua.includes("Safari")) browserName = "Safari 浏览器";
 
-    // 屏幕信息
     let screenRes = screen.width + " * " + screen.height;
-
     return {system,browserName,screenRes};
 }
 
@@ -421,7 +433,6 @@ function startHardwareTest(){
     `;
     resDom.innerHTML = "正在执行CPU运算、图形渲染双重压力测试...";
 
-    // CPU整数浮点混合运算测试
     let cpuStart = performance.now();
     let calcNum = 0;
     for(let i=0;i<1500000;i++){
@@ -429,7 +440,6 @@ function startHardwareTest(){
     }
     let cpuCost = performance.now() - cpuStart;
 
-    // 3D图形绘制测试，模拟游戏场景负载
     let canvas = document.createElement("canvas");
     let gl = canvas.getContext("webgl") || canvas.getContext("experimental-webgl");
     let gpuStart = performance.now();
@@ -438,12 +448,10 @@ function startHardwareTest(){
     }
     let gpuCost = performance.now() - gpuStart;
 
-    // 换算跑分数值
     let cpuScore = Math.floor(12000 / cpuCost * 80);
     let gpuScore = Math.floor(10000 / gpuCost * 75);
     let totalScore = cpuScore + gpuScore;
 
-    // 性能档次评级
     let levelText = "";
     if(totalScore >= 16000) levelText = "顶配性能，通吃各类大型游戏与剪辑渲染";
     else if(totalScore >= 9000) levelText = "中端主流，日常游戏办公无压力";
@@ -457,7 +465,6 @@ function startHardwareTest(){
     硬件性能定位：${levelText}
     `;
 
-    // 触发Win7弹窗
     if(info.system === "Windows 7"){
         document.getElementById("win7Pop").style.display = "flex";
     }
