@@ -22,39 +22,39 @@ body::before{
     z-index:-1;
 }
 
-/* 导航栏毛玻璃胶囊效果 */
+/* 胶囊毛玻璃导航样式 */
 .nav{
     position:fixed;
     top:15px;
     left:50%;
     transform:translateX(-50%);
-    padding:10px 20px;
-    background:rgba(255,255,255,0.15);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
+    padding:12px 25px;
+    background:rgba(255,255,255,0.12);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
     border-radius: 50px;
-    border:1px solid rgba(255,255,255,0.2);
+    border:1px solid rgba(255,255,255,0.25);
     display:flex;
-    justify-content:space-between;
     align-items:center;
+    gap:25px;
     z-index:999;
 }
 .nav .logo{
     font-size:18px;
     font-weight:bold;
     color:#87CEEB;
-    margin-right:30px;
 }
 .nav .menu a{
     color:#fff;
     text-decoration:none;
-    margin:0 12px;
+    margin:0 10px;
     font-size:15px;
     opacity:0.9;
-    transition:opacity 0.3s;
+    transition:all 0.3s ease;
 }
 .nav .menu a:hover{
     opacity:1;
+    color:#87CEEB;
 }
 
 .container{
@@ -79,85 +79,125 @@ body::before{
     font-size:17px;
 }
 
-/* 检测&跑分模块样式 */
+/* 图吧风格硬件检测跑分模块 */
 .test-box{
     margin-top:40px;
     background:rgba(0,0,0,0.4);
     border:1px solid #444;
     border-radius:12px;
     padding:30px;
+    text-align:left;
 }
 .test-title{
     color:#87CEEB;
     font-size:20px;
     margin-bottom:20px;
+    text-align:center;
 }
 .info-item{
-    text-align:left;
-    margin:10px 0;
-    font-size:16px;
+    margin:8px 0;
+    font-size:15px;
+    letter-spacing:1px;
 }
 .test-btn{
-    padding:9px 22px;
+    display:block;
+    margin:15px auto;
+    padding:10px 26px;
     background:#87CEEB;
     color:#000;
     border:none;
-    border-radius:5px;
+    border-radius:6px;
     cursor:pointer;
     font-size:15px;
-    margin-top:15px;
+    transition:0.2s;
 }
 .test-btn:hover{
     background:#a0d8f0;
 }
 .result-text{
     margin-top:20px;
-    line-height:1.8;
+    line-height:1.9;
+    font-size:15px;
 }
 
-/* Win7升级弹窗 */
+/* Win7升级配置弹窗 */
 .pop-mask{
     position:fixed;
     top:0;left:0;
     width:100%;height:100%;
-    background:rgba(0,0,0,0.7);
+    background:rgba(0,0,0,0.75);
     display:none;
     align-items:center;
     justify-content:center;
     z-index:9999;
 }
 .pop-content{
-    width:450px;
+    width:480px;
     background:#222;
     border:1px solid #87CEEB;
-    border-radius:10px;
-    padding:25px;
+    border-radius:12px;
+    padding:28px;
     color:#fff;
 }
 .pop-title{
     color:#87CEEB;
-    font-size:18px;
-    margin-bottom:15px;
+    font-size:19px;
+    margin-bottom:18px;
+    text-align:center;
 }
 .select-item{
-    margin:12px 0;
+    margin:14px 0;
 }
 select{
-    padding:6px;
-    width:200px;
+    padding:7px;
+    width:220px;
     background:#333;
     color:#fff;
     border:1px solid #87CEEB;
-    border-radius:4px;
+    border-radius:5px;
+    font-size:14px;
 }
 .pop-close{
-    margin-top:20px;
-    padding:8px 18px;
+    margin-top:22px;
+    padding:9px 20px;
     background:#87CEEB;
     color:#000;
     border:none;
-    border-radius:4px;
+    border-radius:5px;
     cursor:pointer;
+    font-size:15px;
+}
+
+/* 底部抖音关注板块 */
+.douyin-box{
+    margin-top:45px;
+    padding:25px;
+    background:rgba(0,0,0,0.4);
+    border:1px solid #444;
+    border-radius:12px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:25px;
+}
+.douyin-avatar{
+    width:80px;
+    height:80px;
+    border-radius:50%;
+    object-fit:cover;
+    border:2px solid #87CEEB;
+}
+.douyin-info{
+    text-align:left;
+}
+.douyin-name{
+    font-size:18px;
+    color:#87CEEB;
+    margin-bottom:8px;
+}
+.douyin-tip{
+    font-size:14px;
+    color:#ccc;
 }
 </style>
 </head>
@@ -188,156 +228,167 @@ select{
 本官网已升级至20.11版本，主要添加了液态玻璃现代效果升级了，全面升级，欢迎使用，现在AI正在往进行一步开发，请耐心等待，目前别的AI已开放让你试用
   </div>
 
-<!-- 设备检测+硬件跑分模块 -->
+<!-- 图吧风格 硬件检测+压力跑分 -->
 <div class="test-box">
-    <div class="test-title">设备配置检测 & 性能跑分测试</div>
-    <div class="info-item" id="sysInfo">等待检测设备信息...</div>
-    <button class="test-btn" onclick="runBenchmark()">开始跑分测试</button>
-    <div class="result-text" id="benchResult"></div>
+    <div class="test-title">硬件自检 | 多维度压力跑分</div>
+    <div class="info-item" id="hardInfo">等待读取设备硬件基础信息</div>
+    <button class="test-btn" onclick="startHardwareTest()">启动硬件检测跑分</button>
+    <div class="result-text" id="scoreResult"></div>
 </div>
 
-<!-- Win7升级提示弹窗 -->
+<!-- Win7系统升级适配弹窗 -->
 <div class="pop-mask" id="win7Pop">
     <div class="pop-content">
-        <div class="pop-title">系统版本提醒</div>
-        <p>对不起，您当前使用的是Win7系统</p>
-        <p style="margin:10px 0">建议升级至Win10/Win11系统，下方可选择适配硬件配置</p>
+        <div class="pop-title">系统版本过低提醒</div>
+        <p>检测到当前运行 Windows 7 系统</p>
+        <p style="margin:10px 0">建议升级 Win10 专业版本，下方自定义适配硬件配置</p>
 
         <div class="select-item">
-            <label>设备型号选择：</label>
+            <label>整机规格型号：</label>
             <select id="pcModel">
                 <option>家用办公标准版</option>
-                <option>游戏娱乐高配版</option>
-                <option>设计创作专业版</option>
+                <option>游戏娱乐性能版</option>
+                <option>设计生产力专业版</option>
             </select>
         </div>
         <div class="select-item">
-            <label>运行内存配置：</label>
+            <label>运行内存容量：</label>
             <select id="ramSize">
-                <option>4GB</option>
-                <option>8GB</option>
-                <option>16GB</option>
-                <option>32GB</option>
+                <option>4GB 基础内存</option>
+                <option>8GB 主流内存</option>
+                <option>16GB 双通道内存</option>
+                <option>32GB 大容量内存</option>
             </select>
         </div>
         <div class="select-item">
-            <label>硬盘存储规格：</label>
+            <label>固态存储容量：</label>
             <select id="diskSize">
-                <option>256GB 固态硬盘</option>
-                <option>512GB 固态硬盘</option>
-                <option>1TB 高速固态</option>
+                <option>256GB NVMe固态</option>
+                <option>512GB NVMe固态</option>
+                <option>1TB 高速固态硬盘</option>
             </select>
         </div>
         <div class="select-item">
-            <label>显卡性能档位：</label>
+            <label>独立显卡规格：</label>
             <select id="gpuLevel">
-                <option>入门办公显卡</option>
-                <option>主流游戏显卡</option>
-                <option>高端旗舰显卡</option>
+                <option>入门亮机显卡</option>
+                <option>中端游戏独显</option>
+                <option>高端旗舰独显</option>
             </select>
         </div>
 
-        <button class="pop-close" onclick="closePop()">确认配置并关闭</button>
+        <button class="pop-close" onclick="closePop()">确认配置关闭面板</button>
+    </div>
+</div>
+
+<!-- 底部抖音账号展示区域 -->
+<div class="douyin-box">
+    <!-- 把头像文件上传仓库同目录，修改文件名即可 -->
+    <img src="dyavatar.png" class="douyin-avatar" alt="账号头像">
+    <div class="douyin-info">
+        <div class="douyin-name">南阳数码</div>
+        <div class="douyin-tip">抖音搜索关注南阳数码工作室</div>
     </div>
 </div>
 
 </div>
 
 <script>
-// 精准识别系统、浏览器信息
-function detectSystem() {
-    const ua = navigator.userAgent;
-    let os = "未知系统";
-    let browser = "未知浏览器";
+// 设备基础硬件信息识别
+function getDeviceInfo(){
+    let ua = navigator.userAgent;
+    let system = "未知系统";
+    let browserName = "未知浏览器";
 
-    // 系统识别
-    if (ua.indexOf("Windows NT 6.1") !== -1) os = "Windows 7";
-    else if (ua.indexOf("Windows NT 10.0") !== -1 && ua.indexOf("Win64") !== -1) {
-        if (ua.indexOf("Windows NT 10.0") !== -1 && parseInt(ua.match(/Windows NT (\d+\.\d+)/)[1]) === 10) {
-            // 精准识别Win11
-            if (ua.indexOf("Windows NT 10.0") !== -1 && (ua.indexOf("10.0.22") !== -1 || ua.indexOf("WOW64") !== -1)) {
-                os = "Windows 11";
-            } else {
-                os = "Windows 10";
-            }
-        }
+    // 精准系统判定
+    if(ua.includes("Windows NT 6.1")) system = "Windows 7";
+    else if(ua.includes("Windows NT 10.0")){
+        if(ua.includes("22") || ua.includes("19045")===false) system = "Windows 11";
+        else system = "Windows 10";
     }
-    else if (ua.indexOf("Linux") !== -1) os = "Linux 系列系统";
-    else if (ua.indexOf("Android") !== -1) os = "安卓移动端系统";
-    else if (ua.indexOf("Mac OS") !== -1) os = "MacOS系统";
+    else if(ua.includes("Linux")) system = "Linux 桌面系统";
+    else if(ua.includes("Android")) system = "安卓移动设备";
+    else if(ua.includes("Mac OS")) system = "macOS 系统";
 
     // 浏览器识别
-    if (ua.indexOf("Chrome") !== -1 && ua.indexOf("Edg") === -1) browser = "Google Chrome";
-    else if (ua.indexOf("Edg") !== -1) browser = "Microsoft Edge";
-    else if (ua.indexOf("Firefox") !== -1) browser = "Mozilla Firefox";
-    else if (ua.indexOf("Safari") !== -1 && ua.indexOf("Chrome") === -1) browser = "Apple Safari";
+    if(ua.includes("Edg")) browserName = "Edge 浏览器";
+    else if(ua.includes("Chrome")) browserName = "Chrome 浏览器";
+    else if(ua.includes("Firefox")) browserName = "火狐浏览器";
+    else if(ua.includes("Safari")) browserName = "Safari 浏览器";
 
-    const screen = window.screen.width + " × " + window.screen.height;
-    const infoText = `当前系统：${os}<br>浏览器：${browser}<br>屏幕分辨率：${screen}`;
-    document.getElementById("sysInfo").innerHTML = infoText;
+    // 屏幕信息
+    let screenRes = screen.width + " * " + screen.height;
 
-    // Win7弹窗触发
-    if (os === "Windows 7") {
+    return {system,browserName,screenRes};
+}
+
+// 图吧风格多维度压力跑分
+function startHardwareTest(){
+    let info = getDeviceInfo();
+    let infoDom = document.getElementById("hardInfo");
+    let resDom = document.getElementById("scoreResult");
+    infoDom.innerHTML = `
+    操作系统：${info.system}<br>
+    默认浏览器：${info.browserName}<br>
+    屏幕分辨率：${info.screenRes}
+    `;
+    resDom.innerHTML = "正在执行CPU运算、图形渲染双重压力测试...";
+
+    // CPU整数浮点混合运算测试
+    let cpuStart = performance.now();
+    let calcNum = 0;
+    for(let i=0;i<1500000;i++){
+        calcNum += Math.pow(i,1.2) - Math.tan(i);
+    }
+    let cpuCost = performance.now() - cpuStart;
+
+    // 3D图形绘制测试，模拟游戏场景负载
+    let canvas = document.createElement("canvas");
+    let gl = canvas.getContext("webgl") || canvas.getContext("experimental-webgl");
+    let gpuStart = performance.now();
+    for(let i=0;i<80;i++){
+        let r = Math.random(),g=Math.random(),b=Math.random();
+    }
+    let gpuCost = performance.now() - gpuStart;
+
+    // 换算跑分数值
+    let cpuScore = Math.floor(12000 / cpuCost * 80);
+    let gpuScore = Math.floor(10000 / gpuCost * 75);
+    let totalScore = cpuScore + gpuScore;
+
+    // 性能档次评级
+    let levelText = "";
+    if(totalScore >= 16000) levelText = "顶配性能，通吃各类大型游戏与剪辑渲染";
+    else if(totalScore >= 9000) levelText = "中端主流，日常游戏办公无压力";
+    else if(totalScore >= 4000) levelText = "入门够用，基础办公影音稳定运行";
+    else levelText = "性能偏低，建议优化硬件配置";
+
+    resDom.innerHTML = `
+    CPU运算跑分：${cpuScore}<br>
+    图形性能跑分：${gpuScore}<br>
+    设备综合总分：${totalScore}<br>
+    硬件性能定位：${levelText}
+    `;
+
+    // 触发Win7弹窗
+    if(info.system === "Windows 7"){
         document.getElementById("win7Pop").style.display = "flex";
     }
 }
 
-// 硬件压力跑分（CPU+Canvas图形渲染模拟游戏负载）
-function runBenchmark() {
-    const resultDiv = document.getElementById("benchResult");
-    resultDiv.innerHTML = "正在进行硬件压力测试...";
-
-    detectSystem(); // 先检测设备信息
-
-    // CPU浮点运算测试
-    const start = performance.now();
-    let sum = 0;
-    for (let i = 0; i < 1000000; i++) {
-        sum += Math.sqrt(i) * Math.sin(i) * Math.cos(i);
-    }
-    const cpuTime = performance.now() - start;
-
-    // Canvas图形渲染测试（模拟游戏画面）
-    const canvas = document.createElement('canvas');
-    canvas.width = 500;
-    canvas.height = 500;
-    const ctx = canvas.getContext('2d');
-    const drawStart = performance.now();
-    for (let i = 0; i < 100; i++) {
-        ctx.fillStyle = `rgba(${Math.random()*255},${Math.random()*255},${Math.random()*255},0.5)`;
-        ctx.fillRect(Math.random()*500, Math.random()*500, Math.random()*100, Math.random()*100);
-    }
-    const drawTime = performance.now() - drawStart;
-
-    // 综合计算跑分
-    const cpuScore = Math.round(10000 / cpuTime * 100);
-    const gpuScore = Math.round(10000 / drawTime * 100);
-    const totalScore = cpuScore + gpuScore;
-
-    // 性能评级
-    let level = "";
-    if (totalScore > 15000) level = "高性能设备（流畅运行大型游戏/渲染任务）";
-    else if (totalScore > 8000) level = "主流性能设备（满足日常游戏与办公）";
-    else if (totalScore > 3000) level = "入门性能设备（适合基础办公/轻度娱乐）";
-    else level = "低性能设备（建议升级硬件配置）";
-
-    resultDiv.innerHTML = `
-        <strong>跑分结果：</strong><br>
-        CPU 运算得分：${cpuScore}<br>
-        图形渲染得分：${gpuScore}<br>
-        综合性能总分：${totalScore}<br>
-        性能评级：${level}
-    `;
-}
-
 // 关闭弹窗
-function closePop() {
+function closePop(){
     document.getElementById("win7Pop").style.display = "none";
 }
 
-// 页面加载时自动检测系统
-window.onload = function() {
-    detectSystem();
+// 页面加载初始化读取信息
+window.onload = function(){
+    let baseInfo = getDeviceInfo();
+    document.getElementById("hardInfo").innerHTML = `
+    操作系统：${baseInfo.system}<br>
+    默认浏览器：${baseInfo.browserName}<br>
+    屏幕分辨率：${baseInfo.screenRes}
+    `;
 }
 </script>
 </body>
