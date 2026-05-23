@@ -15,6 +15,19 @@ body::before{content:"";position:absolute;top:0;left:0;width:100%;height:100%;ba
 .container{width:100%;max-width:800px;margin:0 auto;padding:140px 20px 80px;text-align:center;}
 .container h1{font-size:36px;color:#87CEEB;margin-bottom:30px;}
 .about-text{background:rgba(0,0,0,0.4);border:1px solid #444;border-radius:12px;padding:40px;text-align:left;line-height:2;font-size:17px;}
+/* 新增检测模块样式 */
+.check-box{margin-top:40px;background:rgba(0,0,0,0.4);border:1px solid #444;border-radius:12px;padding:30px;}
+.check-title{color:#87CEEB;font-size:20px;margin-bottom:20px;}
+.info-item{text-align:left;margin:10px 0;font-size:16px;}
+.check-btn{padding:9px 22px;background:#87CEEB;color:#000;border:none;border-radius:5px;cursor:pointer;font-size:15px;margin-top:15px;}
+.check-btn:hover{background:#a0d8f0;}
+/* 弹窗样式 */
+.pop-mask{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.7);display:none;align-items:center;justify-content:center;z-index:9999;}
+.pop-content{width:450px;background:#222;border:1px solid #87CEEB;border-radius:10px;padding:25px;color:#fff;}
+.pop-title{color:#87CEEB;font-size:18px;margin-bottom:15px;}
+.select-item{margin:12px 0;}
+select{padding:6px;width:200px;background:#333;color:#fff;border:1px solid #87CEEB;border-radius:4px;}
+.pop-close{margin-top:20px;padding:8px 18px;background:#87CEEB;color:#000;border:none;border-radius:4px;cursor:pointer;}
 </style>
 </head>
 <body>
@@ -42,7 +55,100 @@ body::before{content:"";position:absolute;top:0;left:0;width:100%;height:100%;ba
 
 本官网已升级至20.11版本，主要添加了液态玻璃现代效果升级了，全面升级，欢迎使用，现在AI正在往进行一步开发，请耐心等待，目前别的AI已开放让你试用
   </div>
+
+<!-- 新增设备配置检测模块 -->
+<div class="check-box">
+    <div class="check-title">设备配置自动检测</div>
+    <div class="info-item" id="sysInfo">正在检测设备信息...</div>
+    <button class="check-btn" onclick="checkDevice()">立即检测配置</button>
 </div>
+
+<!-- Win7升级提示弹窗 -->
+<div class="pop-mask" id="win7Pop">
+    <div class="pop-content">
+        <div class="pop-title">系统版本提醒</div>
+        <p>对不起，您当前使用的是Win7系统</p>
+        <p style="margin:10px 0">建议升级至Win10系统，下方可选择适配硬件配置</p>
+
+        <div class="select-item">
+            <label>设备型号选择：</label>
+            <select id="pcModel">
+                <option>家用办公标准版</option>
+                <option>游戏娱乐高配版</option>
+                <option>设计创作专业版</option>
+            </select>
+        </div>
+        <div class="select-item">
+            <label>运行内存配置：</label>
+            <select id="ramSize">
+                <option>4GB</option>
+                <option>8GB</option>
+                <option>16GB</option>
+                <option>32GB</option>
+            </select>
+        </div>
+        <div class="select-item">
+            <label>硬盘存储规格：</label>
+            <select id="diskSize">
+                <option>256GB 固态硬盘</option>
+                <option>512GB 固态硬盘</option>
+                <option>1TB 高速固态</option>
+            </select>
+        </div>
+        <div class="select-item">
+            <label>显卡性能档位：</label>
+            <select id="gpuLevel">
+                <option>入门办公显卡</option>
+                <option>主流游戏显卡</option>
+                <option>高端旗舰显卡</option>
+            </select>
+        </div>
+
+        <button class="pop-close" onclick="closePop()">确认配置并关闭</button>
+    </div>
+</div>
+
+</div>
+
+<script>
+// 设备检测判断逻辑
+function checkDevice(){
+    let userAgent = navigator.userAgent;
+    let sysText = "";
+    let isWin7 = false;
+
+    if(userAgent.indexOf("Windows NT 6.1")!==-1){
+        sysText = "当前系统：Windows 7";
+        isWin7 = true;
+    }else if(userAgent.indexOf("Windows NT 10.0")!==-1){
+        sysText = "当前系统：Windows 10";
+    }else if(userAgent.indexOf("Windows NT 11.0")!==-1){
+        sysText = "当前系统：Windows 11";
+    }else if(userAgent.indexOf("Linux")!==-1){
+        sysText = "当前系统：Linux 系列系统";
+    }else if(userAgent.indexOf("Android")!==-1){
+        sysText = "当前系统：安卓移动端系统";
+    }else if(userAgent.indexOf("Mac")!==-1){
+        sysText = "当前系统：MacOS系统";
+    }else{
+        sysText = "暂未识别当前设备系统";
+    }
+
+    // 补充基础设备信息
+    let browInfo = "浏览器："+navigator.appName;
+    let screenInfo = "屏幕分辨率："+window.screen.width+" × "+window.screen.height;
+    document.getElementById("sysInfo").innerHTML = sysText+"<br>"+browInfo+"<br>"+screenInfo;
+
+    // Win7弹出升级弹窗
+    if(isWin7){
+        document.getElementById("win7Pop").style.display = "flex";
+    }
+}
+
+// 关闭弹窗
+function closePop(){
+    document.getElementById("win7Pop").style.display = "none";
+}
+</script>
 </body>
 </html>
-
