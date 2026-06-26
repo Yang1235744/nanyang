@@ -3,487 +3,639 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>关于我们 - 南阳数码工作室</title>
+<title>MC服务中心 - 南阳服务器</title>
 <style>
-*{margin:0;padding:0;box-sizing:border-box;font-family:"Microsoft YaHei",sans-serif;}
-body{
-    background:url(https://picsum.photos/id/1036/1920/1080) no-repeat center center fixed;
-    background-size:cover;
-    position:relative;
-    min-height:100vh;
-    color:#fff;
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: system-ui, sans-serif;
 }
-body::before{
-    content:"";
-    position:absolute;
+body{
+    color:#eee;
+    line-height:1.8;
+    overflow-x:hidden;
+    animation: pageFadeIn 0.8s ease-out;
+}
+/* 星空黑色背景 */
+#starBg{
+    position:fixed;
     top:0;left:0;
-    width:100%;height:100%;
-    background:rgba(0,0,0,0.6);
+    width:100vw;height:100vh;
+    background:#000008;
     z-index:-1;
 }
-
-/* 胶囊毛玻璃导航样式 */
-.nav{
-    position:fixed;
-    top:15px;
-    left:50%;
-    transform:translateX(-50%);
-    padding:12px 25px;
-    background:rgba(255,255,255,0.12);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    border-radius: 50px;
-    border:1px solid rgba(255,255,255,0.25);
-    display:flex;
-    align-items:center;
-    gap:25px;
-    z-index:999;
+.star{
+    position:absolute;
+    background:#fff;
+    border-radius:50%;
+    animation: twinkle 3s infinite ease-in-out;
 }
-.nav .logo{
-    font-size:18px;
-    font-weight:bold;
-    color:#87CEEB;
+@keyframes twinkle{
+    0%,100%{opacity:0.2;}
+    50%{opacity:1;}
 }
-.nav .menu a{
-    color:#fff;
-    text-decoration:none;
-    margin:0 10px;
-    font-size:15px;
-    opacity:0.9;
-    transition:all 0.3s ease;
+@keyframes pageFadeIn{
+    from{opacity:0;transform:translateY(12px);}
+    to{opacity:1;transform:translateY(0);}
 }
-.nav .menu a:hover{
-    opacity:1;
-    color:#87CEEB;
-}
-
-.container{
+/* 顶部导航栏 */
+.top-nav{
     width:100%;
-    max-width:800px;
+    padding:16px 15px;
+    background:rgba(12, 20, 36, 0.7);
+    backdrop-filter: blur(8px);
+    border-bottom:1px solid rgba(96,165,250,0.2);
+    position:sticky;
+    top:0;
+    z-index:99;
+}
+.nav-wrap{
+    max-width:1100px;
     margin:0 auto;
-    padding:140px 20px 80px;
-    text-align:center;
+    display:flex;
+    justify-content:flex-start;
 }
-.container h1{
-    font-size:36px;
-    color:#87CEEB;
-    margin-bottom:30px;
-}
-.about-text{
-    background:rgba(0,0,0,0.4);
-    border:1px solid #444;
-    border-radius:12px;
-    padding:40px;
-    text-align:left;
-    line-height:2;
-    font-size:17px;
-}
-
-/* 无水印素材提取模块样式 */
-.extract-box{
-    margin-top:40px;
-    background:rgba(0,0,0,0.4);
-    border:1px solid #444;
-    border-radius:12px;
-    padding:30px;
-    text-align:center;
-}
-.extract-title{
-    color:#87CEEB;
-    font-size:20px;
-    margin-bottom:20px;
-}
-.link-input{
-    width:100%;
-    max-width:500px;
-    padding:12px 15px;
-    background:#222;
-    border:1px solid #87CEEB;
+.back-home-btn{
+    padding:8px 20px;
+    background:#1677ff;
+    border:none;
     border-radius:8px;
     color:#fff;
     font-size:15px;
-    outline:none;
-}
-.extract-btn{
-    margin:15px 8px;
-    padding:10px 24px;
-    background:#87CEEB;
-    color:#000;
-    border:none;
-    border-radius:6px;
     cursor:pointer;
-    font-size:15px;
-    transition:0.2s;
+    transition:0.3s all;
 }
-.extract-btn:hover{
-    background:#a0d8f0;
+.back-home-btn:hover{
+    background:#0958d9;
+    box-shadow:0 0 10px #1677ff66;
 }
-.result-show{
-    margin-top:15px;
-    font-size:15px;
-    line-height:1.8;
+.container{
+    max-width:1100px;
+    margin:0 auto;
+    padding:40px 15px;
+    position:relative;
+    z-index:1;
 }
-
-/* 图吧风格硬件检测跑分模块 */
-.test-box{
-    margin-top:40px;
-    background:rgba(0,0,0,0.4);
-    border:1px solid #444;
-    border-radius:12px;
-    padding:30px;
-    text-align:left;
-}
-.test-title{
-    color:#87CEEB;
-    font-size:20px;
-    margin-bottom:20px;
+h1{
     text-align:center;
-}
-.info-item{
-    margin:8px 0;
-    font-size:15px;
-    letter-spacing:1px;
-}
-.test-btn{
-    display:block;
-    margin:15px auto;
-    padding:10px 26px;
-    background:#87CEEB;
-    color:#000;
-    border:none;
-    border-radius:6px;
-    cursor:pointer;
-    font-size:15px;
-    transition:0.2s;
-}
-.test-btn:hover{
-    background:#a0d8f0;
-}
-.result-text{
-    margin-top:20px;
-    line-height:1.9;
-    font-size:15px;
-}
-
-/* Win7升级配置弹窗 */
-.pop-mask{
-    position:fixed;
-    top:0;left:0;
-    width:100%;height:100%;
-    background:rgba(0,0,0,0.75);
-    display:none;
-    align-items:center;
-    justify-content:center;
-    z-index:9999;
-}
-.pop-content{
-    width:480px;
-    background:#222;
-    border:1px solid #87CEEB;
-    border-radius:12px;
-    padding:28px;
-    color:#fff;
-}
-.pop-title{
-    color:#87CEEB;
-    font-size:19px;
-    margin-bottom:18px;
-    text-align:center;
-}
-.select-item{
-    margin:14px 0;
-}
-select{
-    padding:7px;
-    width:220px;
-    background:#333;
-    color:#fff;
-    border:1px solid #87CEEB;
-    border-radius:5px;
-    font-size:14px;
-}
-.pop-close{
-    margin-top:22px;
-    padding:9px 20px;
-    background:#87CEEB;
-    color:#000;
-    border:none;
-    border-radius:5px;
-    cursor:pointer;
-    font-size:15px;
-}
-
-/* 成员卡片通用样式 */
-.user-card{
-    margin-top:30px;
-    padding:25px;
-    background:rgba(0,0,0,0.4);
-    border:1px solid #444;
-    border-radius:12px;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    gap:25px;
-}
-.card-avatar{
-    width:80px;
-    height:80px;
-    border-radius:50%;
-    object-fit:cover;
-    border:2px solid #87CEEB;
-}
-.card-info{
-    text-align:left;
-}
-.card-name{
-    font-size:18px;
-    color:#87CEEB;
+    color:#60a5fa;
+    font-size:32px;
     margin-bottom:8px;
+    animation: titleUp 1s ease-out;
+    text-shadow: 0 0 12px #1677ff66;
 }
-.card-desc{
+@keyframes titleUp{
+    from{opacity:0;transform:translateY(-20px);}
+    to{opacity:1;transform:translateY(0);}
+}
+.sub-title{
+    text-align:center;
+    color:#b0c4de;
+    margin-bottom:40px;
+    font-size:16px;
+}
+/* 总模块大卡片 */
+.module-card{
+    background:rgba(30, 40, 60, 0.65);
+    border:1px solid rgba(96, 165, 250, 0.25);
+    border-radius:16px;
+    padding:28px;
+    margin-bottom:26px;
+    backdrop-filter: blur(6px);
+    transition: all 0.3s ease;
+    animation: cardSlide 1s ease backwards;
+}
+.module-card:nth-of-type(2){animation-delay:0.2s;}
+.module-card:nth-of-type(3){animation-delay:0.4s;}
+.module-card:nth-of-type(4){animation-delay:0.6s;}
+.module-card:nth-of-type(5){animation-delay:0.8s;}
+.module-card:nth-of-type(6){animation-delay:1s;}
+.module-card:nth-of-type(7){animation-delay:1.2s;}
+@keyframes cardSlide{
+    from{opacity:0;transform:translateY(24px);}
+    to{opacity:1;transform:translateY(0);}
+}
+.module-card:hover{
+    transform: translateY(-6px);
+    box-shadow: 0 0 24px rgba(96, 165, 250, 0.22);
+    border-color:rgba(96, 165, 250, 0.5);
+}
+h2{
+    color:#7cb9ff;
+    margin-bottom:18px;
+    border-left:5px solid #60a5fa;
+    padding-left:12px;
+    font-size:22px;
+}
+h3{
+    margin:22px 0 10px;
+    font-size:19px;
+    color:#e0edff;
+}
+/* 节点选择按钮组 */
+.node-wrap{
+    display:flex;
+    gap:14px;
+    flex-wrap:wrap;
+    margin:16px 0;
+}
+.node-btn{
+    padding:10px 20px;
+    border-radius:8px;
+    border:1px solid #4477bb;
+    background:rgba(32, 58, 92, 0.5);
+    color:#cce0ff;
+    cursor:pointer;
+    transition:0.25s all;
+}
+.node-btn.active{
+    background:#1677ff;
+    border-color:#60a5fa;
+    box-shadow: 0 0 8px #1677ff77;
+}
+.node-btn.unopen{
+    opacity:0.4;
+    cursor:not-allowed;
+}
+.node-btn:hover:not(.unopen){
+    background:rgba(22, 119, 255, 0.4);
+}
+/* 联机地址弹窗 */
+.server-address-box{
+    margin-top:20px;
+    padding:20px;
+    border-radius:12px;
+    background:rgba(22, 119, 255, 0.15);
+    border:1px solid #3377cc;
+    display:none;
+    animation: addressFade 0.4s ease-out;
+}
+@keyframes addressFade{
+    from{opacity:0;transform:translateY(10px);}
+    to{opacity:1;transform:translateY(0);}
+}
+.address-item{
+    padding:10px 14px;
+    margin:10px 0;
+    background:rgba(0,0,0,0.3);
+    border-radius:8px;
+}
+.address-title{
+    color:#90c8ff;
+    font-weight:bold;
+}
+.address-text{
+    color:#fff;
+    font-size:17px;
+    margin-top:4px;
+}
+.tip-text{
+    color:#ffc866;
     font-size:14px;
-    color:#ccc;
+    margin-top:12px;
+}
+/* 服务器窗口卡片 */
+.server-window-wrap{
+    display:grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px,1fr));
+    gap:20px;
+    margin-top:20px;
+}
+.server-window{
+    background:rgba(15,22,36,0.75);
+    border:1px solid #4276b866;
+    border-radius:12px;
+    padding:20px;
+    transition:0.3s all;
+    position:relative;
+    overflow:hidden;
+}
+.server-window::before{
+    content:"";
+    position:absolute;
+    top:0;left:0;
+    width:100%;height:4px;
+    background:linear-gradient(90deg,#1677ff,#60d3ff);
+}
+.server-window:hover{
+    border-color:#60a5fa;
+    box-shadow:0 0 16px #1677ff33;
+    transform:translateY(-4px);
+}
+.window-tag{
+    display:inline-block;
+    padding:3px 10px;
+    border-radius:6px;
+    font-size:13px;
+    margin-bottom:12px;
+}
+.tag-public{
+    background:#22c55833;
+    border:1px solid #22c558;
+    color:#86efac;
+}
+.tag-private-low{
+    background:#f9731633;
+    border:1px solid #f97316;
+    color:#fdba74;
+}
+.tag-private-mid{
+    background:#a855f733;
+    border:1px solid #a855f7;
+    color:#d8b4fe;
+}
+.tag-soon{
+    display:inline-block;
+    background:#ff7d00;
+    color:#000;
+    padding:2px 9px;
+    border-radius:5px;
+    font-size:14px;
+    margin-left:10px;
+    animation: breathe 2.6s infinite ease-in-out;
+}
+@keyframes breathe{
+    0%,100%{opacity:0.8;}
+    50%{opacity:1;}
+}
+.warn-text{
+    color:#ff8888;
+}
+ul{
+    padding-left:24px;
+    margin:12px 0;
+}
+li{
+    margin:7px 0;
+}
+/* 模组库蓝色独立小方块 */
+.mod-box{
+    margin-top:16px;
+    padding:20px;
+    background:rgba(22,119,255,0.12);
+    border:1px solid #3b82f6;
+    border-radius:12px;
+}
+.download-btn{
+    margin-top:14px;
+    padding:8px 20px;
+    background:#1677ff;
+    border:none;
+    border-radius:8px;
+    color:#fff;
+    font-size:15px;
+    cursor:pointer;
+    transition:0.3s all;
+}
+.download-btn:hover{
+    background:#0958d9;
+    box-shadow:0 0 10px #1677ff66;
+}
+.bottom-tip{
+    text-align:center;
+    margin-top:50px;
+    color:#a0b8d8;
+    font-size:17px;
+    line-height:2;
+}
+/* 反馈留言模块样式 */
+.feedback-box{
+    margin-top:15px;
+}
+.msg-list{
+    min-height:180px;
+    padding:15px;
+    background:rgba(0,0,0,0.35);
+    border-radius:10px;
+    border:1px solid #334155;
+    margin-bottom:16px;
+}
+.msg-item{
+    padding:10px;
+    border-radius:8px;
+    margin-bottom:10px;
+}
+.player-msg{
+    background:rgba(59, 130, 246, 0.18);
+    border:1px solid #3b82f666;
+}
+.owner-msg{
+    background:rgba(34, 197, 94, 0.18);
+    border:1px solid #22c55866;
+}
+.msg-time{
+    font-size:12px;
+    color:#94a3b8;
+    margin-bottom:4px;
+}
+.input-area{
+    width:100%;
+    padding:12px;
+    background:rgba(0,0,0,0.3);
+    border:1px solid #475569;
+    border-radius:8px;
+    color:#fff;
+    resize:none;
+    min-height:90px;
+    font-size:15px;
+}
+.submit-btn{
+    margin-top:12px;
+    padding:9px 24px;
+    background:#1677ff;
+    border:none;
+    border-radius:8px;
+    color:#fff;
+    cursor:pointer;
+    transition:0.2s;
+}
+.submit-btn:hover{
+    background:#0958d9;
+}
+.reply-row{
+    margin-top:8px;
+    display:flex;
+    gap:10px;
+}
+.reply-input{
+    flex:1;
+    padding:8px 12px;
+    background:rgba(0,0,0,0.3);
+    border:1px solid #475569;
+    border-radius:8px;
+    color:#fff;
+}
+.reply-btn{
+    padding:0 14px;
+    background:#22c558;
+    border:none;
+    border-radius:8px;
+    color:#000;
+    cursor:pointer;
 }
 </style>
 </head>
 <body>
-<div class="nav">
-  <div class="logo">南阳数码工作室</div>
-  <div class="menu">
-    <a href="./index.html">首页</a>
-    <a href="https://www.microsoft.com" target="_blank">微软官方地址</a>
-    <a href="./index.html">系统镜像下载</a>
-    <a href="./about.html">关于我们</a>
-  </div>
+<!-- 顶部导航栏 -->
+<div class="top-nav">
+    <div class="nav-wrap">
+        <button class="back-home-btn" onclick="location.href='https://yang1235744.github.io/nanyang/'">返回主页</button>
+    </div>
 </div>
+
+<!-- 星空背景容器 -->
+<div id="starBg"></div>
 
 <div class="container">
-  <h1>关于我们</h1>
-  <div class="about-text">
-    欢迎使用南阳数码工作室提供的官方镜像与魔改镜像，还有 PE，欢迎使用，使完记得好评哟。<br><br>
-    记住这个官网，我们永远支持您对我们的支持，我们不会像那些流氓官网似的，我们是纯净官网。<br><br>
-    本官网已更新至 2.0版本，欢迎使用。内置添加了浏览器，方便您跳转页面，不用再像现在一样跳转页面，直接在页面里画中画一样，让你体验上画中画的感觉。下载是画中画式的，直接到达真正浏览器去下载，欢迎使用。<br><br>
-    我们正在为 AI 开发 Deepseek 大模型，正在连接我的工作室服务器，请您尽情期待，感谢你的等待。<br><br>
-    
-    本官网已更新至 2.01 版本，主要添加了防黑客入侵、ai防火墙、外网IP拦截，欢迎使用。<br>
-    目前自研 AI 模型仍在工作室制作中，研发周期较为漫长，还需要进行大量训练与调试工作。为避免用户在使用官网时因 AI 功能不完善而失望，现阶段采用与豆包合作的网页过渡版 AI，当前可以直接与豆包进行对话，由豆包提供回答服务，敬请谅解。
-    目前开发者只有我一人开发ai工作室自主ai慢长的研发时间研发很漫长敬请尽情期待
-  
+    <h1>南阳服务器 · MC服务中心</h1>
+    <p class="sub-title">开放的世界，皆是南阳服务器开放世界</p>
 
-本官网已升级至20.11版本，主要添加了液态玻璃现代效果升级了，全面升级，欢迎使用，现在AI正在往进行一步开发，请耐心等待，目前别的AI已开放让你试用
-  </div>
+    <!-- 模块1：节点选择模块 -->
+    <div class="module-card">
+        <h2>节点选择模块</h2>
+        <p>请选择游玩节点，选定节点后下方自动展示服务器联机地址</p>
+        <div class="node-wrap">
+            <div class="node-btn active" data-main="cn-hk1.mfrp.space:56775" data-back="38.76.198.156:56775">香港节点（已上线，默认节点）</div>
+            <div class="node-btn unopen">天津节点（未上线）</div>
+            <div class="node-btn unopen">北京·河北节点（未上线）</div>
+            <div class="node-btn unopen">上海节点（未上线）</div>
+            <div class="node-btn unopen">广州/成都/浙江节点（未上线）</div>
+        </div>
+        <p style="margin-top:10px;color:#99b3d8;">目前仅香港节点正式开放，其余地区节点均在部署搭建中</p>
 
-<!-- 无水印素材提取工具 -->
-<div class="extract-box">
-    <div class="extract-title">无水印素材提取工具</div>
-    <input class="link-input" id="shareLink" placeholder="粘贴图片、视频分享链接">
-    <br>
-    <button class="extract-btn" onclick="parseSource()">一键解析提取</button>
-    <button class="extract-btn" onclick="resetExtract()">清空内容</button>
-    <div class="result-show" id="extractResult"></div>
-</div>
-
-<!-- 图吧风格 硬件检测+压力跑分 -->
-<div class="test-box">
-    <div class="test-title">硬件自检 | 多维度压力跑分</div>
-    <div class="info-item" id="hardInfo">等待读取设备硬件基础信息</div>
-    <button class="test-btn" onclick="startHardwareTest()">启动硬件检测跑分</button>
-    <div class="result-text" id="scoreResult"></div>
-</div>
-
-<!-- 共创成员 鹿黑 -->
-<div class="user-card">
-    <img src="测试图（本人不喜欢）.jpg" class="card-avatar" alt="鹿黑头像">
-    <div class="card-info">
-        <div class="card-name">鹿黑</div>
-        <div class="card-desc">陌生共创成员</div>
+        <div class="server-address-box" id="addressPanel">
+            <div class="address-item">
+                <div class="address-title">主服务器地址</div>
+                <div class="address-text" id="mainAddr">cn-hk1.mfrp.space:56775</div>
+            </div>
+            <div class="address-item">
+                <div class="address-title">备用服务器地址</div>
+                <div class="address-text" id="backAddr">38.76.198.156:56775</div>
+            </div>
+            <p class="tip-text">提示：若主地址无法正常连接游戏，请切换备用地址尝试进入服务器</p>
+        </div>
     </div>
-</div>
 
-<!-- 主页主账号 -->
-<div class="user-card">
-    <img src="Screenshot_20260523_083637.jpg" class="card-avatar" alt="账号头像">
-    <div class="card-info">
-        <div class="card-name">南阳数码 主科技原开发</div>
-        <div class="card-desc">抖音搜索关注南阳数码工作室</div>
+    <!-- 模块2：服务器分区窗口 -->
+    <div class="module-card">
+        <h2>服务器分区选择窗口</h2>
+        <p>三种服务器分区独立窗口，按需选择游玩，所有服统一支持Java版1.20.1 / 1.20.2 / 1.20.6</p>
+        <div class="server-window-wrap">
+            <!-- 公开高配服 -->
+            <div class="server-window">
+                <span class="window-tag tag-public">高配公开服务器 · 永久免费</span>
+                <h3>南阳公共开放世界</h3>
+                <ul>
+                    <li>全玩家互通多人大世界，无硬性人数上限</li>
+                    <li>超大互通生存地图，内置公共基建、玩家社区活动</li>
+                    <li>无氪金道具、无付费权限，完全公平原版生存</li>
+                    <li>所有节点互通，香港节点直接接入游玩</li>
+                </ul>
+            </div>
+            <!-- 低配私人服 -->
+            <div class="server-window">
+                <span class="window-tag tag-private-low">私人低配服 <span class="tag-soon">即将上线</span></span>
+                <h3>南阳服务器3</h3>
+                <ul>
+                    <li>专属私人小型世界，最多3名好友同时联机</li>
+                    <li class="warn-text">性能有限，游戏帧率会出现波动，请玩家适应</li>
+                    <li>适合单人存档、小型好友圈子、简易红石测试</li>
+                    <li>自愿捐赠费用：5元/3个月</li>
+                </ul>
+            </div>
+            <!-- 中配私人服 -->
+            <div class="server-window">
+                <span class="window-tag tag-private-mid">私人中配服 <span class="tag-soon">即将上线</span></span>
+                <h3>南阳服务器2</h3>
+                <ul>
+                    <li>专属中型私人世界，最多支持8人小队联机</li>
+                    <li>运行稳定性优于低配私人服，远距离仅小幅波动</li>
+                    <li>适合中型生存小队、整合包、大型建筑存档长期游玩</li>
+                    <li>自愿捐赠费用：10元/3个月</li>
+                </ul>
+            </div>
+        </div>
     </div>
-</div>
 
-<!-- Win7系统升级适配弹窗 -->
-<div class="pop-mask" id="win7Pop">
-    <div class="pop-content">
-        <div class="pop-title">系统版本过低提醒</div>
-        <p>检测到当前运行 Windows 7 系统</p>
-        <p style="margin:10px 0">建议升级 Win10 专业版本，下方自定义适配硬件配置</p>
-
-        <div class="select-item">
-            <label>整机规格型号：</label>
-            <select id="pcModel">
-                <option>家用办公标准版</option>
-                <option>游戏娱乐性能版</option>
-                <option>设计生产力专业版</option>
-            </select>
+    <!-- 模块3：模组库独立蓝色方块 -->
+    <div class="module-card">
+        <h2>模组库模块</h2>
+        <div class="mod-box">
+            <p>服务器会不定时新增模组，服主持续往服务器内添加模组，请您注意网盘更新文件，记得定时前往网盘下载模组，更新您的mod文件，这样才能完整体验服务器内全部内容。</p>
+            <p style="margin-top:10px;color:#90c8ff;">网盘名称：南阳服务器飞牛端 分享文件，谢谢您下载支持！</p>
+            <!-- 和返回主页按钮完全同款样式的下载按钮 -->
+            <button class="download-btn">去网盘点击下载</button>
         </div>
-        <div class="select-item">
-            <label>运行内存容量：</label>
-            <select id="ramSize">
-                <option>4GB 基础内存</option>
-                <option>8GB 主流内存</option>
-                <option>16GB 双通道内存</option>
-                <option>32GB 大容量内存</option>
-            </select>
-        </div>
-        <div class="select-item">
-            <label>固态存储容量：</label>
-            <select id="diskSize">
-                <option>256GB NVMe固态</option>
-                <option>512GB NVMe固态</option>
-                <option>1TB 高速固态硬盘</option>
-            </select>
-        </div>
-        <div class="select-item">
-            <label>独立显卡规格：</label>
-            <select id="gpuLevel">
-                <option>入门亮机显卡</option>
-                <option>中端游戏独显</option>
-                <option>高端旗舰独显</option>
-            </select>
-        </div>
-
-        <button class="pop-close" onclick="closePop()">确认配置关闭面板</button>
     </div>
-</div>
 
+    <!-- 模块4：自愿捐赠说明 -->
+    <div class="module-card">
+        <h2>自愿捐赠说明</h2>
+        <p>本人暂无稳定经济来源，服务器设备、网络带宽、设备电费、新节点搭建全部自费承担，运维压力较大。</p>
+        <p>私人低配、中配服务器收取费用全部属于自愿捐赠，私人服功能暂未开放，上线后可按需选择。所有资金仅用于：</p>
+        <ul>
+            <li>现有服务器设备维护、配件更换</li>
+            <li>天津、北京河北、上海等多地新节点设备采购部署</li>
+            <li>服务器7×24小时运行电费、宽带网络开销</li>
+            <li>硬件性能升级，优化公开服流畅度、提升玩家承载上限</li>
+            <li>制作服务器宣传内容、举办玩家社区活动</li>
+        </ul>
+        <h3>郑重承诺</h3>
+        <ul>
+            <li>高配公开多人服务器永久免费开放，绝不售卖装备、权限破坏游戏平衡</li>
+            <li>捐赠资金收支会不定期在账号公示，全程透明可查</li>
+            <li>所有捐助玩家会记录在册，在官网、服务器公告永久署名致谢</li>
+            <li>硬件升级、新节点开放、私人服上线等内容会单独更新发布</li>
+        </ul>
+    </div>
+
+    <!-- 模块5：玩家须知 -->
+    <div class="module-card">
+        <h2>玩家须知 & 反馈渠道</h2>
+        <h3>联机兑换码规则</h3>
+        <p>选定节点生成的联机兑换码有效期7天，过期可重新领取；私人服务器兑换码仅对应个人专属世界，禁止随意分享。</p>
+        <h3>版本适配提醒</h3>
+        <p>全服务器仅支持我的世界Java版1.20.X系列，暂不支持基岩版与其他游戏版本，后续根据玩家需求拓展适配。</p>
+        <h3>催更与反馈渠道</h3>
+        <p>账号内容涵盖数码折腾、服务器更新等多类内容，服务器BUG、优化建议、催更需求均可在下方留言反馈。</p>
+    </div>
+
+    <!-- 模块6：本地反馈聊天框 -->
+    <div class="module-card">
+        <h2>玩家反馈留言区</h2>
+        <div class="feedback-box">
+            <div class="msg-list" id="msgList"></div>
+            <textarea class="input-area" id="feedbackInput" placeholder="输入你的问题、建议、BUG反馈..."></textarea>
+            <button class="submit-btn" id="sendMsgBtn">提交反馈</button>
+        </div>
+    </div>
+
+    <!-- 底部提示文案 -->
+    <p class="bottom-tip">
+        服务器持续更新中，请您耐心等待<br>
+        非常值得期待，欢迎您体验南阳MC服务器
+    </p>
 </div>
 
 <script>
-// 真实下载函数
-function downloadFile(url, fileName) {
-    let a = document.createElement('a');
-    a.href = url;
-    a.download = fileName;
-    a.target = '_blank';
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
+// 星空粒子生成
+const starContainer = document.getElementById('starBg');
+function createStar(){
+    const star = document.createElement('div');
+    star.className = 'star';
+    const size = Math.random() * 2 + 0.5;
+    star.style.width = size + 'px';
+    star.style.height = size + 'px';
+    star.style.left = Math.random() * 100 + '%';
+    star.style.top = Math.random() * 100 + '%';
+    star.style.animationDelay = Math.random() * 3 + 's';
+    starContainer.appendChild(star);
 }
+for(let i=0;i<180;i++) createStar();
 
-// 模拟解析（这里先拿一张可直接下载的图做示例）
-function parseSource() {
-    let link = document.getElementById("shareLink").value.trim();
-    let resDom = document.getElementById("extractResult");
+// 节点点击逻辑
+const nodeBtns = document.querySelectorAll('.node-btn:not(.unopen)');
+const addressPanel = document.getElementById('addressPanel');
+const mainAddrDom = document.getElementById('mainAddr');
+const backAddrDom = document.getElementById('backAddr');
+nodeBtns.forEach(btn=>{
+    btn.onclick = ()=>{
+        nodeBtns.forEach(b=>b.classList.remove('active'));
+        btn.classList.add('active');
+        const mainIp = btn.dataset.main;
+        const backIp = btn.dataset.back;
+        mainAddrDom.innerText = mainIp;
+        backAddrDom.innerText = backIp;
+        addressPanel.style.display = "block";
+    }
+})
+addressPanel.style.display = "block";
 
-    if (!link) {
-        resDom.innerHTML = "<span style='color:#ff6b6b'>请粘贴有效的分享链接</span>";
+// 反馈留言系统 - 本地存储 + 10天自动清理
+const MSG_KEY = "nanyang_server_msg";
+const EXPIRE_DAY = 10;
+const msgListDom = document.getElementById("msgList");
+const inputDom = document.getElementById("feedbackInput");
+const sendBtn = document.getElementById("sendMsgBtn");
+
+// 读取本地消息
+function getMsgData(){
+    const raw = localStorage.getItem(MSG_KEY);
+    return raw ? JSON.parse(raw) : [];
+}
+// 保存消息
+function saveMsgData(arr){
+    localStorage.setItem(MSG_KEY, JSON.stringify(arr));
+}
+// 自动清理过期消息
+function cleanExpireMsg(){
+    const list = getMsgData();
+    const now = Date.now();
+    const expireMs = EXPIRE_DAY * 24 * 60 * 60 * 1000;
+    const newList = list.filter(item => now - item.createTime < expireMs);
+    saveMsgData(newList);
+    return newList;
+}
+// 渲染留言列表
+function renderMsg(){
+    const list = cleanExpireMsg();
+    msgListDom.innerHTML = "";
+    if(list.length === 0){
+        msgListDom.innerHTML = '<div style="color:#94a3b8;text-align:center;padding:30px;">暂无反馈留言，欢迎提交你的问题与建议</div>';
         return;
     }
-
-    resDom.innerHTML = "<span style='color:#87CEEB'>正在解析资源，去除水印处理中...</span>";
-
-    setTimeout(() => {
-        // 示例：用一张公共可下载图代替真实解析
-        let realUrl = "https://picsum.photos/id/1036/1920/1080";
-        resDom.innerHTML = `
-        <span style="color:#4cd964">解析成功，已去除全部水印</span><br>
-        素材原图原画质保留<br>
-        <button class="extract-btn" onclick="downloadFile('${realUrl}','无水印素材.jpg')">下载无水印文件</button>
+    list.forEach((item, idx)=>{
+        const div = document.createElement("div");
+        div.className = "msg-item player-msg";
+        const timeStr = new Date(item.createTime).toLocaleString();
+        let html = `
+            <div class="msg-time">玩家留言 · ${timeStr}</div>
+            <div>${item.content}</div>
         `;
-    }, 1600);
+        if(item.reply){
+            html += `<div style="margin-top:10px;padding:8px;background:rgba(34,197,94,0.15);border-radius:6px;border:1px solid #22c55866;">
+                <div class="msg-time">服主回复</div>
+                ${item.reply}
+            </div>`;
+        }
+        html += `
+            <div class="reply-row">
+                <input class="reply-input" placeholder="服主回复内容" data-idx="${idx}">
+                <button class="reply-btn" onclick="submitReply(${idx})">回复</button>
+            </div>
+        `;
+        div.innerHTML = html;
+        msgListDom.appendChild(div);
+    })
 }
-
-// 清空输入
-function resetExtract() {
-    document.getElementById("shareLink").value = "";
-    document.getElementById("extractResult").innerHTML = "";
+// 提交玩家留言
+sendBtn.onclick = function(){
+    const text = inputDom.value.trim();
+    if(!text) return alert("请输入反馈内容！");
+    const list = getMsgData();
+    list.push({
+        createTime: Date.now(),
+        content: text,
+        reply: ""
+    });
+    saveMsgData(list);
+    inputDom.value = "";
+    renderMsg();
+    alert("反馈提交成功，服主会尽快查看回复！");
 }
-
-// 设备基础硬件信息识别
-function getDeviceInfo(){
-    let ua = navigator.userAgent;
-    let system = "未知系统";
-    let browserName = "未知浏览器";
-
-    if(ua.includes("Windows NT 6.1")) system = "Windows 7";
-    else if(ua.includes("Windows NT 10.0")){
-        if(ua.includes("22") || ua.includes("19045")===false) system = "Windows 11";
-        else system = "Windows 10";
-    }
-    else if(ua.includes("Linux")) system = "Linux 桌面系统";
-    else if(ua.includes("Android")) system = "安卓移动设备";
-    else if(ua.includes("Mac OS")) system = "macOS 系统";
-
-    if(ua.includes("Edg")) browserName = "Edge 浏览器";
-    else if(ua.includes("Chrome")) browserName = "Chrome 浏览器";
-    else if(ua.includes("Firefox")) browserName = "火狐浏览器";
-    else if(ua.includes("Safari")) browserName = "Safari 浏览器";
-
-    let screenRes = screen.width + " * " + screen.height;
-    return {system,browserName,screenRes};
+// 服主回复全局函数
+window.submitReply = function(idx){
+    const input = document.querySelector(`.reply-input[data-idx="${idx}"]`);
+    const replyText = input.value.trim();
+    if(!replyText) return alert("请输入回复内容！");
+    const list = getMsgData();
+    list[idx].reply = replyText;
+    saveMsgData(list);
+    renderMsg();
 }
-
-// 图吧风格多维度压力跑分
-function startHardwareTest(){
-    let info = getDeviceInfo();
-    let infoDom = document.getElementById("hardInfo");
-    let resDom = document.getElementById("scoreResult");
-    infoDom.innerHTML = `
-    操作系统：${info.system}<br>
-    默认浏览器：${info.browserName}<br>
-    屏幕分辨率：${info.screenRes}
-    `;
-    resDom.innerHTML = "正在执行CPU运算、图形渲染双重压力测试...";
-
-    let cpuStart = performance.now();
-    let calcNum = 0;
-    for(let i=0;i<1500000;i++){
-        calcNum += Math.pow(i,1.2) - Math.tan(i);
-    }
-    let cpuCost = performance.now() - cpuStart;
-
-    let canvas = document.createElement("canvas");
-    let gl = canvas.getContext("webgl") || canvas.getContext("experimental-webgl");
-    let gpuStart = performance.now();
-    for(let i=0;i<80;i++){
-        let r = Math.random(),g=Math.random(),b=Math.random();
-    }
-    let gpuCost = performance.now() - gpuStart;
-
-    let cpuScore = Math.floor(12000 / cpuCost * 80);
-    let gpuScore = Math.floor(10000 / gpuCost * 75);
-    let totalScore = cpuScore + gpuScore;
-
-    let levelText = "";
-    if(totalScore >= 16000) levelText = "顶配性能，通吃各类大型游戏与剪辑渲染";
-    else if(totalScore >= 9000) levelText = "中端主流，日常游戏办公无压力";
-    else if(totalScore >= 4000) levelText = "入门够用，基础办公影音稳定运行";
-    else levelText = "性能偏低，建议优化硬件配置";
-
-    resDom.innerHTML = `
-    CPU运算跑分：${cpuScore}<br>
-    图形性能跑分：${gpuScore}<br>
-    设备综合总分：${totalScore}<br>
-    硬件性能定位：${levelText}
-    `;
-
-    if(info.system === "Windows 7"){
-        document.getElementById("win7Pop").style.display = "flex";
-    }
-}
-
-// 关闭弹窗
-function closePop(){
-    document.getElementById("win7Pop").style.display = "none";
-}
-
-// 页面加载初始化读取信息
-window.onload = function(){
-    let baseInfo = getDeviceInfo();
-    document.getElementById("hardInfo").innerHTML = `
-    操作系统：${baseInfo.system}<br>
-    默认浏览器：${baseInfo.browserName}<br>
-    屏幕分辨率：${baseInfo.screenRes}
-    `;
-}
+// 页面加载自动清理+渲染
+renderMsg();
 </script>
 </body>
 </html>
