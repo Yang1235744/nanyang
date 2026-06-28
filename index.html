@@ -2,7 +2,7 @@
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>南阳数码工作室</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box;font-family:"Microsoft YaHei",sans-serif;}
@@ -146,7 +146,7 @@ border:1px solid rgba(255,255,255,0.1);transition:all 0.25s ease;}
 </head>
 <body>
 
-<!-- 调试解锁弹窗（仅触发F12/右键才显示，页面加载默认隐藏） -->
+<!-- 调试解锁弹窗（仅电脑F12/鼠标右键才弹出，手机长按不会触发） -->
 <div class="debug-lock" id="debugLock">
     <h2>后台代码保护锁</h2>
     <input id="pwd" placeholder="管理员密码">
@@ -313,12 +313,14 @@ if(!isGithub){
 }
 </script>
 
-<!-- 调试防篡改锁逻辑：仅右键/F12触发，页面初始不弹出 -->
+<!-- 修复：仅电脑触发代码锁，手机触摸长按完全放行 -->
 <script>
 const KEY = 'ny_block';
 const PWD = 'NanYang256@G';
 const BIR = '20120201';
 const lockBox = document.getElementById("debugLock");
+// 判断是否手机设备
+const isMobile = /Android|iPhone|iPad|iPod|HarmonyOS/i.test(navigator.userAgent);
 
 // 解锁函数，解锁后清除锁定标记恢复页面
 function unlockDebug(){
@@ -330,14 +332,16 @@ function unlockDebug(){
   }else alert('解锁信息错误，禁止篡改网站代码');
 }
 
-// 监听右键菜单，触发锁定
-document.addEventListener('contextmenu',e=>{
-  e.preventDefault();
-  localStorage.setItem(KEY,'1');
-  lockBox.classList.add("show");
-});
+// 仅电脑监听鼠标右键，手机屏蔽右键锁触发
+if(!isMobile){
+  document.addEventListener('contextmenu',e=>{
+    e.preventDefault();
+    localStorage.setItem(KEY,'1');
+    lockBox.classList.add("show");
+  });
+}
 
-// 监听F12、Ctrl+Shift+I调试快捷键，触发锁定
+// 快捷键：电脑+手机只要按F12/调试快捷键都拦截（调试工具不分设备）
 window.addEventListener('keydown',e=>{
   if(e.key==='F12'||(e.ctrlKey&&e.shiftKey&&e.key==='I')){
     e.preventDefault();
