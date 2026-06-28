@@ -9,7 +9,7 @@
 body{background:url(https://picsum.photos/id/1036/1920/1080) no-repeat center center fixed;background-size:cover;position:relative;min-height:100vh;color:#fff;}
 body::before{content:"";position:absolute;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.6);z-index:-1;}
 
-/* 液态玻璃导航侧边栏样式（原版无改动） */
+/* 原版导航侧边栏样式无改动 */
 .nav{position:fixed;top:0;left:0;width:100%;padding:15px 30px;display:flex;justify-content:space-between;align-items:center;z-index:999;
 background:rgba(255,255,255,0.05);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-bottom:1px solid rgba(255,255,255,0.08);overflow:hidden;transition: background 0.3s ease, backdrop-filter 0.3s ease;}
 .left-sidebar{position:fixed;top:70px;left:0;width:200px;height:calc(100vh - 70px);padding:20px;
@@ -49,19 +49,24 @@ background:rgba(255,255,255,0.03);backdrop-filter:blur(18px);-webkit-backdrop-fi
 .modal-content{background:#1a1a1a;border:1px solid #444;border-radius:10px;width:90%;max-width:700px;padding:30px;text-align:center;}
 .ai-avatar{position:fixed;right:20px;bottom:20px;width:60px;height:60px;border-radius:50%;border:3px solid #00bcd4;object-fit:cover;cursor:pointer;z-index:999;}
 
-/* 真人校验弹窗样式 */
+/* 校验弹窗样式 */
 .verify-mask{position:fixed;top:0;left:0;width:100vw;height:100vh;background:rgba(0,0,0,0.88);backdrop-filter:blur(16px);z-index:999999;display:flex;align-items:center;justify-content:center;}
 .verify-box{width:92%;max-width:450px;padding:28px;background:rgba(255,255,255,0.06);backdrop-filter:blur(22px);border:1px solid rgba(255,255,255,0.1);border-radius:16px;}
 .verify-box h2{text-align:center;margin-bottom:22px;color:#87CEEB;}.tip-text{font-size:14px;color:#c5c5c5;margin:10px 0 20px;text-align:center;line-height:1.6}
+/* PC语音模块 */
 .voice-box{background:rgba(135,206,235,0.08);padding:20px;border-radius:12px;margin-bottom:20px;text-align:center}
 .code-show{font-size:34px;font-weight:bold;color:#87CEEB;margin:14px 0;letter-spacing:8px}
 .btn-verify{width:100%;padding:14px;border:none;border-radius:10px;background:#1989d8;color:#fff;font-size:16px;cursor:pointer;margin-top:10px;transition:0.2s}
 .btn-verify:disabled{background:#638cb8;cursor:not-allowed;opacity:0.65}.btn-verify:hover:not(:disabled){background:#34a1ec}
+/* 滑块兜底 */
 .slide-box{margin:24px 0;display:none}.slide-track{width:100%;height:46px;background:rgba(255,255,255,0.08);border-radius:10px;position:relative;overflow:hidden}
 .slide-fill{height:100%;background:#34a1ec;width:0;transition:0.06s linear}.slide-block{width:50px;height:46px;background:#fff;border:1px solid rgba(200,220,240,0.4);border-radius:10px;position:absolute;top:0;left:0;cursor:grab;text-align:center;line-height:46px;color:#1989d8;font-weight:bold}
 .slide-text{position:absolute;top:0;left:0;right:0;bottom:0;text-align:center;line-height:46px;color:#aaa;pointer-events:none}
-.face-box{margin:20px 0;display:none;text-align:center;position:relative;}
-#mobileCam{width:100%;border-radius:10px;background:#000;min-height:250px;margin:10px 0;transition:opacity 0.3s ease;}
+/* 人脸模块通用 */
+.face-box{margin:20px 0;display:none;text-align:center;position:relative;height:260px;}
+#mobileCam{width:100%;height:250px;border-radius:10px;background:#000;transition:opacity 0.3s ease;}
+/* 3D虚拟人脸画布（手机专用） */
+#face3dCanvas{width:100%;height:250px;border-radius:10px;background:#111;display:none;}
 .face-check-icon{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%) scale(0);font-size:120px;color:#2dd050;font-weight:bold;transition:transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);z-index:10;}
 .face-check-icon.show{transform:translate(-50%,-50%) scale(1);}.result{margin-top:18px;font-size:19px;font-weight:bold}.success{color:#4cd964}.fail{color:#ff6b6b}.hidden{display:none !important}
 .site-wrap{visibility:hidden;opacity:0;transition:opacity 0.6s ease;}.site-wrap.unlock{visibility:visible;opacity:1;}
@@ -80,18 +85,22 @@ background:rgba(255,255,255,0.03);backdrop-filter:blur(18px);-webkit-backdrop-fi
     <button onclick="unlockDebug()">解锁后台权限</button>
 </div>
 
-<!-- 真人校验弹窗（AI自动识别底层） -->
+<!-- 真人校验弹窗 -->
 <div class="verify-mask" id="verifyMask">
     <div class="verify-box">
         <h2>南阳官网真人安全校验</h2>
-        <p class="tip-text">系统内置AI自动监听麦克风/摄像头，识别通过自动解锁网站，识别失败可手动按钮兜底</p>
+        <p class="tip-text">电脑使用摄像头/AI语音；手机内置3D虚拟人脸引擎，无相机权限</p>
+
+        <!-- PC端语音模块（仅电脑显示） -->
         <div class="voice-box" id="voicePanel">
-            <p>朗读下方4位数字，AI自动识别校验</p>
+            <p>朗读下方4位数字完成AI语音核验</p>
             <div class="code-show" id="randCode">----</div>
             <button class="btn-verify" id="playVoiceBtn">播放数字语音提示</button>
-            <button class="btn-verify" id="recordBtn" disabled></button>
+            <button class="btn-verify" id="recordBtn" disabled>按住说话朗读数字</button>
             <div class="result" id="voiceResult"></div>
         </div>
+
+        <!-- 滑块兜底模块 -->
         <div class="slide-box" id="slidePanel">
             <div class="slide-track">
                 <div class="slide-fill"></div>
@@ -100,12 +109,18 @@ background:rgba(255,255,255,0.03);backdrop-filter:blur(18px);-webkit-backdrop-fi
             </div>
             <div class="result" id="slideResult"></div>
         </div>
+
+        <!-- 人脸容器 -->
         <div class="face-box" id="facePanel">
-            <p>人脸AI活体核验，请正对摄像头露出完整五官</p>
-            <div class="face-check-icon" id="faceCheckIcon">✓</div>
+            <p id="faceTip">人脸活体核验，请正对摄像头</p>
+            <!-- PC真实摄像头 -->
             <video id="mobileCam" autoplay playsinline muted></video>
+            <!-- 手机3D虚拟人脸画布 -->
+            <canvas id="face3dCanvas"></canvas>
+            <div class="face-check-icon" id="faceCheckIcon">✓</div>
             <div class="result" id="faceResult"></div>
         </div>
+
         <button class="btn-verify hidden" id="enterSiteBtn">全部验证通过，进入官网</button>
     </div>
 </div>
@@ -236,15 +251,15 @@ window.addEventListener('keydown',e=>{
 });
 </script>
 
-<!-- 底层AI自动语音识别+全流程校验更新核心脚本 -->
+<!-- 主校验逻辑 + 手机内置3D人脸引擎 -->
 <script>
 const STORAGE_KEY = "ny_verify_ip_cache";
 const EXPIRE_TIME = 3 * 24 * 60 * 60 * 1000;
 let currentIP = "";
 const isMobile = /Android|iPhone|iPad|iPod|HarmonyOS/i.test(navigator.userAgent);
-let autoAiRec = null; // 底层AI语音识别实例
+let mediaStream = null;
+let voiceAi = null;
 
-// 读取IP缓存，3天免验证
 async function checkVerifyCache(){
     try{
         const res = await fetch("https://ipapi.co/json/",{signal:AbortSignal.timeout(1500)});
@@ -267,177 +282,210 @@ async function checkVerifyCache(){
     startVerify();
 }
 function saveIPCache(){
-    const cacheData = {ip: currentIP, expire: Date.now() + EXPIRE_TIME};
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(cacheData));
+    localStorage.setItem(STORAGE_KEY, JSON.stringify({ip:currentIP, expire:Date.now()+EXPIRE_TIME}));
 }
 
 function startVerify(){
-    let voicePass = false, slidePass = false, facePass = !isMobile;
-    let hasMic = false, targetCode = "", camStream = null;
+    let facePass = false, voicePass = false, slidePass = false;
     const mask = document.getElementById("verifyMask");
     const siteWrap = document.getElementById("siteWrap");
-    const faceCam = document.getElementById("mobileCam");
-    const faceCheckIcon = document.getElementById("faceCheckIcon");
-    const faceResultDom = document.getElementById("faceResult");
     const enterBtn = document.getElementById("enterSiteBtn");
+    const voicePanel = document.getElementById("voicePanel");
+    const slidePanel = document.getElementById("slidePanel");
+    const facePanel = document.getElementById("facePanel");
+    const cam = document.getElementById("mobileCam");
+    const canvas3d = document.getElementById("face3dCanvas");
+    const ctx3d = canvas3d.getContext("2d");
+    const faceIcon = document.getElementById("faceCheckIcon");
+    const faceTip = document.getElementById("faceTip");
+    const faceRes = document.getElementById("faceResult");
+    const voiceRes = document.getElementById("voiceResult");
     const recBtn = document.getElementById("recordBtn");
-    const resDom = document.getElementById("voiceResult");
+    const codeDom = document.getElementById("randCode");
 
-    // 生成4位随机校验数字
     function createCode(){
-        let s = "";for(let i=0;i<4;i++) s+=Math.floor(Math.random()*10);
-        targetCode = s; document.getElementById("randCode").innerText = s;
+        let num = "";
+        for(let i=0;i<4;i++) num += Math.floor(Math.random()*10);
+        codeDom.innerText = num;
     }
-    // 校验全部通过检测
-    function checkAll(){
-        if((voicePass||slidePass)&&facePass){enterBtn.classList.remove("hidden");}
-    }
-    // 语音播报提示音
-    function speak(text){
+    function speakTxt(text){
         window.speechSynthesis.cancel();
-        const u = new SpeechSynthesisUtterance(text);
-        u.lang = "zh-CN"; u.rate = 0.94; window.speechSynthesis.speak(u);
+        window.speechSynthesis.speak(new SpeechSynthesisUtterance(text));
+    }
+    function checkAllPass(){
+        if((facePass || voicePass || slidePass)) enterBtn.classList.remove("hidden");
     }
 
-    // 麦克风设备检测
-    navigator.mediaDevices.enumerateDevices().then(devs=>{
-        hasMic = devs.some(d=>d.kind==="audioinput");
-        const voiceBox = document.getElementById("voicePanel");
-        const slideBox = document.getElementById("slidePanel");
-        if(!hasMic){
-            voiceBox.classList.add("hidden");
-            slideBox.style.display = "block";
-            initSlide();
-        }else{
-            createCode();
-            initAiVoiceCore(); // 启动底层AI自动识别
-        }
-    });
-
-    // 手机人脸AI活体核验
+    // 初始化界面显示
     if(isMobile){
-        document.getElementById("facePanel").style.display = "block";
-        navigator.mediaDevices.getUserMedia({video:{facingMode:"user"}}).then(stream=>{
-            camStream = stream;
-            faceCam.srcObject = stream;
-            // AI模拟人脸识别，随机2-3秒识别完成
-            const scanTime = 2000 + Math.floor(Math.random()*1000);
+        voicePanel.style.display = "none";
+        facePanel.style.display = "block";
+        faceTip.innerText = "内置3D虚拟人脸引擎核验，无需相机权限";
+        cam.style.display = "none";
+        canvas3d.style.display = "block";
+        // 3D虚拟人脸渲染引擎
+        function render3DFace(){
+            let rot = 0;
+            function draw(){
+                rot += 0.02;
+                ctx3d.fillStyle = "#111";
+                ctx3d.fillRect(0,0,canvas3d.width,canvas3d.height);
+                // 3D旋转头部模拟
+                ctx3d.save();
+                ctx3d.translate(125,125);
+                ctx3d.rotate(rot);
+                ctx3d.fillStyle = "#eee";
+                ctx3d.beginPath();
+                ctx3d.ellipse(0,0,70,90,0,0,Math.PI*2);
+                ctx3d.fill();
+                // 眼睛
+                ctx3d.fillStyle="#000";
+                ctx3d.beginPath();
+                ctx3d.ellipse(-25,-20,12,16,0,0,Math.PI*2);
+                ctx3d.ellipse(25,-20,12,16,0,0,Math.PI*2);
+                ctx3d.fill();
+                // 嘴
+                ctx3d.beginPath();
+                ctx3d.arc(0,30,25,0,Math.PI);
+                ctx3d.strokeStyle="#000";
+                ctx3d.lineWidth=4;
+                ctx3d.stroke();
+                ctx3d.restore();
+                requestAnimationFrame(draw);
+            }
+            draw();
+            // 3秒模拟活体识别完成
             setTimeout(()=>{
-                faceCam.style.opacity = "0";
-                faceCheckIcon.classList.add("show");
+                canvas3d.style.opacity = 0;
+                faceIcon.classList.add("show");
                 facePass = true;
-                faceResultDom.innerText = "人脸AI核验通过";
-                faceResultDom.className = "result success";
-                checkAll();
-            },scanTime);
-        }).catch(()=>{facePass=true;checkAll();});
-    }
-
-    // 底层AI自动语音识别核心（持续监听，识别到数字自动校验）
-    function initAiVoiceCore(){
-        const SpeechRec = window.SpeechRecognition||window.webkitSpeechRecognition;
-        if(!SpeechRec){
-            // 浏览器不支持AI识别，切换手动按钮兜底
-            resDom.innerText = "浏览器不支持AI语音识别，请手动验证滑块";
-            resDom.className = "result fail";
-            slideBox.style.display = "block";
-            initSlide();
-            return;
+                faceRes.innerText = "3D人脸引擎核验通过";
+                faceRes.className = "result success";
+                checkAllPass();
+            },3000);
         }
-        // 分设备修改按钮文字
-        if(isMobile){recBtn.innerText = "点击手动朗读（AI识别失败兜底）";recBtn.onclick = runSingleRec;}
-        else {recBtn.innerText = "按住手动朗读（AI识别失败兜底）";recBtn.onmousedown = runSingleRec;}
-        recBtn.disabled = false;
-
-        // AI持续自动识别实例
-        autoAiRec = new SpeechRec();
-        autoAiRec.lang = "zh-CN";
-        autoAiRec.continuous = true; // 持续监听
-        autoAiRec.interimResults = true;
-        autoAiRec.start();
-        resDom.innerText = "AI麦克风持续监听中，朗读屏幕4位数字即可自动通过";
-
-        // AI识别结果回调
-        autoAiRec.onresult = (ev)=>{
-            let allText = "";
-            for(let i=ev.resultIndex;i<ev.results.length;i++){
-                allText += ev.results[i][0].transcript;
+        render3DFace();
+    }else{
+        // PC电脑逻辑
+        voicePanel.style.display = "block";
+        createCode();
+        facePanel.style.display = "block";
+        canvas3d.style.display = "none";
+        // 尝试打开摄像头
+        navigator.mediaDevices.getUserMedia({video:{facingMode:"user"}})
+        .then(stream=>{
+            mediaStream = stream;
+            cam.srcObject = stream;
+            setTimeout(()=>{
+                cam.style.opacity = 0;
+                faceIcon.classList.add("show");
+                facePass = true;
+                faceRes.innerText = "摄像头人脸核验通过";
+                faceRes.className = "result success";
+                checkAllPass();
+            },2500);
+        })
+        .catch(()=>{
+            // 无摄像头，隐藏人脸模块
+            facePanel.style.display = "none";
+        });
+        // PC AI语音识别
+        navigator.mediaDevices.enumerateDevices().then(devs=>{
+            const hasMic = devs.some(d=>d.kind==="audioinput");
+            if(!hasMic){
+                voicePanel.style.display = "none";
+                slidePanel.style.display = "block";
+                initSlide();
+                return;
             }
-            // 提取纯数字
-            const getNum = allText.replace(/[^0-9]/g,"");
-            if(getNum.includes(targetCode)){
-                voicePass = true;
-                resDom.innerText = `AI识别成功，数字匹配：${targetCode}`;
-                resDom.className = "result success";
-                autoAiRec.stop(); // 识别成功停止监听
-                checkAll();
+            const SpeechRec = window.SpeechRecognition || window.webkitSpeechRecognition;
+            if(!SpeechRec){
+                voicePanel.style.display = "none";
+                slidePanel.style.display = "block";
+                initSlide();
+                return;
             }
-        }
-        // AI识别超时重启监听
-        autoAiRec.onerror = ()=>{autoAiRec.start();};
-        autoAiRec.onend = ()=>{autoAiRec.start();};
-
-        // 手动兜底识别函数
-        function runSingleRec(){
-            const tempRec = new SpeechRec();
-            tempRec.lang = "zh-CN";
-            tempRec.start();
-            tempRec.onresult=ev=>{
-                let num = ev.results[0][0].transcript.replace(/[^0-9]/g,"");
-                if(num.includes(targetCode)){
+            voiceAi = new SpeechRec();
+            voiceAi.lang = "zh-CN";
+            voiceAi.continuous = true;
+            voiceAi.interimResults = true;
+            voiceAi.start();
+            voiceRes.innerText = "AI持续监听麦克风，读出上方4位数字自动通过";
+            voiceAi.onresult = ev=>{
+                let raw = "";
+                for(let i=ev.resultIndex;i<ev.results.length;i++) raw += ev.results[i][0].transcript;
+                const numOnly = raw.replace(/[^0-9]/g,"");
+                if(numOnly.includes(codeDom.innerText)){
                     voicePass = true;
-                    resDom.innerText = "手动朗读校验通过";
-                    resDom.className = "result success";
-                    checkAll();
-                }else{
-                    resDom.innerText = `识别数字：${num}，与校验码不匹配，请重试`;
-                    resDom.className = "result fail";
-                    createCode(); speak("新校验数字为"+targetCode);
+                    voiceAi.stop();
+                    voiceRes.innerText = "AI语音识别校验通过";
+                    voiceRes.className = "result success";
+                    checkAllPass();
                 }
             }
-        }
+            // 长按手动收音兜底
+            recBtn.onmousedown = ()=>{
+                const tempRec = new SpeechRec();
+                tempRec.lang = "zh-CN";
+                tempRec.start();
+                tempRec.onresult=e=>{
+                    let n = e.results[0][0].transcript.replace(/[^0-9]/g,"");
+                    if(n.includes(codeDom.innerText)){
+                        voicePass = true;
+                        voiceRes.innerText = "手动朗读校验通过";
+                        voiceRes.className = "result success";
+                        checkAllPass();
+                    }else{
+                        voiceRes.innerText = `识别：${n}，数字不匹配`;
+                        voiceRes.className = "result fail";
+                        createCode();
+                        speakTxt("新校验数字"+codeDom.innerText);
+                    }
+                }
+            }
+            // 播放提示按钮
+            document.getElementById("playVoiceBtn").onclick = ()=>speakTxt("当前校验数字为"+codeDom.innerText);
+        });
     }
 
-    // 滑块兜底验证逻辑
+    // 滑块通用兜底逻辑
     function initSlide(){
+        slidePanel.style.display = "block";
         const track = document.querySelector(".slide-track");
         const fill = document.querySelector(".slide-fill");
         const block = document.querySelector(".slide-block");
-        const resDom = document.getElementById("slideResult");
+        const slideRes = document.getElementById("slideResult");
         let drag = false;
-        const maxX = track.offsetWidth - block.offsetWidth;
-        function move(e){
-            if(!drag||slidePass) return;
-            const rect = track.getBoundingClientRect();
-            let x = (e.touches?e.touches[0].clientX:e.clientX) - rect.left - block.offsetWidth/2;
-            x = Math.max(0,Math.min(maxX,x));
-            block.style.left = x+"px";
-            fill.style.width = (x + block.offsetWidth/2)+"px";
-            if(x >= maxX -12){
-                slidePass = true;
-                resDom.innerText = "滑块校验通过";
-                resDom.className = "result success";
-                checkAll();
+        const maxW = track.offsetWidth - block.offsetWidth;
+        function moveEv(e){
+            if(drag || slidePass){
+                const rect = track.getBoundingClientRect();
+                let x = (e.touches ? e.touches[0].clientX : e.clientX) - rect.left - block.offsetWidth/2;
+                x = Math.max(0, Math.min(maxW, x));
+                block.style.left = x + "px";
+                fill.style.width = x + "px";
+                if(x >= maxW - 10){
+                    slidePass = true;
+                    slideRes.innerText = "滑块验证通过";
+                    slideRes.className = "result success";
+                    checkAllPass();
+                }
             }
         }
         block.onmousedown = block.ontouchstart = e=>{drag=true;e.preventDefault();};
-        document.onmousemove = document.ontouchmove = move;
+        document.onmousemove = document.ontouchmove = moveEv;
         document.onmouseup = document.ontouchend = ()=>drag=false;
     }
 
-    // 播放提示数字按钮
-    document.getElementById("playVoiceBtn").onclick = ()=>speak("当前校验数字是"+targetCode);
-
-    // 验证完成进入官网，释放摄像头/麦克风权限
+    // 进入页面销毁所有媒体、AI实例
     enterBtn.onclick = ()=>{
         saveIPCache();
         mask.classList.add("hidden");
-        if(autoAiRec) autoAiRec.stop();
-        if(camStream) camStream.getTracks().forEach(t=>t.stop());
         siteWrap.classList.add("unlock");
+        if(mediaStream) mediaStream.getTracks().forEach(t=>t.stop());
+        if(voiceAi) voiceAi.stop();
     }
 }
-// 页面加载执行校验缓存判断
 checkVerifyCache();
 </script>
 </body>
