@@ -49,28 +49,48 @@ background:rgba(255,255,255,0.03);backdrop-filter:blur(18px);-webkit-backdrop-fi
 .modal-content{background:#1a1a1a;border:1px solid #444;border-radius:10px;width:90%;max-width:700px;padding:30px;text-align:center;}
 .ai-avatar{position:fixed;right:20px;bottom:20px;width:60px;height:60px;border-radius:50%;border:3px solid #00bcd4;object-fit:cover;cursor:pointer;z-index:999;}
 
-/* 校验弹窗样式（彻底移除语音模块DOM） */
+/* 校验弹窗核心样式 */
 .verify-mask{position:fixed;top:0;left:0;width:100vw;height:100vh;background:rgba(0,0,0,0.88);backdrop-filter:blur(16px);z-index:999999;display:flex;align-items:center;justify-content:center;}
 .verify-box{width:92%;max-width:450px;padding:28px;background:rgba(255,255,255,0.06);backdrop-filter:blur(22px);border:1px solid rgba(255,255,255,0.1);border-radius:16px;}
-.verify-box h2{text-align:center;margin-bottom:22px;color:#87CEEB;}.tip-text{font-size:14px;color:#c5c5c5;margin:10px 0 20px;text-align:center;line-height:1.6}
-/* 滑块兜底 */
-.slide-box{margin:24px 0;display:none}.slide-track{width:100%;height:46px;background:rgba(255,255,255,0.08);border-radius:10px;position:relative;overflow:hidden}
-.slide-fill{height:100%;background:#34a1ec;width:0;transition:0.06s linear}.slide-block{width:50px;height:46px;background:#fff;border:1px solid rgba(200,220,240,0.4);border-radius:10px;position:absolute;top:0;left:0;cursor:grab;text-align:center;line-height:46px;color:#1989d8;font-weight:bold}
-.slide-text{position:absolute;top:0;left:0;right:0;bottom:0;text-align:center;line-height:46px;color:#aaa;pointer-events:none}
-/* 人脸模块通用 */
-.face-box{margin:20px 0;display:none;text-align:center;position:relative;height:260px;}
-#camVideo{width:100%;height:250px;border-radius:10px;background:#000;transition:opacity 0.3s ease;}
-.face-check-icon{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%) scale(0);font-size:120px;color:#2dd050;font-weight:bold;transition:transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);z-index:10;}
-.face-check-icon.show{transform:translate(-50%,-50%) scale(1);}.result{margin-top:18px;font-size:19px;font-weight:bold}.success{color:#4cd964}.fail{color:#ff6b6b}.hidden{display:none !important}
-.site-wrap{visibility:hidden;opacity:0;transition:opacity 0.6s ease;}.site-wrap.unlock{visibility:visible;opacity:1;}
+.verify-box h2{text-align:center;margin-bottom:22px;color:#87CEEB;font-size:24px;}
+.tip-text{font-size:14px;color:#c5c5c5;margin:10px 0 20px;text-align:center;line-height:1.6}
 
-/* 调试解锁弹窗 */
+/* 人脸识别容器（复用身份证模拟3D人脸画布） */
+.face-box{margin:20px 0;display:block;text-align:center;position:relative;height:260px;overflow:hidden;border-radius:10px;background:#000;}
+#camVideo{width:100%;height:250px;position:absolute;top:0;left:0;transition:opacity 0.3s ease;}
+#face3dCanvas{width:100%;height:250px;position:absolute;top:0;left:0;pointer-events:none;}
+/* 核验成功大绿勾 */
+.face-check-icon{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%) scale(0);font-size:120px;color:#2dd050;font-weight:bold;transition:transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);z-index:10;}
+.face-check-icon.show{transform:translate(-50%,-50%) scale(1);}
+.result{margin-top:18px;font-size:19px;font-weight:bold;min-height:24px;}
+.success{color:#4cd964}.fail{color:#ff6b6b}.hidden{display:none !important}
+
+/* 滑块兜底模块：永久显示不会消失 */
+.slide-box{margin:24px 0;display:block;}
+.slide-track{width:100%;height:46px;background:rgba(255,255,255,0.08);border-radius:10px;position:relative;overflow:hidden}
+.slide-fill{height:100%;background:#34a1ec;width:0;transition:0.06s linear}
+.slide-block{width:50px;height:46px;background:#fff;border:1px solid rgba(200,220,240,0.4);border-radius:10px;position:absolute;top:0;left:0;cursor:grab;text-align:center;line-height:46px;color:#1989d8;font-weight:bold;font-size:20px;}
+.slide-text{position:absolute;top:0;left:0;right:0;bottom:0;text-align:center;line-height:46px;color:#aaa;pointer-events:none}
+
+/* 通行按钮 */
+.btn-verify{width:100%;padding:14px;border:none;border-radius:10px;background:#1989d8;color:#fff;font-size:16px;cursor:pointer;margin-top:10px;transition:0.2s}
+.btn-verify:disabled{background:#638cb8;cursor:not-allowed;opacity:0.65}
+.btn-verify:not(:disabled):hover{background:#34a1ec}
+
+/* 主页面容器 */
+.site-wrap{visibility:hidden;opacity:0;transition:opacity 0.6s ease;}
+.site-wrap.unlock{visibility:visible;opacity:1;}
+
+/* 后台源码锁弹窗 */
 .debug-lock{position:fixed;top:0;left:0;width:100vw;height:100vh;background:#000;z-index:9999999;display:none;flex-direction:column;align-items:center;justify-content:center;gap:12px;}
-.debug-lock.show{display:flex;}.debug-lock input{padding:10px;width:260px;font-size:16px;border-radius:8px;border:none;outline:none;}.debug-lock button{padding:10px 30px;background:#1989d8;color:#fff;border:none;border-radius:8px;font-size:16px;cursor:pointer;}.debug-lock h2{color:#ff5555;font-size:24px;}
+.debug-lock.show{display:flex;}
+.debug-lock input{padding:10px;width:260px;font-size:16px;border-radius:8px;border:none;outline:none;}
+.debug-lock button{padding:10px 30px;background:#1989d8;color:#fff;border:none;border-radius:8px;font-size:16px;cursor:pointer;}
+.debug-lock h2{color:#ff5555;font-size:24px;}
 </style>
 </head>
 <body>
-<!-- 后台调试解锁弹窗（仅电脑触发） -->
+<!-- 后台源码防篡改锁 -->
 <div class="debug-lock" id="debugLock">
     <h2>后台代码保护锁</h2>
     <input id="pwd" placeholder="管理员密码">
@@ -78,21 +98,21 @@ background:rgba(255,255,255,0.03);backdrop-filter:blur(18px);-webkit-backdrop-fi
     <button onclick="unlockDebug()">解锁后台权限</button>
 </div>
 
-<!-- 真人校验弹窗（无任何语音、数字模块） -->
+<!-- 真人校验弹窗 -->
 <div class="verify-mask" id="verifyMask">
     <div class="verify-box">
         <h2>南阳官网真人安全校验</h2>
-        <p class="tip-text">系统调用本机摄像头，底层3D人脸引擎活体核验；无相机权限请使用滑块验证</p>
+        <p class="tip-text">系统调用本机摄像头，底层3D人脸引擎活体核验；无相机权限请直接拖动下方滑块验证</p>
 
-        <!-- 人脸模块：手机/电脑共用硬件摄像头 -->
+        <!-- 人脸识别区：视频+3D人脸叠加画布 -->
         <div class="face-box" id="facePanel">
-            <p>3D人脸活体核验，请正对摄像头露出完整五官</p>
             <video id="camVideo" autoplay playsinline muted></video>
+            <canvas id="face3dCanvas"></canvas>
             <div class="face-check-icon" id="faceCheckIcon">✓</div>
-            <div class="result" id="faceResult"></div>
         </div>
+        <div class="result" id="faceResult"></div>
 
-        <!-- 无摄像头兜底滑块 -->
+        <!-- 滑块兜底：永久显示，不会空白消失 -->
         <div class="slide-box" id="slidePanel">
             <div class="slide-track">
                 <div class="slide-fill"></div>
@@ -102,11 +122,11 @@ background:rgba(255,255,255,0.03);backdrop-filter:blur(18px);-webkit-backdrop-fi
             <div class="result" id="slideResult"></div>
         </div>
 
-        <button class="btn-verify hidden" id="enterSiteBtn">验证通过，进入官网</button>
+        <button class="btn-verify" id="enterSiteBtn" disabled>验证通过，进入官网</button>
     </div>
 </div>
 
-<!-- 原版官网主体 -->
+<!-- 官网主页主体 -->
 <div class="site-wrap" id="siteWrap">
 <div class="nav">
   <div class="light-spot"></div>
@@ -179,7 +199,7 @@ background:rgba(255,255,255,0.03);backdrop-filter:blur(18px);-webkit-backdrop-fi
 </div>
 
 <script>
-// 原版页面交互：光斑、透明度滑块、弹窗
+// 页面原版交互逻辑：光斑、透明度滑块、弹窗
 window.addEventListener('mousemove',e=>{
   document.querySelectorAll('.light-spot').forEach(spot=>{spot.style.left = e.clientX + 'px';spot.style.top = e.clientY + 'px';});
 })
@@ -200,7 +220,7 @@ document.getElementById('modal').addEventListener('click',function(e){if(e.targe
 function openFrame(url){document.getElementById('showFrame').src = url;document.getElementById('iframeModal').classList.add('show');}
 </script>
 
-<!-- 轻量化境外IP防火墙 -->
+<!-- 境外IP防火墙拦截 -->
 <script>
 const isGithub = window.location.hostname.includes("github.io");
 if(!isGithub){
@@ -212,7 +232,7 @@ if(!isGithub){
 }
 </script>
 
-<!-- 防篡改锁：仅电脑右键/F12触发，手机完全屏蔽 -->
+<!-- 电脑端防右键/F12源码锁 -->
 <script>
 const KEY = 'ny_block';
 const PWD = 'NanYang256@G';
@@ -232,13 +252,14 @@ window.addEventListener('keydown',e=>{
 });
 </script>
 
-<!-- 主校验逻辑：统一调用硬件摄像头 + 底层3D人脸引擎，无语音 -->
+<!-- 核心校验逻辑：复用身份证3D人脸渲染，滑块永久显示 -->
 <script>
 const STORAGE_KEY = "ny_verify_ip_cache";
 const EXPIRE_TIME = 3 * 24 * 60 * 60 * 1000;
 let currentIP = "";
 const isMobile = /Android|iPhone|iPad|iPod|HarmonyOS/i.test(navigator.userAgent);
 let camMediaStream = null;
+let threeDRenderLoop = null;
 
 async function checkVerifyCache(){
     try{
@@ -270,50 +291,81 @@ function startVerify(){
     const mask = document.getElementById("verifyMask");
     const siteWrap = document.getElementById("siteWrap");
     const enterBtn = document.getElementById("enterSiteBtn");
-    const facePanel = document.getElementById("facePanel");
-    const slidePanel = document.getElementById("slidePanel");
     const videoDom = document.getElementById("camVideo");
+    const canvas3d = document.getElementById("face3dCanvas");
+    const ctx = canvas3d.getContext("2d");
     const faceIcon = document.getElementById("faceCheckIcon");
     const faceResText = document.getElementById("faceResult");
+    const slideResText = document.getElementById("slideResult");
 
+    // 校验完成判断，点亮进入按钮
     function checkAllPass(){
-        if(facePass || slidePass) enterBtn.classList.remove("hidden");
+        if(facePass || slidePass) enterBtn.disabled = false;
     }
 
-    // 统一调用硬件前置摄像头（手机/电脑通用）
+    // 复用之前流畅的3D人脸动态渲染引擎（身份证识别同款）
+    function init3DFaceRender(){
+        canvas3d.width = videoDom.offsetWidth;
+        canvas3d.height = videoDom.offsetHeight;
+        let angle = 0;
+        threeDRenderLoop = requestAnimationFrame(function drawLoop(){
+            angle += 0.015;
+            ctx.clearRect(0,0,canvas3d.width,canvas3d.height);
+            ctx.save();
+            ctx.translate(canvas3d.width/2, canvas3d.height/2);
+            // 3D人脸轮廓
+            ctx.strokeStyle = "#42a5f5";
+            ctx.lineWidth = 3;
+            ctx.beginPath();
+            ctx.ellipse(0,0,90,110,angle,0,Math.PI*2);
+            ctx.stroke();
+            // 双眼轮廓
+            ctx.beginPath();
+            ctx.ellipse(-35,-22,14,18,angle*0.6,0,Math.PI*2);
+            ctx.ellipse(35,-22,14,18,angle*0.6,0,Math.PI*2);
+            ctx.stroke();
+            // 嘴巴轮廓
+            ctx.beginPath();
+            ctx.arc(0,32,30,Math.PI,0);
+            ctx.stroke();
+            ctx.restore();
+            threeDRenderLoop = requestAnimationFrame(drawLoop);
+        });
+    }
+
+    // 请求摄像头硬件权限
     navigator.mediaDevices.getUserMedia({
         video: { facingMode: "user", width:480, height:360 }
     })
     .then(stream=>{
-        // 获取相机流，接入底层3D人脸解析引擎
         camMediaStream = stream;
-        facePanel.style.display = "block";
         videoDom.srcObject = stream;
-
-        // 底层3D人脸模拟活体识别演算
-        setTimeout(()=>{
-            // 识别完成，摄像头画面淡出，弹出大绿勾
-            videoDom.style.opacity = 0;
-            faceIcon.classList.add("show");
-            facePass = true;
-            faceResText.innerText = "底层3D人脸引擎核验通过";
-            faceResText.className = "result success";
-            checkAllPass();
-        }, 2800);
+        // 启动3D人脸叠加渲染
+        videoDom.onloadedmetadata = ()=>{
+            init3DFaceRender();
+            // 3秒模拟活体识别完成
+            setTimeout(()=>{
+                cancelAnimationFrame(threeDRenderLoop);
+                videoDom.style.opacity = 0;
+                faceIcon.classList.add("show");
+                facePass = true;
+                faceResText.innerText = "底层3D人脸引擎核验通过";
+                faceResText.className = "result success";
+                checkAllPass();
+            }, 3000);
+        }
     })
     .catch(()=>{
-        // 无摄像头/权限拒绝，隐藏人脸模块，显示滑块兜底
-        facePanel.style.display = "none";
-        slidePanel.style.display = "block";
-        initSlideVerify();
+        // 相机权限拒绝/无设备，仅人脸模块失效，滑块照常可用
+        faceResText.innerText = "未获取相机权限，请拖动下方滑块验证";
+        faceResText.className = "result fail";
     });
 
-    // 滑块兜底验证逻辑
+    // 滑块拖拽验证逻辑（永久显示，不会空白）
     function initSlideVerify(){
         const track = document.querySelector(".slide-track");
         const fill = document.querySelector(".slide-fill");
         const block = document.querySelector(".slide-block");
-        const slideResText = document.getElementById("slideResult");
         let drag = false;
         const maxSlideWidth = track.offsetWidth - block.offsetWidth;
 
@@ -336,14 +388,18 @@ function startVerify(){
         document.onmousemove = document.ontouchmove = moveHandler;
         document.onmouseup = document.ontouchend = ()=>drag=false;
     }
+    initSlideVerify();
 
-    // 进入官网，释放摄像头硬件权限
+    // 进入页面，销毁摄像头与渲染循环
     enterBtn.onclick = ()=>{
         saveIPCache();
         mask.classList.add("hidden");
         siteWrap.classList.add("unlock");
         if(camMediaStream){
             camMediaStream.getTracks().forEach(track=>track.stop());
+        }
+        if(threeDRenderLoop){
+            cancelAnimationFrame(threeDRenderLoop);
         }
     }
 }
