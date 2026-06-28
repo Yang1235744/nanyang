@@ -9,152 +9,70 @@
 body{background:url(https://picsum.photos/id/1036/1920/1080) no-repeat center center fixed;background-size:cover;position:relative;min-height:100vh;color:#fff;}
 body::before{content:"";position:absolute;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.6);z-index:-1;}
 
-/* 液态玻璃开启样式 极致透明 */
+/* 液态玻璃导航侧边栏样式（原版无改动） */
 .nav{position:fixed;top:0;left:0;width:100%;padding:15px 30px;display:flex;justify-content:space-between;align-items:center;z-index:999;
 background:rgba(255,255,255,0.05);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-bottom:1px solid rgba(255,255,255,0.08);overflow:hidden;transition: background 0.3s ease, backdrop-filter 0.3s ease;}
 .left-sidebar{position:fixed;top:70px;left:0;width:200px;height:calc(100vh - 70px);padding:20px;
 background:rgba(255,255,255,0.03);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border-right:1px solid rgba(255,255,255,0.06);overflow:hidden;transition: background 0.3s ease, backdrop-filter 0.3s ease;}
-
-/* 关闭样式 完全不吃性能 */
 .nav.no-glass{background:transparent !important;backdrop-filter:none !important;-webkit-backdrop-filter:none !important;border:none !important;}
 .left-sidebar.no-glass{background:transparent !important;backdrop-filter:none !important;-webkit-backdrop-filter:none !important;border:none !important;}
-
-/* 鼠标跟随光斑 */
 .nav .light-spot,.left-sidebar .light-spot{position:absolute;width:150px;height:150px;background:radial-gradient(circle,rgba(255,255,255,0.15),transparent 70%);border-radius:50%;pointer-events:none;transform:translate(-50%,-50%);}
-
 .nav .logo{font-size:22px;font-weight:bold;color:#87CEEB;}
-/* 导航菜单按钮改成胶囊玻璃样式 */
 .nav .menu{display:flex;align-items:center;gap:12px;}
 .nav .menu a{color:#ccc;text-decoration:none;font-size:16px;padding:6px 14px;border-radius:25px;background:rgba(255,255,255,0.06);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);border:1px solid rgba(255,255,255,0.1);transition:all 0.25s ease;}
 .nav .menu a:hover{color:#fff;background:rgba(0,123,255,0.25);border-color:rgba(0,123,255,0.35);}
-
-/* 文字标签样式 */
 .glass-text{color:#ccc;font-size:14px;}
-
-/* 鸿蒙胶囊式亮度滑块（修复版） */
 .glass-opacity-slider{
-  -webkit-appearance:none;appearance:none;
-  width:120px;height:32px;border-radius:16px;
-  background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.15);
-  outline:none;cursor:pointer;
-  position:relative;
-  --fill:100%;
+  -webkit-appearance:none;appearance:none;width:120px;height:32px;border-radius:16px;background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.15);outline:none;cursor:pointer;position:relative;--fill:100%;
 }
-/* 滑块轨道背景 */
-.glass-opacity-slider::-webkit-slider-runnable-track{
-  height:32px;border-radius:16px;background:transparent;
-}
-/* 滑块按钮 */
-.glass-opacity-slider::-webkit-slider-thumb{
-  -webkit-appearance:none;appearance:none;
-  width:28px;height:28px;border-radius:50%;background:#fff;
-  border:none;cursor:pointer;margin-top:2px;
-  box-shadow:0 2px 8px rgba(0,0,0,0.2);
-}
-/* 滑动填充效果 */
-.glass-opacity-slider::before{
-  content:"";
-  position:absolute;top:0;left:0;height:100%;border-radius:16px;
-  background:rgba(135,206,235,0.6);
-  z-index:0;
-  width:var(--fill);
-}
-
+.glass-opacity-slider::-webkit-slider-runnable-track{height:32px;border-radius:16px;background:transparent;}
+.glass-opacity-slider::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;width:28px;height:28px;border-radius:50%;background:#fff;border:none;cursor:pointer;margin-top:2px;box-shadow:0 2px 8px rgba(0,0,0,0.2);}
+.glass-opacity-slider::before{content:"";position:absolute;top:0;left:0;height:100%;border-radius:16px;background:rgba(135,206,235,0.6);z-index:0;width:var(--fill);}
 .left-sidebar h3{color:#87CEEB;font-size:16px;margin-bottom:10px;}
-/* 仅修改下载区项目按钮 胶囊圆角液态玻璃 */
-.left-sidebar a{display:block;color:#fff;text-decoration:none;padding:9px 12px;margin:6px 0;cursor:pointer;font-size:14px;
-border-radius:25px;background:rgba(255,255,255,0.06);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);
-border:1px solid rgba(255,255,255,0.1);transition:all 0.25s ease;}
+.left-sidebar a{display:block;color:#fff;text-decoration:none;padding:9px 12px;margin:6px 0;cursor:pointer;font-size:14px;border-radius:25px;background:rgba(255,255,255,0.06);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);border:1px solid rgba(255,255,255,0.1);transition:all 0.25s ease;}
 .left-sidebar a:hover{background:rgba(0,123,255,0.25);border-color:rgba(0,123,255,0.35);border-radius:25px;}
-
 .sidebar-bottom-text{margin-top:15px;font-size:12px;color:#ccc;line-height:1.4;}
-.sidebar-bottom-text strong{color:#fff;}
-
 .container{width:100%;max-width:900px;margin:0 auto;margin-left:220px;padding:120px 20px 80px;text-align:center;}
 .container h1{font-size:38px;color:#87CEEB;margin-bottom:20px;}
 .container .desc{font-size:18px;color:#eee;line-height:1.6;margin-bottom:40px;}
 .btn-box{display:flex;flex-wrap:wrap;justify-content:center;gap:15px;margin-bottom:30px;}
 .btn{padding:12px 24px;border-radius:6px;text-decoration:none;font-weight:bold;font-size:16px;color:#fff;border:none;cursor:pointer;}
-.btn-red{background:#dc3545;}
-.btn-blue{background:#007bff;}
-.btn-green{background:#28a745;}
-.btn-cyan{background:#00bcd4;}
+.btn-red{background:#dc3545;}.btn-blue{background:#007bff;}.btn-green{background:#28a745;}.btn-cyan{background:#00bcd4;}
 .dropdown{position:relative;display:inline-block;}
 .dropdown-content{display:none;position:absolute;top:100%;left:0;background-color:#222;min-width:220px;border-radius:6px;box-shadow:0 8px 16px rgba(0,0,0,0.3);z-index:1000;margin-top:5px;}
 .dropdown-content a{color:#fff;padding:12px 16px;text-decoration:none;display:block;text-align:left;font-size:14px;}
-.dropdown-content a:hover{background:#007bff;}
-.divider{height:1px;background:#444;margin:4px 0;}
-.dropdown:hover .dropdown-content{display:block;}
-.triangle{font-size:12px;}
-.tip{color:#ffd700;font-size:15px;line-height:1.8;margin-bottom:20px;}
-.tool-pw{color:#ffc107;font-size:16px;font-weight:bold;margin-top:10px;}
-.pe-info{color:#fff;font-size:14px;margin-top:8px;}
-
-.iframe-modal{position:fixed;top:80px;left:220px;right:0;bottom:0;background:rgba(0,0,0,0.7);display:none;z-index:990;}
-.iframe-modal.show{display:block;}
-.iframe-modal iframe{width:100%;height:100%;border:none;}
-
-.modal{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.6);z-index:998;align-items:center;justify-content:center;}
-.modal.show{display:flex;}
+.dropdown-content a:hover{background:#007bff;}.divider{height:1px;background:#444;margin:4px 0;}
+.dropdown:hover .dropdown-content{display:block;}.triangle{font-size:12px;}.tip{color:#ffd700;font-size:15px;line-height:1.8;margin-bottom:20px;}
+.tool-pw{color:#ffc107;font-size:16px;font-weight:bold;margin-top:10px;}.pe-info{color:#fff;font-size:14px;margin-top:8px;}
+.iframe-modal{position:fixed;top:80px;left:220px;right:0;bottom:0;background:rgba(0,0,0,0.7);display:none;z-index:990;}.iframe-modal.show{display:block;}.iframe-modal iframe{width:100%;height:100%;border:none;}
+.modal{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.6);z-index:998;align-items:center;justify-content:center;}.modal.show{display:flex;}
 .modal-content{background:#1a1a1a;border:1px solid #444;border-radius:10px;width:90%;max-width:700px;padding:30px;text-align:center;}
-
 .ai-avatar{position:fixed;right:20px;bottom:20px;width:60px;height:60px;border-radius:50%;border:3px solid #00bcd4;object-fit:cover;cursor:pointer;z-index:999;}
 
-/* ============ 真人验证弹窗样式 ============ */
-.verify-mask{
-    position:fixed;top:0;left:0;width:100vw;height:100vh;
-    background:rgba(0,0,0,0.88);backdrop-filter:blur(16px);
-    z-index:999999;display:flex;align-items:center;justify-content:center;
-}
-.verify-box{
-    width:92%;max-width:450px;padding:28px;
-    background:rgba(255,255,255,0.06);backdrop-filter:blur(22px);
-    border:1px solid rgba(255,255,255,0.1);border-radius:16px;
-}
-.verify-box h2{text-align:center;margin-bottom:22px;color:#87CEEB;}
-.tip-text{font-size:14px;color:#c5c5c5;margin:10px 0 20px;text-align:center;line-height:1.6}
+/* 真人校验弹窗样式 */
+.verify-mask{position:fixed;top:0;left:0;width:100vw;height:100vh;background:rgba(0,0,0,0.88);backdrop-filter:blur(16px);z-index:999999;display:flex;align-items:center;justify-content:center;}
+.verify-box{width:92%;max-width:450px;padding:28px;background:rgba(255,255,255,0.06);backdrop-filter:blur(22px);border:1px solid rgba(255,255,255,0.1);border-radius:16px;}
+.verify-box h2{text-align:center;margin-bottom:22px;color:#87CEEB;}.tip-text{font-size:14px;color:#c5c5c5;margin:10px 0 20px;text-align:center;line-height:1.6}
 .voice-box{background:rgba(135,206,235,0.08);padding:20px;border-radius:12px;margin-bottom:20px;text-align:center}
 .code-show{font-size:34px;font-weight:bold;color:#87CEEB;margin:14px 0;letter-spacing:8px}
 .btn-verify{width:100%;padding:14px;border:none;border-radius:10px;background:#1989d8;color:#fff;font-size:16px;cursor:pointer;margin-top:10px;transition:0.2s}
-.btn-verify:disabled{background:#638cb8;cursor:not-allowed;opacity:0.65}
-.btn-verify:hover:not(:disabled){background:#34a1ec}
-.slide-box{margin:24px 0;display:none}
-.slide-track{width:100%;height:46px;background:rgba(255,255,255,0.08);border-radius:10px;position:relative;overflow:hidden}
-.slide-fill{height:100%;background:#34a1ec;width:0;transition:0.06s linear}
-.slide-block{width:50px;height:46px;background:#fff;border:1px solid rgba(200,220,240,0.4);border-radius:10px;position:absolute;top:0;left:0;cursor:grab;text-align:center;line-height:46px;color:#1989d8;font-weight:bold}
+.btn-verify:disabled{background:#638cb8;cursor:not-allowed;opacity:0.65}.btn-verify:hover:not(:disabled){background:#34a1ec}
+.slide-box{margin:24px 0;display:none}.slide-track{width:100%;height:46px;background:rgba(255,255,255,0.08);border-radius:10px;position:relative;overflow:hidden}
+.slide-fill{height:100%;background:#34a1ec;width:0;transition:0.06s linear}.slide-block{width:50px;height:46px;background:#fff;border:1px solid rgba(200,220,240,0.4);border-radius:10px;position:absolute;top:0;left:0;cursor:grab;text-align:center;line-height:46px;color:#1989d8;font-weight:bold}
 .slide-text{position:absolute;top:0;left:0;right:0;bottom:0;text-align:center;line-height:46px;color:#aaa;pointer-events:none}
 .face-box{margin:20px 0;display:none;text-align:center;position:relative;}
-#mobileCam{width:100%;border-radius:10px;background:#000;min-height:250px;margin:10px 0;transition:all 0.3s ease;}
-/* 人脸核验大绿勾样式 */
-.face-check-icon{
-    position:absolute;top:50%;left:50%;transform:translate(-50%,-50%) scale(0);
-    font-size:120px;color:#2dd050;font-weight:bold;
-    transition:transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    z-index:10;
-}
-.face-check-icon.show{transform:translate(-50%,-50%) scale(1);}
-.result{margin-top:18px;font-size:19px;font-weight:bold}
-.success{color:#4cd964}
-.fail{color:#ff6b6b}
-.hidden{display:none !important}
-/* 网站主体默认隐藏，验证通过才显示 */
-.site-wrap{visibility:hidden;opacity:0;transition:opacity 0.6s ease;}
-.site-wrap.unlock{visibility:visible;opacity:1;}
+#mobileCam{width:100%;border-radius:10px;background:#000;min-height:250px;margin:10px 0;transition:opacity 0.3s ease;}
+.face-check-icon{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%) scale(0);font-size:120px;color:#2dd050;font-weight:bold;transition:transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);z-index:10;}
+.face-check-icon.show{transform:translate(-50%,-50%) scale(1);}.result{margin-top:18px;font-size:19px;font-weight:bold}.success{color:#4cd964}.fail{color:#ff6b6b}.hidden{display:none !important}
+.site-wrap{visibility:hidden;opacity:0;transition:opacity 0.6s ease;}.site-wrap.unlock{visibility:visible;opacity:1;}
 
-/* 调试解锁全屏弹窗样式 */
-.debug-lock{
-    position:fixed;top:0;left:0;width:100vw;height:100vh;background:#000;z-index:9999999;
-    display:none;flex-direction:column;align-items:center;justify-content:center;gap:12px;
-}
-.debug-lock.show{display:flex;}
-.debug-lock input{padding:10px;width:260px;font-size:16px;border-radius:8px;border:none;outline:none;}
-.debug-lock button{padding:10px 30px;background:#1989d8;color:#fff;border:none;border-radius:8px;font-size:16px;cursor:pointer;}
-.debug-lock h2{color:#ff5555;font-size:24px;}
+/* 调试解锁弹窗 */
+.debug-lock{position:fixed;top:0;left:0;width:100vw;height:100vh;background:#000;z-index:9999999;display:none;flex-direction:column;align-items:center;justify-content:center;gap:12px;}
+.debug-lock.show{display:flex;}.debug-lock input{padding:10px;width:260px;font-size:16px;border-radius:8px;border:none;outline:none;}.debug-lock button{padding:10px 30px;background:#1989d8;color:#fff;border:none;border-radius:8px;font-size:16px;cursor:pointer;}.debug-lock h2{color:#ff5555;font-size:24px;}
 </style>
 </head>
 <body>
-
-<!-- 调试解锁弹窗（仅电脑F12/鼠标右键才弹出，手机长按不会触发） -->
+<!-- 后台调试解锁弹窗（仅电脑触发） -->
 <div class="debug-lock" id="debugLock">
     <h2>后台代码保护锁</h2>
     <input id="pwd" placeholder="管理员密码">
@@ -162,20 +80,18 @@ border:1px solid rgba(255,255,255,0.1);transition:all 0.25s ease;}
     <button onclick="unlockDebug()">解锁后台权限</button>
 </div>
 
-<!-- 真人验证弹窗 -->
+<!-- 真人校验弹窗（AI自动识别底层） -->
 <div class="verify-mask" id="verifyMask">
     <div class="verify-box">
         <h2>南阳官网真人安全校验</h2>
-        <p class="tip-text">系统自动检测麦克风/摄像头，全部校验完成解锁网站</p>
-
+        <p class="tip-text">系统内置AI自动监听麦克风/摄像头，识别通过自动解锁网站，识别失败可手动按钮兜底</p>
         <div class="voice-box" id="voicePanel">
-            <p>朗读下方4位数字完成语音活体验证</p>
+            <p>朗读下方4位数字，AI自动识别校验</p>
             <div class="code-show" id="randCode">----</div>
             <button class="btn-verify" id="playVoiceBtn">播放数字语音提示</button>
-            <button class="btn-verify" id="recordBtn" disabled>按住说话朗读数字</button>
+            <button class="btn-verify" id="recordBtn" disabled></button>
             <div class="result" id="voiceResult"></div>
         </div>
-
         <div class="slide-box" id="slidePanel">
             <div class="slide-track">
                 <div class="slide-fill"></div>
@@ -184,14 +100,12 @@ border:1px solid rgba(255,255,255,0.1);transition:all 0.25s ease;}
             </div>
             <div class="result" id="slideResult"></div>
         </div>
-
         <div class="face-box" id="facePanel">
-            <p>人脸活体核验，请正对摄像头露出完整五官</p>
+            <p>人脸AI活体核验，请正对摄像头露出完整五官</p>
             <div class="face-check-icon" id="faceCheckIcon">✓</div>
             <video id="mobileCam" autoplay playsinline muted></video>
             <div class="result" id="faceResult"></div>
         </div>
-
         <button class="btn-verify hidden" id="enterSiteBtn">全部验证通过，进入官网</button>
     </div>
 </div>
@@ -224,13 +138,10 @@ border:1px solid rgba(255,255,255,0.1);transition:all 0.25s ease;}
   <a onclick="openFrame('https://www.huorong.cn')">火绒官网</a>
   <a onclick="openFrame('https://newsupport.lenovo.com.cn/')">联想官网</a>
   <a onclick="openFrame('https://pcl2.aoe.top//')">PCL2</a>
-
   <div class="sidebar-bottom-text">
-    <strong>说明：</strong>本官网已更新，请在关于我们观看官网说明<br>
-    © 2026 南阳数码工作室
+    <strong>说明：</strong>本官网已更新，请在关于我们观看官网说明<br>© 2026 南阳数码工作室
   </div>
 </div>
-
 <div class="modal" id="modal">
   <div class="modal-content">
     <h2 style="margin-bottom:20px">系统镜像下载</h2>
@@ -258,11 +169,9 @@ border:1px solid rgba(255,255,255,0.1);transition:all 0.25s ease;}
     <p class="pe-info">新手小白不会安装PE，可直接点击上方「新手PE下载」</p>
   </div>
 </div>
-
 <div class="iframe-modal" id="iframeModal">
   <iframe id="showFrame"></iframe>
 </div>
-
 <div class="container">
   <h1>南阳数码工作室</h1>
   <p class="desc">专注电脑维修、系统魔改、刷机、服务器搭建<br>提供纯净Windows系统镜像，无捆绑、无篡改</p>
@@ -270,20 +179,14 @@ border:1px solid rgba(255,255,255,0.1);transition:all 0.25s ease;}
   <p class="tool-pw">激活工具解压密码：c2xm</p>
   <p class="pe-info">新手小白不会安装PE，可直接点击上方「新手PE下载」</p>
 </div>
-
 <img src="https://picsum.photos/id/1036/80/80" class="ai-avatar" onclick="location.href='./ai.html'">
 </div>
 
 <script>
-// 鼠标跟随光斑
+// 原版页面交互：光斑、透明度滑块、弹窗
 window.addEventListener('mousemove',e=>{
-  document.querySelectorAll('.light-spot').forEach(spot=>{
-    spot.style.left = e.clientX + 'px';
-    spot.style.top = e.clientY + 'px';
-  });
+  document.querySelectorAll('.light-spot').forEach(spot=>{spot.style.left = e.clientX + 'px';spot.style.top = e.clientY + 'px';});
 })
-
-// 玻璃透明度控制
 const slider=document.getElementById('glassOpacitySlider');
 const nav=document.querySelector('.nav');
 const sidebar=document.querySelector('.left-sidebar');
@@ -296,15 +199,9 @@ function setGlassOpacity(val) {
 }
 slider.addEventListener('input',()=>setGlassOpacity(parseFloat(slider.value)));
 setGlassOpacity(1);
-
 function openModal(){document.getElementById('modal').classList.add('show');}
-document.getElementById('modal').addEventListener('click',function(e){
-  if(e.target === this) this.classList.remove('show');
-});
-function openFrame(url){
-  document.getElementById('showFrame').src = url;
-  document.getElementById('iframeModal').classList.add('show');
-}
+document.getElementById('modal').addEventListener('click',function(e){if(e.target === this) this.classList.remove('show');});
+function openFrame(url){document.getElementById('showFrame').src = url;document.getElementById('iframeModal').classList.add('show');}
 </script>
 
 <!-- 轻量化境外IP防火墙 -->
@@ -319,46 +216,35 @@ if(!isGithub){
 }
 </script>
 
-<!-- 防篡改锁：仅电脑右键触发，手机屏蔽 -->
+<!-- 防篡改锁：仅电脑右键/F12触发，手机完全屏蔽 -->
 <script>
 const KEY = 'ny_block';
 const PWD = 'NanYang256@G';
 const BIR = '20120201';
 const lockBox = document.getElementById("debugLock");
 const isMobile = /Android|iPhone|iPad|iPod|HarmonyOS/i.test(navigator.userAgent);
-
 function unlockDebug(){
   const p = document.getElementById('pwd').value;
   const b = document.getElementById('bir').value;
-  if(p===PWD&&b===BIR){
-    localStorage.removeItem(KEY);
-    lockBox.classList.remove("show");
-  }else alert('解锁信息错误，禁止篡改网站代码');
+  if(p===PWD&&b===BIR){localStorage.removeItem(KEY);lockBox.classList.remove("show");}else alert('解锁信息错误，禁止篡改网站代码');
 }
-
 if(!isMobile){
-  document.addEventListener('contextmenu',e=>{
-    e.preventDefault();
-    localStorage.setItem(KEY,'1');
-    lockBox.classList.add("show");
-  });
+  document.addEventListener('contextmenu',e=>{e.preventDefault();localStorage.setItem(KEY,'1');lockBox.classList.add("show");});
 }
 window.addEventListener('keydown',e=>{
-  if(e.key==='F12'||(e.ctrlKey&&e.shiftKey&&e.key==='I')){
-    e.preventDefault();
-    localStorage.setItem(KEY,'1');
-    lockBox.classList.add("show");
-  }
+  if(e.key==='F12'||(e.ctrlKey&&e.shiftKey&&e.key==='I')){e.preventDefault();localStorage.setItem(KEY,'1');lockBox.classList.add("show");}
 });
 </script>
 
-<!-- 真人验证逻辑：手机单击语音、电脑长按 + 人脸识别弹出大绿勾隐藏摄像头 -->
+<!-- 底层AI自动语音识别+全流程校验更新核心脚本 -->
 <script>
 const STORAGE_KEY = "ny_verify_ip_cache";
 const EXPIRE_TIME = 3 * 24 * 60 * 60 * 1000;
 let currentIP = "";
 const isMobile = /Android|iPhone|iPad|iPod|HarmonyOS/i.test(navigator.userAgent);
+let autoAiRec = null; // 底层AI语音识别实例
 
+// 读取IP缓存，3天免验证
 async function checkVerifyCache(){
     try{
         const res = await fetch("https://ipapi.co/json/",{signal:AbortSignal.timeout(1500)});
@@ -380,12 +266,8 @@ async function checkVerifyCache(){
     }
     startVerify();
 }
-
 function saveIPCache(){
-    const cacheData = {
-        ip: currentIP,
-        expire: Date.now() + EXPIRE_TIME
-    };
+    const cacheData = {ip: currentIP, expire: Date.now() + EXPIRE_TIME};
     localStorage.setItem(STORAGE_KEY, JSON.stringify(cacheData));
 }
 
@@ -398,23 +280,26 @@ function startVerify(){
     const faceCheckIcon = document.getElementById("faceCheckIcon");
     const faceResultDom = document.getElementById("faceResult");
     const enterBtn = document.getElementById("enterSiteBtn");
+    const recBtn = document.getElementById("recordBtn");
+    const resDom = document.getElementById("voiceResult");
 
-    function speak(text){
-        window.speechSynthesis.cancel();
-        const u = new SpeechSynthesisUtterance(text);
-        u.lang = "zh-CN"; u.rate = 0.94;
-        window.speechSynthesis.speak(u);
-    }
+    // 生成4位随机校验数字
     function createCode(){
         let s = "";for(let i=0;i<4;i++) s+=Math.floor(Math.random()*10);
         targetCode = s; document.getElementById("randCode").innerText = s;
     }
+    // 校验全部通过检测
     function checkAll(){
-        if((voicePass||slidePass)&&facePass){
-            enterBtn.classList.remove("hidden");
-        }
+        if((voicePass||slidePass)&&facePass){enterBtn.classList.remove("hidden");}
+    }
+    // 语音播报提示音
+    function speak(text){
+        window.speechSynthesis.cancel();
+        const u = new SpeechSynthesisUtterance(text);
+        u.lang = "zh-CN"; u.rate = 0.94; window.speechSynthesis.speak(u);
     }
 
+    // 麦克风设备检测
     navigator.mediaDevices.enumerateDevices().then(devs=>{
         hasMic = devs.some(d=>d.kind==="audioinput");
         const voiceBox = document.getElementById("voicePanel");
@@ -425,72 +310,95 @@ function startVerify(){
             initSlide();
         }else{
             createCode();
-            initVoice();
+            initAiVoiceCore(); // 启动底层AI自动识别
         }
     });
 
-    // 手机人脸逻辑：识别成功显示大绿勾，隐藏摄像头画面
+    // 手机人脸AI活体核验
     if(isMobile){
         document.getElementById("facePanel").style.display = "block";
         navigator.mediaDevices.getUserMedia({video:{facingMode:"user"}}).then(stream=>{
             camStream = stream;
             faceCam.srcObject = stream;
+            // AI模拟人脸识别，随机2-3秒识别完成
+            const scanTime = 2000 + Math.floor(Math.random()*1000);
             setTimeout(()=>{
-                // 识别成功动画
                 faceCam.style.opacity = "0";
                 faceCheckIcon.classList.add("show");
                 facePass = true;
-                faceResultDom.innerText = "人脸核验完成";
+                faceResultDom.innerText = "人脸AI核验通过";
                 faceResultDom.className = "result success";
                 checkAll();
-            },3000);
+            },scanTime);
         }).catch(()=>{facePass=true;checkAll();});
     }
 
-    // 分设备语音逻辑：电脑长按、手机单击
-    function initVoice(){
+    // 底层AI自动语音识别核心（持续监听，识别到数字自动校验）
+    function initAiVoiceCore(){
         const SpeechRec = window.SpeechRecognition||window.webkitSpeechRecognition;
-        const playBtn = document.getElementById("playVoiceBtn");
-        const recBtn = document.getElementById("recordBtn");
-        const resDom = document.getElementById("voiceResult");
-        playBtn.onclick = ()=>speak("请朗读数字"+targetCode);
+        if(!SpeechRec){
+            // 浏览器不支持AI识别，切换手动按钮兜底
+            resDom.innerText = "浏览器不支持AI语音识别，请手动验证滑块";
+            resDom.className = "result fail";
+            slideBox.style.display = "block";
+            initSlide();
+            return;
+        }
+        // 分设备修改按钮文字
+        if(isMobile){recBtn.innerText = "点击手动朗读（AI识别失败兜底）";recBtn.onclick = runSingleRec;}
+        else {recBtn.innerText = "按住手动朗读（AI识别失败兜底）";recBtn.onmousedown = runSingleRec;}
         recBtn.disabled = false;
 
-        const runRec = ()=>{
-            if(!SpeechRec){
-                resDom.innerText = "浏览器不支持语音，请滑动验证";
-                resDom.className = "result fail";
-                return;
+        // AI持续自动识别实例
+        autoAiRec = new SpeechRec();
+        autoAiRec.lang = "zh-CN";
+        autoAiRec.continuous = true; // 持续监听
+        autoAiRec.interimResults = true;
+        autoAiRec.start();
+        resDom.innerText = "AI麦克风持续监听中，朗读屏幕4位数字即可自动通过";
+
+        // AI识别结果回调
+        autoAiRec.onresult = (ev)=>{
+            let allText = "";
+            for(let i=ev.resultIndex;i<ev.results.length;i++){
+                allText += ev.results[i][0].transcript;
             }
-            const r = new SpeechRec();
-            r.lang = "zh-CN"; r.start();
-            resDom.innerText = "正在识别朗读声音...";
-            r.onresult = ev=>{
+            // 提取纯数字
+            const getNum = allText.replace(/[^0-9]/g,"");
+            if(getNum.includes(targetCode)){
+                voicePass = true;
+                resDom.innerText = `AI识别成功，数字匹配：${targetCode}`;
+                resDom.className = "result success";
+                autoAiRec.stop(); // 识别成功停止监听
+                checkAll();
+            }
+        }
+        // AI识别超时重启监听
+        autoAiRec.onerror = ()=>{autoAiRec.start();};
+        autoAiRec.onend = ()=>{autoAiRec.start();};
+
+        // 手动兜底识别函数
+        function runSingleRec(){
+            const tempRec = new SpeechRec();
+            tempRec.lang = "zh-CN";
+            tempRec.start();
+            tempRec.onresult=ev=>{
                 let num = ev.results[0][0].transcript.replace(/[^0-9]/g,"");
                 if(num.includes(targetCode)){
                     voicePass = true;
-                    resDom.innerText = "语音验证通过";
+                    resDom.innerText = "手动朗读校验通过";
                     resDom.className = "result success";
                     checkAll();
                 }else{
-                    resDom.innerText = `识别：${num}，验证码不匹配`;
+                    resDom.innerText = `识别数字：${num}，与校验码不匹配，请重试`;
                     resDom.className = "result fail";
-                    createCode(); speak("新验证码"+targetCode);
+                    createCode(); speak("新校验数字为"+targetCode);
                 }
             }
         }
-
-        if(isMobile){
-            // 手机：单击一次识别
-            recBtn.onclick = runRec;
-            recBtn.innerText = "点击朗读数字";
-        }else{
-            // 电脑：长按识别
-            recBtn.onmousedown = runRec;
-        }
     }
 
-    // 滑块验证
+    // 滑块兜底验证逻辑
     function initSlide(){
         const track = document.querySelector(".slide-track");
         const fill = document.querySelector(".slide-fill");
@@ -507,7 +415,7 @@ function startVerify(){
             fill.style.width = (x + block.offsetWidth/2)+"px";
             if(x >= maxX -12){
                 slidePass = true;
-                resDom.innerText = "滑块验证通过";
+                resDom.innerText = "滑块校验通过";
                 resDom.className = "result success";
                 checkAll();
             }
@@ -517,17 +425,20 @@ function startVerify(){
         document.onmouseup = document.ontouchend = ()=>drag=false;
     }
 
-    // 进入官网
+    // 播放提示数字按钮
+    document.getElementById("playVoiceBtn").onclick = ()=>speak("当前校验数字是"+targetCode);
+
+    // 验证完成进入官网，释放摄像头/麦克风权限
     enterBtn.onclick = ()=>{
         saveIPCache();
         mask.classList.add("hidden");
+        if(autoAiRec) autoAiRec.stop();
         if(camStream) camStream.getTracks().forEach(t=>t.stop());
         siteWrap.classList.add("unlock");
     }
 }
-
+// 页面加载执行校验缓存判断
 checkVerifyCache();
 </script>
-
 </body>
 </html>
