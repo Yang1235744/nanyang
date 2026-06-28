@@ -132,9 +132,27 @@ border:1px solid rgba(255,255,255,0.1);transition:all 0.25s ease;}
 /* 网站主体默认隐藏，验证通过才显示 */
 .site-wrap{visibility:hidden;opacity:0;transition:opacity 0.6s ease;}
 .site-wrap.unlock{visibility:visible;opacity:1;}
+
+/* 调试解锁全屏弹窗样式 */
+.debug-lock{
+    position:fixed;top:0;left:0;width:100vw;height:100vh;background:#000;z-index:9999999;
+    display:none;flex-direction:column;align-items:center;justify-content:center;gap:12px;
+}
+.debug-lock.show{display:flex;}
+.debug-lock input{padding:10px;width:260px;font-size:16px;border-radius:8px;border:none;outline:none;}
+.debug-lock button{padding:10px 30px;background:#1989d8;color:#fff;border:none;border-radius:8px;font-size:16px;cursor:pointer;}
+.debug-lock h2{color:#ff5555;font-size:24px;}
 </style>
 </head>
 <body>
+
+<!-- 调试解锁弹窗（仅触发F12/右键才显示，页面加载默认隐藏） -->
+<div class="debug-lock" id="debugLock">
+    <h2>后台代码保护锁</h2>
+    <input id="pwd" placeholder="管理员密码">
+    <input id="bir" placeholder="校验生日">
+    <button onclick="unlockDebug()">解锁后台权限</button>
+</div>
 
 <!-- 真人验证弹窗（访问先弹出，轻量化验证逻辑） -->
 <div class="verify-mask" id="verifyMask">
@@ -282,29 +300,9 @@ function openFrame(url){
 }
 </script>
 
-<!-- 轻量化优化原版防火墙，保留你的解锁逻辑，修复github.io误拦截 -->
+<!-- 轻量化境外IP防火墙，无页面加载拦截 -->
 <script>
-const KEY = 'ny_block';
-const PWD = 'NanYang256@G';
-const BIR = '20120201';
 const isGithub = window.location.hostname.includes("github.io");
-
-function unlock(){
-  const p = document.getElementById('pwd').value;
-  const b = document.getElementById('bir').value;
-  if(p===PWD&&b===BIR){
-    localStorage.removeItem(KEY);location.reload();
-  }else alert('解锁信息错误');
-}
-
-// 调试锁定
-if(localStorage.getItem(KEY)){
-  document.body.innerHTML=`<div style="background:#000;color:red;height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;"><input id=pwd placeholder=密码><input id=bir placeholder=生日 style=margin-top:6px;><button onclick=unlock() style=margin-top:10px;>解锁</button></div>`;
-}
-
-document.addEventListener('contextmenu',e=>{e.preventDefault();localStorage.setItem(KEY,'1');location.reload();});
-window.addEventListener('keydown',e=>{if(e.key==='F12'||(e.ctrlKey&&e.shiftKey&&e.key==='I')){localStorage.setItem(KEY,'1');location.reload();}});
-
 // 轻量化IP拦截：github域名直接跳过境外拦截
 if(!isGithub){
   fetch('https://ipapi.co/json/',{signal:AbortSignal.timeout(1800)})
@@ -313,6 +311,40 @@ if(!isGithub){
     if(d.country_code!=='CN') document.body.innerHTML='<div style="background:#000;color:red;height:100vh;display:flex;align-items:center;justify-content:center;font-size:22px;">防火墙拦截：仅中国大陆网络可访问</div>';
   }).catch(()=>{});
 }
+</script>
+
+<!-- 调试防篡改锁逻辑：仅右键/F12触发，页面初始不弹出 -->
+<script>
+const KEY = 'ny_block';
+const PWD = 'NanYang256@G';
+const BIR = '20120201';
+const lockBox = document.getElementById("debugLock");
+
+// 解锁函数，解锁后清除锁定标记恢复页面
+function unlockDebug(){
+  const p = document.getElementById('pwd').value;
+  const b = document.getElementById('bir').value;
+  if(p===PWD&&b===BIR){
+    localStorage.removeItem(KEY);
+    lockBox.classList.remove("show");
+  }else alert('解锁信息错误，禁止篡改网站代码');
+}
+
+// 监听右键菜单，触发锁定
+document.addEventListener('contextmenu',e=>{
+  e.preventDefault();
+  localStorage.setItem(KEY,'1');
+  lockBox.classList.add("show");
+});
+
+// 监听F12、Ctrl+Shift+I调试快捷键，触发锁定
+window.addEventListener('keydown',e=>{
+  if(e.key==='F12'||(e.ctrlKey&&e.shiftKey&&e.key==='I')){
+    e.preventDefault();
+    localStorage.setItem(KEY,'1');
+    lockBox.classList.add("show");
+  }
+});
 </script>
 
 <!-- 真人验证完整轻量化逻辑 + IP缓存3天免验证 -->
