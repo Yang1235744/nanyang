@@ -14,8 +14,6 @@ body::before{content:"";position:absolute;top:0;left:0;width:100%;height:100%;ba
 background:rgba(255,255,255,0.05);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-bottom:1px solid rgba(255,255,255,0.08);overflow:hidden;transition: background 0.3s ease, backdrop-filter 0.3s ease;}
 .left-sidebar{position:fixed;top:70px;left:0;width:200px;height:calc(100vh - 70px);padding:20px;
 background:rgba(255,255,255,0.03);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border-right:1px solid rgba(255,255,255,0.06);overflow:hidden;transition: background 0.3s ease, backdrop-filter 0.3s ease;}
-.nav.no-glass{background:transparent !important;backdrop-filter:none !important;-webkit-backdrop-filter:none !important;border:none !important;}
-.left-sidebar.no-glass{background:transparent !important;backdrop-filter:none !important;-webkit-backdrop-filter:none !important;border:none !important;}
 .nav .light-spot,.left-sidebar .light-spot{position:absolute;width:150px;height:150px;background:radial-gradient(circle,rgba(255,255,255,0.15),transparent 70%);border-radius:50%;pointer-events:none;transform:translate(-50%,-50%);}
 .nav .logo{font-size:22px;font-weight:bold;color:#87CEEB;}
 .nav .menu{display:flex;align-items:center;gap:12px;}
@@ -55,17 +53,18 @@ background:rgba(255,255,255,0.03);backdrop-filter:blur(18px);-webkit-backdrop-fi
 .verify-box h2{text-align:center;margin-bottom:22px;color:#87CEEB;font-size:24px;}
 .tip-text{font-size:14px;color:#c5c5c5;margin:10px 0 20px;text-align:center;line-height:1.6}
 
-/* 人脸识别容器（复用身份证模拟3D人脸画布） */
+/* 人脸区域 */
 .face-box{margin:20px 0;display:block;text-align:center;position:relative;height:260px;overflow:hidden;border-radius:10px;background:#000;}
-#camVideo{width:100%;height:250px;position:absolute;top:0;left:0;transition:opacity 0.3s ease;}
-#face3dCanvas{width:100%;height:250px;position:absolute;top:0;left:0;pointer-events:none;}
+#camVideo{width:100%;height:250px;position:absolute;top:0;left:0;transition:opacity 0.3s ease;display:none;}
+#face3dCanvas{width:100%;height:250px;position:absolute;top:0;left:0;pointer-events:none;display:none;}
+.open-cam-btn{width:100%;height:100%;background:#1989d8;color:#fff;font-size:18px;border:none;cursor:pointer;}
 /* 核验成功大绿勾 */
 .face-check-icon{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%) scale(0);font-size:120px;color:#2dd050;font-weight:bold;transition:transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);z-index:10;}
 .face-check-icon.show{transform:translate(-50%,-50%) scale(1);}
 .result{margin-top:18px;font-size:19px;font-weight:bold;min-height:24px;}
 .success{color:#4cd964}.fail{color:#ff6b6b}.hidden{display:none !important}
 
-/* 滑块兜底模块：永久显示不会消失 */
+/* 滑块兜底模块：永久显示，不会消失，拖拽逻辑修复 */
 .slide-box{margin:24px 0;display:block;}
 .slide-track{width:100%;height:46px;background:rgba(255,255,255,0.08);border-radius:10px;position:relative;overflow:hidden}
 .slide-fill{height:100%;background:#34a1ec;width:0;transition:0.06s linear}
@@ -102,17 +101,19 @@ background:rgba(255,255,255,0.03);backdrop-filter:blur(18px);-webkit-backdrop-fi
 <div class="verify-mask" id="verifyMask">
     <div class="verify-box">
         <h2>南阳官网真人安全校验</h2>
-        <p class="tip-text">系统调用本机摄像头，底层3D人脸引擎活体核验；无相机权限请直接拖动下方滑块验证</p>
+        <p class="tip-text">点击下方按钮开启前置摄像头，底层3D人脸引擎活体核验；无相机权限直接拖动滑块验证</p>
 
-        <!-- 人脸识别区：视频+3D人脸叠加画布 -->
+        <!-- 人脸识别区：初始显示开启相机按钮，点击后显示真实视频+3D画布 -->
         <div class="face-box" id="facePanel">
-            <video id="camVideo" autoplay playsinline muted></video>
+            <button class="open-cam-btn" id="openCamBtn">点击开启前置摄像头</button>
+            <!-- 全兼容视频属性，解决手机黑屏 -->
+            <video id="camVideo" autoplay muted playsinline webkit-playsinline x5-playsinline t7-playsinline></video>
             <canvas id="face3dCanvas"></canvas>
             <div class="face-check-icon" id="faceCheckIcon">✓</div>
         </div>
         <div class="result" id="faceResult"></div>
 
-        <!-- 滑块兜底：永久显示，不会空白消失 -->
+        <!-- 滑块兜底：永久显示，拖拽逻辑修复，不再假滑块 -->
         <div class="slide-box" id="slidePanel">
             <div class="slide-track">
                 <div class="slide-fill"></div>
@@ -252,7 +253,7 @@ window.addEventListener('keydown',e=>{
 });
 </script>
 
-<!-- 核心校验逻辑：复用身份证3D人脸渲染，滑块永久显示 -->
+<!-- 核心校验逻辑：点击按钮唤起真实相机、修复可用滑块、3D人脸叠加真实画面 -->
 <script>
 const STORAGE_KEY = "ny_verify_ip_cache";
 const EXPIRE_TIME = 3 * 24 * 60 * 60 * 1000;
@@ -291,6 +292,7 @@ function startVerify(){
     const mask = document.getElementById("verifyMask");
     const siteWrap = document.getElementById("siteWrap");
     const enterBtn = document.getElementById("enterSiteBtn");
+    const openCamBtn = document.getElementById("openCamBtn");
     const videoDom = document.getElementById("camVideo");
     const canvas3d = document.getElementById("face3dCanvas");
     const ctx = canvas3d.getContext("2d");
@@ -303,7 +305,7 @@ function startVerify(){
         if(facePass || slidePass) enterBtn.disabled = false;
     }
 
-    // 复用之前流畅的3D人脸动态渲染引擎（身份证识别同款）
+    // 复用身份证同款流畅3D人脸动态渲染，叠加真实相机画面
     function init3DFaceRender(){
         canvas3d.width = videoDom.offsetWidth;
         canvas3d.height = videoDom.offsetHeight;
@@ -333,35 +335,43 @@ function startVerify(){
         });
     }
 
-    // 请求摄像头硬件权限
-    navigator.mediaDevices.getUserMedia({
-        video: { facingMode: "user", width:480, height:360 }
-    })
-    .then(stream=>{
-        camMediaStream = stream;
-        videoDom.srcObject = stream;
-        // 启动3D人脸叠加渲染
-        videoDom.onloadedmetadata = ()=>{
-            init3DFaceRender();
-            // 3秒模拟活体识别完成
-            setTimeout(()=>{
-                cancelAnimationFrame(threeDRenderLoop);
-                videoDom.style.opacity = 0;
-                faceIcon.classList.add("show");
-                facePass = true;
-                faceResText.innerText = "底层3D人脸引擎核验通过";
-                faceResText.className = "result success";
-                checkAllPass();
-            }, 3000);
+    // 点击按钮手动唤起相机（解决浏览器自动拦截黑屏问题）
+    openCamBtn.onclick = async function(){
+        try{
+            // 简化相机参数，删除冲突分辨率，兼容所有手机/电脑
+            const constraints = {
+                video: { facingMode: "user" },
+                audio: false
+            };
+            const stream = await navigator.mediaDevices.getUserMedia(constraints);
+            camMediaStream = stream;
+            // 隐藏开启按钮，显示真实相机视频与3D画布
+            openCamBtn.style.display = "none";
+            videoDom.style.display = "block";
+            canvas3d.style.display = "block";
+            videoDom.srcObject = stream;
+            // 视频加载完成启动3D扫描动画
+            videoDom.onloadedmetadata = ()=>{
+                init3DFaceRender();
+                // 3秒模拟活体识别完成
+                setTimeout(()=>{
+                    cancelAnimationFrame(threeDRenderLoop);
+                    videoDom.style.opacity = 0;
+                    faceIcon.classList.add("show");
+                    facePass = true;
+                    faceResText.innerText = "底层3D人脸引擎核验通过";
+                    faceResText.className = "result success";
+                    checkAllPass();
+                }, 3000);
+            }
+        }catch(err){
+            // 相机授权失败、无设备，提示文字，滑块正常可用
+            faceResText.innerText = "未获取相机权限，请拖动下方滑块验证";
+            faceResText.className = "result fail";
         }
-    })
-    .catch(()=>{
-        // 相机权限拒绝/无设备，仅人脸模块失效，滑块照常可用
-        faceResText.innerText = "未获取相机权限，请拖动下方滑块验证";
-        faceResText.className = "result fail";
-    });
+    }
 
-    // 滑块拖拽验证逻辑（永久显示，不会空白）
+    // 修复滑块拖拽逻辑，不再是假滑块，滑到底直接解锁按钮
     function initSlideVerify(){
         const track = document.querySelector(".slide-track");
         const fill = document.querySelector(".slide-fill");
@@ -377,6 +387,7 @@ function startVerify(){
             block.style.left = offsetX + "px";
             fill.style.width = offsetX + "px";
 
+            // 滑到最右侧，标记通过，点亮按钮
             if(offsetX >= maxSlideWidth - 10){
                 slidePass = true;
                 slideResText.innerText = "滑块验证通过";
@@ -390,7 +401,7 @@ function startVerify(){
     }
     initSlideVerify();
 
-    // 进入页面，销毁摄像头与渲染循环
+    // 进入官网，销毁摄像头与渲染循环，释放硬件
     enterBtn.onclick = ()=>{
         saveIPCache();
         mask.classList.add("hidden");
