@@ -315,8 +315,52 @@ if(!isGithub){
 }
 </script>
 
-<!-- 真人验证完整轻量化逻辑 -->
+<!-- 真人验证完整轻量化逻辑 + IP缓存3天免验证 -->
 <script>
+// 存储键名
+const STORAGE_KEY = "ny_verify_ip_cache";
+// 3天毫秒
+const EXPIRE_TIME = 3 * 24 * 60 * 60 * 1000;
+let currentIP = "";
+
+// 读取缓存判断是否免验证
+async function checkVerifyCache(){
+    // 获取当前访问IP
+    try{
+        const res = await fetch("https://ipapi.co/json/",{signal:AbortSignal.timeout(1500)});
+        const data = await res.json();
+        currentIP = data.ip;
+    }catch(e){
+        // IP获取失败直接强制验证
+        startVerify();
+        return;
+    }
+
+    // 读取本地缓存
+    const cacheStr = localStorage.getItem(STORAGE_KEY);
+    if(cacheStr){
+        const cache = JSON.parse(cacheStr);
+        const now = Date.now();
+        // IP匹配且未过期，直接放行，跳过验证弹窗
+        if(cache.ip === currentIP && now < cache.expire){
+            document.getElementById("verifyMask").classList.add("hidden");
+            document.getElementById("siteWrap").classList.add("unlock");
+            return;
+        }
+    }
+    // 无缓存/IP不一致/过期，弹出验证
+    startVerify();
+}
+
+// 验证全部通过后，保存IP和3天过期时间
+function saveIPCache(){
+    const cacheData = {
+        ip: currentIP,
+        expire: Date.now() + EXPIRE_TIME
+    };
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(cacheData));
+}
+
 function startVerify(){
     let voicePass = false, slidePass = false, facePass = !(/Android|iPhone|iPad|iPod/i.test(navigator.userAgent));
     let hasMic = false, targetCode = "", camStream = null;
@@ -429,14 +473,17 @@ function startVerify(){
         document.onmouseup = document.ontouchend = ()=>drag=false;
     }
 
-    // 进入网站按钮
+    // 进入网站按钮：验证通过保存IP缓存，3天免验证
     document.getElementById("enterSiteBtn").onclick = ()=>{
+        saveIPCache();
         mask.classList.add("hidden");
         if(camStream) camStream.getTracks().forEach(t=>t.stop());
         siteWrap.classList.add("unlock");
     }
 }
-startVerify();
+
+// 页面加载优先执行缓存判断
+checkVerifyCache();
 </script>
 
 </body>
