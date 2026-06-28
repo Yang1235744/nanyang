@@ -100,7 +100,7 @@ border:1px solid rgba(255,255,255,0.1);transition:all 0.25s ease;}
 
 .ai-avatar{position:fixed;right:20px;bottom:20px;width:60px;height:60px;border-radius:50%;border:3px solid #00bcd4;object-fit:cover;cursor:pointer;z-index:999;}
 
-/* ============ 新增真人验证弹窗样式（匹配网站玻璃风格） ============ */
+/* ============ 真人验证弹窗样式 ============ */
 .verify-mask{
     position:fixed;top:0;left:0;width:100vw;height:100vh;
     background:rgba(0,0,0,0.88);backdrop-filter:blur(16px);
@@ -123,8 +123,16 @@ border:1px solid rgba(255,255,255,0.1);transition:all 0.25s ease;}
 .slide-fill{height:100%;background:#34a1ec;width:0;transition:0.06s linear}
 .slide-block{width:50px;height:46px;background:#fff;border:1px solid rgba(200,220,240,0.4);border-radius:10px;position:absolute;top:0;left:0;cursor:grab;text-align:center;line-height:46px;color:#1989d8;font-weight:bold}
 .slide-text{position:absolute;top:0;left:0;right:0;bottom:0;text-align:center;line-height:46px;color:#aaa;pointer-events:none}
-.face-box{margin:20px 0;display:none;text-align:center}
-#mobileCam{width:100%;border-radius:10px;background:#000;min-height:250px;margin:10px 0}
+.face-box{margin:20px 0;display:none;text-align:center;position:relative;}
+#mobileCam{width:100%;border-radius:10px;background:#000;min-height:250px;margin:10px 0;transition:all 0.3s ease;}
+/* 人脸核验大绿勾样式 */
+.face-check-icon{
+    position:absolute;top:50%;left:50%;transform:translate(-50%,-50%) scale(0);
+    font-size:120px;color:#2dd050;font-weight:bold;
+    transition:transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    z-index:10;
+}
+.face-check-icon.show{transform:translate(-50%,-50%) scale(1);}
 .result{margin-top:18px;font-size:19px;font-weight:bold}
 .success{color:#4cd964}
 .fail{color:#ff6b6b}
@@ -154,7 +162,7 @@ border:1px solid rgba(255,255,255,0.1);transition:all 0.25s ease;}
     <button onclick="unlockDebug()">解锁后台权限</button>
 </div>
 
-<!-- 真人验证弹窗（访问先弹出，轻量化验证逻辑） -->
+<!-- 真人验证弹窗 -->
 <div class="verify-mask" id="verifyMask">
     <div class="verify-box">
         <h2>南阳官网真人安全校验</h2>
@@ -179,6 +187,7 @@ border:1px solid rgba(255,255,255,0.1);transition:all 0.25s ease;}
 
         <div class="face-box" id="facePanel">
             <p>人脸活体核验，请正对摄像头露出完整五官</p>
+            <div class="face-check-icon" id="faceCheckIcon">✓</div>
             <video id="mobileCam" autoplay playsinline muted></video>
             <div class="result" id="faceResult"></div>
         </div>
@@ -187,7 +196,7 @@ border:1px solid rgba(255,255,255,0.1);transition:all 0.25s ease;}
     </div>
 </div>
 
-<!-- 你原版全部官网内容包裹容器 -->
+<!-- 原版官网主体 -->
 <div class="site-wrap" id="siteWrap">
 <div class="nav">
   <div class="light-spot"></div>
@@ -213,7 +222,6 @@ border:1px solid rgba(255,255,255,0.1);transition:all 0.25s ease;}
   <a onclick="openFrame('https://play.mcjs.cc/1.12.2wasm/')">我的世界网页模拟试玩区</a>
   <a onclick="openFrame('https://firpe.cn/page-247')">FIRPE 维护系统（神通Win11 PE）</a>
   <a onclick="openFrame('https://www.huorong.cn')">火绒官网</a>
-  <!-- 新增内置打开 -->
   <a onclick="openFrame('https://newsupport.lenovo.com.cn/')">联想官网</a>
   <a onclick="openFrame('https://pcl2.aoe.top//')">PCL2</a>
 
@@ -275,11 +283,10 @@ window.addEventListener('mousemove',e=>{
   });
 })
 
-// 玻璃透明度+鸿蒙式胶囊填充（修复版）
+// 玻璃透明度控制
 const slider=document.getElementById('glassOpacitySlider');
 const nav=document.querySelector('.nav');
 const sidebar=document.querySelector('.left-sidebar');
-
 function setGlassOpacity(val) {
   nav.style.background=`rgba(255,255,255,${0.05*val})`;
   sidebar.style.background=`rgba(255,255,255,${0.03*val})`;
@@ -300,10 +307,9 @@ function openFrame(url){
 }
 </script>
 
-<!-- 轻量化境外IP防火墙，无页面加载拦截 -->
+<!-- 轻量化境外IP防火墙 -->
 <script>
 const isGithub = window.location.hostname.includes("github.io");
-// 轻量化IP拦截：github域名直接跳过境外拦截
 if(!isGithub){
   fetch('https://ipapi.co/json/',{signal:AbortSignal.timeout(1800)})
   .then(r=>r.json())
@@ -313,16 +319,14 @@ if(!isGithub){
 }
 </script>
 
-<!-- 修复：仅电脑触发代码锁，手机触摸长按完全放行 -->
+<!-- 防篡改锁：仅电脑右键触发，手机屏蔽 -->
 <script>
 const KEY = 'ny_block';
 const PWD = 'NanYang256@G';
 const BIR = '20120201';
 const lockBox = document.getElementById("debugLock");
-// 判断是否手机设备
 const isMobile = /Android|iPhone|iPad|iPod|HarmonyOS/i.test(navigator.userAgent);
 
-// 解锁函数，解锁后清除锁定标记恢复页面
 function unlockDebug(){
   const p = document.getElementById('pwd').value;
   const b = document.getElementById('bir').value;
@@ -332,7 +336,6 @@ function unlockDebug(){
   }else alert('解锁信息错误，禁止篡改网站代码');
 }
 
-// 仅电脑监听鼠标右键，手机屏蔽右键锁触发
 if(!isMobile){
   document.addEventListener('contextmenu',e=>{
     e.preventDefault();
@@ -340,8 +343,6 @@ if(!isMobile){
     lockBox.classList.add("show");
   });
 }
-
-// 快捷键：电脑+手机只要按F12/调试快捷键都拦截（调试工具不分设备）
 window.addEventListener('keydown',e=>{
   if(e.key==='F12'||(e.ctrlKey&&e.shiftKey&&e.key==='I')){
     e.preventDefault();
@@ -351,44 +352,35 @@ window.addEventListener('keydown',e=>{
 });
 </script>
 
-<!-- 真人验证完整轻量化逻辑 + IP缓存3天免验证 -->
+<!-- 真人验证逻辑：手机单击语音、电脑长按 + 人脸识别弹出大绿勾隐藏摄像头 -->
 <script>
-// 存储键名
 const STORAGE_KEY = "ny_verify_ip_cache";
-// 3天毫秒
 const EXPIRE_TIME = 3 * 24 * 60 * 60 * 1000;
 let currentIP = "";
+const isMobile = /Android|iPhone|iPad|iPod|HarmonyOS/i.test(navigator.userAgent);
 
-// 读取缓存判断是否免验证
 async function checkVerifyCache(){
-    // 获取当前访问IP
     try{
         const res = await fetch("https://ipapi.co/json/",{signal:AbortSignal.timeout(1500)});
         const data = await res.json();
         currentIP = data.ip;
     }catch(e){
-        // IP获取失败直接强制验证
         startVerify();
         return;
     }
-
-    // 读取本地缓存
     const cacheStr = localStorage.getItem(STORAGE_KEY);
     if(cacheStr){
         const cache = JSON.parse(cacheStr);
         const now = Date.now();
-        // IP匹配且未过期，直接放行，跳过验证弹窗
         if(cache.ip === currentIP && now < cache.expire){
             document.getElementById("verifyMask").classList.add("hidden");
             document.getElementById("siteWrap").classList.add("unlock");
             return;
         }
     }
-    // 无缓存/IP不一致/过期，弹出验证
     startVerify();
 }
 
-// 验证全部通过后，保存IP和3天过期时间
 function saveIPCache(){
     const cacheData = {
         ip: currentIP,
@@ -398,10 +390,14 @@ function saveIPCache(){
 }
 
 function startVerify(){
-    let voicePass = false, slidePass = false, facePass = !(/Android|iPhone|iPad|iPod/i.test(navigator.userAgent));
+    let voicePass = false, slidePass = false, facePass = !isMobile;
     let hasMic = false, targetCode = "", camStream = null;
     const mask = document.getElementById("verifyMask");
     const siteWrap = document.getElementById("siteWrap");
+    const faceCam = document.getElementById("mobileCam");
+    const faceCheckIcon = document.getElementById("faceCheckIcon");
+    const faceResultDom = document.getElementById("faceResult");
+    const enterBtn = document.getElementById("enterSiteBtn");
 
     function speak(text){
         window.speechSynthesis.cancel();
@@ -415,11 +411,10 @@ function startVerify(){
     }
     function checkAll(){
         if((voicePass||slidePass)&&facePass){
-            document.getElementById("enterSiteBtn").classList.remove("hidden");
+            enterBtn.classList.remove("hidden");
         }
     }
 
-    // 麦克风检测
     navigator.mediaDevices.enumerateDevices().then(devs=>{
         hasMic = devs.some(d=>d.kind==="audioinput");
         const voiceBox = document.getElementById("voicePanel");
@@ -434,22 +429,25 @@ function startVerify(){
         }
     });
 
-    // 手机人脸
-    if(/Android|iPhone|iPad|iPod/i.test(navigator.userAgent)){
+    // 手机人脸逻辑：识别成功显示大绿勾，隐藏摄像头画面
+    if(isMobile){
         document.getElementById("facePanel").style.display = "block";
         navigator.mediaDevices.getUserMedia({video:{facingMode:"user"}}).then(stream=>{
             camStream = stream;
-            document.getElementById("mobileCam").srcObject = stream;
+            faceCam.srcObject = stream;
             setTimeout(()=>{
+                // 识别成功动画
+                faceCam.style.opacity = "0";
+                faceCheckIcon.classList.add("show");
                 facePass = true;
-                document.getElementById("faceResult").innerText = "人脸核验完成";
-                document.getElementById("faceResult").className = "result success";
+                faceResultDom.innerText = "人脸核验完成";
+                faceResultDom.className = "result success";
                 checkAll();
             },3000);
         }).catch(()=>{facePass=true;checkAll();});
     }
 
-    // 语音识别
+    // 分设备语音逻辑：电脑长按、手机单击
     function initVoice(){
         const SpeechRec = window.SpeechRecognition||window.webkitSpeechRecognition;
         const playBtn = document.getElementById("playVoiceBtn");
@@ -457,7 +455,8 @@ function startVerify(){
         const resDom = document.getElementById("voiceResult");
         playBtn.onclick = ()=>speak("请朗读数字"+targetCode);
         recBtn.disabled = false;
-        recBtn.onmousedown = ()=>{
+
+        const runRec = ()=>{
             if(!SpeechRec){
                 resDom.innerText = "浏览器不支持语音，请滑动验证";
                 resDom.className = "result fail";
@@ -479,6 +478,15 @@ function startVerify(){
                     createCode(); speak("新验证码"+targetCode);
                 }
             }
+        }
+
+        if(isMobile){
+            // 手机：单击一次识别
+            recBtn.onclick = runRec;
+            recBtn.innerText = "点击朗读数字";
+        }else{
+            // 电脑：长按识别
+            recBtn.onmousedown = runRec;
         }
     }
 
@@ -509,8 +517,8 @@ function startVerify(){
         document.onmouseup = document.ontouchend = ()=>drag=false;
     }
 
-    // 进入网站按钮：验证通过保存IP缓存，3天免验证
-    document.getElementById("enterSiteBtn").onclick = ()=>{
+    // 进入官网
+    enterBtn.onclick = ()=>{
         saveIPCache();
         mask.classList.add("hidden");
         if(camStream) camStream.getTracks().forEach(t=>t.stop());
@@ -518,7 +526,6 @@ function startVerify(){
     }
 }
 
-// 页面加载优先执行缓存判断
 checkVerifyCache();
 </script>
 
