@@ -12,7 +12,7 @@
     font-family: "Microsoft YaHei", system-ui, sans-serif;
 }
 :root {
-    --blue: #00a1ff;
+    --blue: #00c8ff;
     --purple: #a855f7;
     --bg-base: #040610;
     --glass: rgba(255,255,255,0.04);
@@ -20,7 +20,6 @@
     --border-line: rgba(255,255,255,0.07);
     --text-white: #ffffff;
     --text-gray: #b2b2c8;
-    --transition-all: all 0.24s ease;
 }
 html {
     scroll-behavior: smooth;
@@ -31,21 +30,20 @@ body {
     overflow-x: hidden;
     position: relative;
     background: var(--bg-base);
-    animation: pageFadeIn 0.9s ease forwards;
 }
-/* 蓝紫流动光带背景，纯CSS无图片 */
+/* 纯CSS流动光带背景，无图片 */
 .bg-flow-wrap {
     position: fixed;
     inset: 0;
-    z-index: -10;
+    z-index: -2;
     overflow: hidden;
 }
 .light-strip {
     position: absolute;
     width: 160%;
     height: 160%;
-    top: -40%;
-    left: -40%;
+    top: -30%;
+    left: -30%;
     background: conic-gradient(
         transparent 0 40%,
         rgba(0,200,255,0.15) 45% 50%,
@@ -72,6 +70,9 @@ body::after {
     z-index: -1;
 }
 /* 页面入场淡入动画 */
+body {
+    animation: pageFadeIn 0.9s ease forwards;
+}
 @keyframes pageFadeIn {
     from { opacity: 0; transform: translateY(20px); }
     to { opacity: 1; transform: translateY(0); }
@@ -93,7 +94,7 @@ header {
     background: var(--glass);
     border: 1px solid var(--border-line);
     z-index: 999;
-    transition: var(--transition-all);
+    transition: 0.3s ease;
 }
 header.scroll-active {
     background: rgba(4,6,16,0.85);
@@ -106,7 +107,7 @@ header.scroll-active {
     font-size: 16px;
     font-weight: 600;
     margin-right: 36px;
-    transition: var(--transition-all);
+    transition: 0.24s;
 }
 .nav-left a:hover {
     color: var(--blue);
@@ -118,35 +119,26 @@ header.scroll-active {
 .nav-right {
     display: flex;
     align-items: center;
-    gap: 18px;
+    gap: 24px;
 }
-.search-box {
-    width: 260px;
-    height: 38px;
-    border-radius: 20px;
-    background: var(--glass);
-    border: 1px solid var(--border-line);
-    padding: 0 16px;
-    color: #fff;
-    outline: none;
-    font-size: 14px;
-}
-.search-box::placeholder {
-    color: #777;
+.search-icon {
+    color: var(--text-gray);
+    cursor: pointer;
+    font-size: 18px;
 }
 .download-nav {
     padding: 9px 24px;
     border-radius: 999px;
-    background: linear-gradient(135deg, var(--blue), var(--purple));
+    background: var(--blue);
     color: #fff;
-    text-decoration: none;
-    font-size: 15px;
-    font-weight: 700;
-    transition: var(--transition-all);
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+    transition: 0.24s;
 }
 .download-nav:hover {
+    background: #0088cc;
     transform: scale(1.04);
-    box-shadow: 0 8px 22px rgba(0,200,255,0.35);
 }
 /* 首页主视觉区域 */
 .banner {
@@ -283,7 +275,7 @@ header.scroll-active {
     font-size: 17px;
     border: none;
     cursor: pointer;
-    transition: var(--transition-all);
+    transition: 0.24s;
 }
 .download-main-btn:hover {
     background: #111;
@@ -296,12 +288,12 @@ header.scroll-active {
     color: #fff;
     border: 1px solid var(--border-line);
     cursor: pointer;
-    transition: var(--transition-all);
+    transition: 0.24s;
 }
 .download-side-btn:hover {
     background: rgba(255,255,255,0.1);
 }
-/* 3D AI播放器视觉展示区 */
+/* 3D AI播放器展示区（仅视觉展示，无播放功能） */
 .player-section {
     width: min(1200px, 92%);
     margin: 160px auto;
@@ -382,24 +374,23 @@ footer {
     <div class="light-strip"></div>
     <div class="light-strip"></div>
 </div>
-<div class="page-transition-mask" id="pageTrans"></div>
+<div class="page-transition-mask" id="pageMask"></div>
 
 <header id="navBar">
     <div class="nav-left">
         <a href="./index.html" class="active">首页</a>
-        <a href="./feature.html" onclick="jumpPage(event,'./feature.html')">产品功能</a>
-        <!-- 修正跳转目标 about.html，路径无误 -->
-        <a href="./about.html" onclick="jumpPage(event,'./about.html')">关于我们</a>
+        <a href="https://yang1235744.github.io/nanyang/feature.html" onclick="jumpPage(event,'https://yang1235744.github.io/nanyang/feature.html')">产品功能</a>
+        <a href="https://yang1235744.github.io/nanyang/about.html" onclick="jumpPage(event,'https://yang1235744.github.io/nanyang/about.html')">关于我们</a>
     </div>
     <div class="nav-right">
-        <input class="search-box" placeholder="搜索歌曲、专辑">
-        <a href="./download.html" class="download-nav" onclick="jumpPage(event,'./download.html')">客户端下载</a>
+        <span class="search-icon">🔍</span>
+        <a href="https://yang1235744.github.io/nanyang/download.html" onclick="jumpPage(event,'https://yang1235744.github.io/nanyang/download.html')" class="download-nav">客户端下载</a>
     </div>
 </header>
 
 <div class="banner">
     <div class="banner-title">
-        <h1>南阳音乐。</h1>
+        <h1>南阳音乐</h1>
         <p>纯粹的本地音乐体验</p>
     </div>
 
@@ -421,31 +412,31 @@ footer {
             <h2>纯粹的本地音乐体验</h2>
             <p>所有音乐文件本地存储，不存在歌曲下架、版权灰标；内置AI智能播放引擎，3D立体播放界面，纯净无广告无付费弹窗。</p>
             <div class="download-btn-wrap">
-                <button class="download-main-btn" onclick="jumpPage(event,'./download.html')">下载客户端</button>
-                <a href="./feature.html" class="download-side-btn" onclick="jumpPage(event,'./feature.html')">查看全部功能</a>
+                <button class="download-main-btn" onclick="jumpPage(event,'https://yang1235744.github.io/nanyang/download.html')">下载客户端</button>
+                <a href="https://yang1235744.github.io/nanyang/feature.html" class="download-side-btn" onclick="jumpPage(event,'https://yang1235744.github.io/nanyang/feature.html')">查看全部功能</a>
             </div>
         </div>
     </div>
 </div>
 
-<section class="player-section" id="playerWrap">
+<div class="player-section" id="playerWrap">
     <h2 class="player-title">3D立体AI播放器</h2>
     <div class="player-3d-box">
         <div class="player-inner">
             <h3>立体可视化播放界面</h3>
             <p>立体波形动效、本地LRC歌词同步、无损全格式兼容，仅页面视觉展示</p>
-            <button class="download-side-btn" onclick="jumpPage(event,'./download.html')">下载体验完整播放器</button>
+            <button class="download-side-btn" onclick="jumpPage(event,'https://yang1235744.github.io/nanyang/download.html')">下载体验完整播放器</button>
         </div>
     </div>
-</section>
+</div>
 
 <footer>
 © 2026 南阳数码工作室 · 南阳音乐 | 仅页面视觉展示，非商用软件
 </footer>
 
 <script>
-// 页面跳转淡入过渡函数，about.html路径正常调用
-const mask = document.getElementById('pageTrans');
+// 页面跳转过渡动画
+const mask = document.getElementById('pageMask');
 function jumpPage(e, url) {
     e.preventDefault();
     mask.classList.add('active');
@@ -461,6 +452,7 @@ window.addEventListener('scroll', ()=>{
         navBar.classList.add('scroll-active');
     } else {
         navBar.classList.remove('scroll-active');
+    }
 })
 
 // 滚动触发播放器区域入场动画
