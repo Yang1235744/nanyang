@@ -2,344 +2,469 @@
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>南阳数码工作室</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>南阳音乐</title>
 <style>
-*{margin:0;padding:0;box-sizing:border-box;font-family:"Microsoft YaHei",sans-serif;}
-body{background:url(https://picsum.photos/id/1036/1920/1080) no-repeat center center fixed;background-size:cover;position:relative;min-height:100vh;color:#fff;}
-body::before{content:"";position:absolute;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.6);z-index:-1;}
-
-/* 导航侧边栏原版样式 */
-.nav{position:fixed;top:0;left:0;width:100%;padding:15px 30px;display:flex;justify-content:space-between;align-items:center;z-index:999;
-background:rgba(255,255,255,0.05);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-bottom:1px solid rgba(255,255,255,0.08);}
-.left-sidebar{position:fixed;top:70px;left:0;width:200px;height:calc(100vh - 70px);padding:20px;
-background:rgba(255,255,255,0.03);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border-right:1px solid rgba(255,255,255,0.06);}
-.nav .light-spot,.left-sidebar .light-spot{position:absolute;width:150px;height:150px;background:radial-gradient(circle,rgba(255,255,255,0.15),transparent 70%);border-radius:50%;pointer-events:none;transform:translate(-50%,-50%);}
-.nav .logo{font-size:22px;font-weight:bold;color:#87CEEB;}
-.nav .menu{display:flex;align-items:center;gap:12px;}
-.nav .menu a{color:#ccc;text-decoration:none;font-size:16px;padding:6px 14px;border-radius:25px;background:rgba(255,255,255,0.06);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);border:1px solid rgba(255,255,255,0.1);transition:all 0.25s ease;}
-.nav .menu a:hover{color:#fff;background:rgba(0,123,255,0.25);border-color:rgba(0,123,255,0.35);}
-.glass-text{color:#ccc;font-size:14px;}
-.glass-opacity-slider{
-  -webkit-appearance:none;appearance:none;width:120px;height:32px;border-radius:16px;background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.15);outline:none;cursor:pointer;--fill:100%;
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Microsoft YaHei", system-ui, sans-serif;
 }
-.glass-opacity-slider::-webkit-slider-runnable-track{height:32px;border-radius:16px;background:transparent;}
-.glass-opacity-slider::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;width:28px;height:28px;border-radius:50%;background:#fff;border:none;cursor:pointer;margin-top:2px;box-shadow:0 2px 8px rgba(0,0,0,0.2);}
-.glass-opacity-slider::before{content:"";position:absolute;top:0;left:0;height:100%;border-radius:16px;background:rgba(135,206,235,0.6);z-index:0;width:var(--fill);}
-.left-sidebar h3{color:#87CEEB;font-size:16px;margin-bottom:10px;}
-.left-sidebar a{display:block;color:#fff;text-decoration:none;padding:9px 12px;margin:6px 0;cursor:pointer;font-size:14px;border-radius:25px;background:rgba(255,255,255,0.06);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);border:1px solid rgba(255,255,255,0.1);transition:all 0.25s ease;}
-.left-sidebar a:hover{background:rgba(0,123,255,0.25);border-color:rgba(0,123,255,0.35);border-radius:25px;}
-.sidebar-bottom-text{margin-top:15px;font-size:12px;color:#ccc;line-height:1.4;}
-.container{width:100%;max-width:900px;margin:0 auto;margin-left:220px;padding:120px 20px 80px;text-align:center;}
-.container h1{font-size:38px;color:#87CEEB;margin-bottom:20px;}
-.container .desc{font-size:18px;color:#eee;line-height:1.6;margin-bottom:40px;}
-.btn-box{display:flex;flex-wrap:wrap;justify-content:center;gap:15px;margin-bottom:30px;}
-.btn{padding:12px 24px;border-radius:6px;text-decoration:none;font-weight:bold;font-size:16px;color:#fff;border:none;cursor:pointer;}
-.btn-red{background:#dc3545;}.btn-blue{background:#007bff;}.btn-green{background:#28a745;}.btn-cyan{background:#00bcd4;}
-.dropdown{position:relative;display:inline-block;}
-.dropdown-content{display:none;position:absolute;top:100%;left:0;background-color:#222;min-width:220px;border-radius:6px;box-shadow:0 8px 16px rgba(0,0,0,0.3);z-index:1000;margin-top:5px;}
-.dropdown-content a{color:#fff;padding:12px 16px;text-decoration:none;display:block;text-align:left;font-size:14px;}
-.dropdown-content a:hover{background:#007bff;}.divider{height:1px;background:#444;margin:4px 0;}
-.dropdown:hover .dropdown-content{display:block;}.triangle{font-size:12px;}.tip{color:#ffd700;font-size:15px;line-height:1.8;margin-bottom:20px;}
-.tool-pw{color:#ffc107;font-size:16px;font-weight:bold;margin-top:10px;}.pe-info{color:#fff;font-size:14px;margin-top:8px;}
-.iframe-modal{position:fixed;top:80px;left:220px;right:0;bottom:0;background:rgba(0,0,0,0.7);display:none;z-index:990;}.iframe-modal.show{display:block;}.iframe-modal iframe{width:100%;height:100%;border:none;}
-.modal{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.6);z-index:998;align-items:center;justify-content:center;}.modal.show{display:flex;}
-.modal-content{background:#1a1a1a;border:1px solid #444;border-radius:10px;width:90%;max-width:700px;padding:30px;text-align:center;}
-.ai-avatar{position:fixed;right:20px;bottom:20px;width:60px;height:60px;border-radius:50%;border:3px solid #00bcd4;object-fit:cover;cursor:pointer;z-index:999;}
-
-/* 校验弹窗 */
-.verify-mask{position:fixed;top:0;left:0;width:100vw;height:100vh;background:rgba(0,0,0,0.88);backdrop-filter:blur(16px);z-index:999999;display:flex;align-items:center;justify-content:center;}
-.verify-box{width:92%;max-width:450px;padding:28px;background:rgba(255,255,255,0.06);backdrop-filter:blur(22px);border:1px solid rgba(255,255,255,0.1);border-radius:16px;}
-.verify-box h2{text-align:center;margin-bottom:22px;color:#87CEEB;font-size:24px;}
-.tip-text{font-size:14px;color:#c5c5c5;margin:10px 0 20px;text-align:center;line-height:1.6}
-
-/* 人脸容器 */
-.face-box{margin:20px 0;display:block;text-align:center;position:relative;height:260px;overflow:hidden;border-radius:10px;background:#000;}
-#camVideo{width:100%;height:250px;position:absolute;top:0;left:0;transition:opacity 0.3s ease;display:none;}
-#face3dCanvas{width:100%;height:250px;position:absolute;top:0;left:0;pointer-events:none;display:none;}
-.face-check-icon{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%) scale(0);font-size:120px;color:#2dd050;font-weight:bold;transition:transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);z-index:10;}
-.face-check-icon.show{transform:translate(-50%,-50%) scale(1);}
-.result{margin-top:18px;font-size:19px;font-weight:bold;min-height:24px;}
-.success{color:#4cd964}.fail{color:#ff6b6b}.hidden{display:none !important}
-
-/* 无相机兜底输入框 */
-.input-box{margin-top:20px;text-align:center;display:none;}
-.input-box input{width:80%;padding:12px 16px;border-radius:8px;border:none;font-size:16px;text-align:center;color:#000;outline:none;}
-.input-box p{margin-top:8px;color:#aaa;font-size:14px;}
-
-/* 主页容器 */
-.site-wrap{visibility:hidden;opacity:0;transition:opacity 0.6s ease;}
-.site-wrap.unlock{visibility:visible;opacity:1;}
-
-/* 源码锁弹窗 */
-.debug-lock{position:fixed;top:0;left:0;width:100vw;height:100vh;background:#000;z-index:9999999;display:none;flex-direction:column;align-items:center;justify-content:center;gap:12px;}
-.debug-lock.show{display:flex;}
-.debug-lock input{padding:10px;width:260px;font-size:16px;border-radius:8px;border:none;outline:none;}
-.debug-lock button{padding:10px 30px;background:#1989d8;color:#fff;border:none;border-radius:8px;font-size:16px;cursor:pointer;}
-.debug-lock h2{color:#ff5555;font-size:24px;}
+:root {
+    --blue: #00c8ff;
+    --purple: #a855f7;
+    --bg-base: #040610;
+    --glass: rgba(255,255,255,0.04);
+    --glass-stong: rgba(255,255,255,0.08);
+    --border-line: rgba(255,255,255,0.07);
+    --text-white: #ffffff;
+    --text-gray: #b2b2c8;
+}
+html {
+    scroll-behavior: smooth;
+}
+body {
+    min-height: 100vh;
+    color: var(--text-white);
+    overflow-x: hidden;
+    position: relative;
+    background: var(--bg-base);
+}
+/* 纯CSS流动光带背景，无图片 */
+.bg-flow-wrap {
+    position: fixed;
+    inset: 0;
+    z-index: -2;
+    overflow: hidden;
+}
+.light-strip {
+    position: absolute;
+    width: 160%;
+    height: 160%;
+    top: -30%;
+    left: -30%;
+    background: conic-gradient(
+        transparent 0 40%,
+        rgba(0,200,255,0.15) 45% 50%,
+        transparent 50% 90%,
+        rgba(168,85,247,0.15) 95% 100%
+    );
+    animation: rotateLight 20s linear infinite;
+}
+.light-strip:nth-child(2) {
+    animation-duration: 26s;
+    animation-direction: reverse;
+    opacity: 0.55;
+    filter: blur(40px);
+}
+@keyframes rotateLight {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+body::after {
+    content: "";
+    position: fixed;
+    inset: 0;
+    background: rgba(4,6,16,0.65);
+    z-index: -1;
+}
+/* 页面入场淡入动画 */
+body {
+    animation: pageFadeIn 0.9s ease forwards;
+}
+@keyframes pageFadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+/* 顶部圆角玻璃导航栏 */
+header {
+    position: fixed;
+    top: 24px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: min(1180px, 94%);
+    padding: 16px 32px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-radius: 999px;
+    backdrop-filter: blur(26px);
+    -webkit-backdrop-filter: blur(26px);
+    background: var(--glass);
+    border: 1px solid var(--border-line);
+    z-index: 999;
+    transition: 0.3s ease;
+}
+header.scroll-active {
+    background: rgba(4,6,16,0.85);
+    box-shadow: 0 6px 30px rgba(0,0,0,0.4);
+    top: 12px;
+}
+.nav-left a {
+    text-decoration: none;
+    color: var(--text-white);
+    font-size: 16px;
+    font-weight: 600;
+    margin-right: 36px;
+    transition: 0.24s;
+}
+.nav-left a:hover {
+    color: var(--blue);
+}
+.nav-left a.active {
+    border-bottom: 2px solid var(--blue);
+    padding-bottom: 4px;
+}
+.nav-right {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+}
+.search-icon {
+    color: var(--text-gray);
+    cursor: pointer;
+    font-size: 18px;
+}
+.download-nav {
+    padding: 9px 24px;
+    border-radius: 999px;
+    background: var(--blue);
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+    transition: 0.24s;
+}
+.download-nav:hover {
+    background: #0088cc;
+    transform: scale(1.04);
+}
+/* 首页主视觉区域 */
+.banner {
+    width: min(1200px, 92%);
+    margin: 0 auto;
+    padding-top: 160px;
+    min-height: 100vh;
+}
+.banner-title h1 {
+    font-size: 68px;
+    font-weight: 900;
+    line-height: 1.1;
+    margin-bottom: 12px;
+    animation: titleFloat 1s ease forwards;
+    opacity: 0;
+    transform: translateY(30px);
+}
+@keyframes titleFloat {
+    to { opacity: 1; transform: translateY(0); }
+}
+.banner-title p {
+    font-size: 24px;
+    color: var(--text-gray);
+    margin-bottom: 80px;
+    animation: textFloat 1s 0.2s ease forwards;
+    opacity: 0;
+    transform: translateY(24px);
+}
+@keyframes textFloat {
+    to { opacity: 1; transform: translateY(0); }
+}
+/* 3D立体卡片容器 */
+.card-stack {
+    position: relative;
+    width: 100%;
+    min-height: 520px;
+    perspective: 1200px;
+}
+/* 左侧卡片 图1.png */
+.card-small-1 {
+    position: absolute;
+    top: 0;
+    left: 2%;
+    width: 360px;
+    padding: 28px;
+    border-radius: 18px;
+    backdrop-filter: blur(16px);
+    background: var(--glass-stong);
+    border: 1px solid var(--border-line);
+    transform: rotateY(-12deg) rotateX(6deg);
+    animation: cardShow 1s 0.4s ease forwards;
+    opacity: 0;
+}
+.card-small-1 .preview-img {
+    width: 100%;
+    height: 140px;
+    border-radius: 12px;
+    margin-bottom: 16px;
+    object-fit: cover;
+}
+/* 右侧卡片 图2.png */
+.card-small-2 {
+    position: absolute;
+    top: 40px;
+    right: 2%;
+    width: 340px;
+    padding: 28px;
+    border-radius: 18px;
+    backdrop-filter: blur(16px);
+    background: var(--glass-stong);
+    border: 1px solid var(--border-line);
+    transform: rotateY(12deg) rotateX(6deg);
+    animation: cardShow 1s 0.6s ease forwards;
+    opacity: 0;
+}
+.card-small-2 .preview-img {
+    width: 100%;
+    height: 140px;
+    border-radius: 12px;
+    margin-bottom: 16px;
+    object-fit: cover;
+}
+@keyframes cardShow {
+    to { opacity: 1; transform: translateY(0); }
+}
+.card-small-1 h3, .card-small-2 h3 {
+    font-size: 22px;
+    margin-bottom: 10px;
+}
+.card-small-1 p, .card-small-2 p {
+    color: var(--text-gray);
+    font-size: 14px;
+    line-height: 1.6;
+}
+/* 底部主下载卡片 */
+.card-main-download {
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: min(720px, 98%);
+    padding: 42px;
+    border-radius: 22px;
+    backdrop-filter: blur(20px);
+    background: var(--glass-stong);
+    border: 1px solid var(--border-line);
+    animation: bigCardUp 1s 0.8s ease forwards;
+    opacity: 0;
+    transform: translateX(-50%) translateY(40px);
+}
+@keyframes bigCardUp {
+    to { opacity: 1; transform: translateX(-50%) translateY(0); }
+}
+.card-main-download h2 {
+    font-size: 32px;
+    margin-bottom: 18px;
+}
+.card-main-download p {
+    color: var(--text-gray);
+    line-height: 1.7;
+    max-width: 600px;
+    margin: 0 auto 36px;
+}
+.download-btn-wrap {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+}
+.download-main-btn {
+    padding: 14px 36px;
+    border-radius: 999px;
+    background: #000000;
+    color: #fff;
+    font-size: 17px;
+    border: none;
+    cursor: pointer;
+    transition: 0.24s;
+}
+.download-main-btn:hover {
+    background: #111;
+    transform: scale(1.04);
+}
+.download-side-btn {
+    padding: 14px 30px;
+    border-radius: 999px;
+    background: var(--glass);
+    color: #fff;
+    border: 1px solid var(--border-line);
+    cursor: pointer;
+    transition: 0.24s;
+}
+.download-side-btn:hover {
+    background: rgba(255,255,255,0.1);
+}
+/* 3D AI播放器展示区（仅视觉展示，无播放功能） */
+.player-section {
+    width: min(1200px, 92%);
+    margin: 160px auto;
+    text-align: center;
+}
+.player-section h2 {
+    font-size: 40px;
+    margin-bottom: 60px;
+    opacity: 0;
+    transform: translateY(30px);
+    transition: 0.8s ease;
+}
+.player-section h2.show {
+    opacity: 1;
+    transform: translateY(0);
+}
+.player-3d-box {
+    width: min(900px, 100%);
+    height: 420px;
+    margin: 0 auto;
+    border-radius: 20px;
+    backdrop-filter: blur(18px);
+    background: var(--glass-stong);
+    border: 1px solid var(--border-line);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transform-style: preserve-3d;
+    transform: rotateX(8deg) rotateY(-6deg);
+    transition: transform 0.3s ease;
+    opacity: 0;
+}
+.player-3d-box.show {
+    opacity: 1;
+}
+.player-3d-box:hover {
+    transform: rotateX(4deg) rotateY(-2deg);
+}
+.player-inner h3 {
+    font-size: 28px;
+    color: var(--blue);
+    margin-bottom: 16px;
+}
+.player-inner p {
+    color: var(--text-gray);
+    font-size: 16px;
+    margin-bottom: 30px;
+    max-width: 600px;
+}
+/* 页面切换遮罩动画 */
+.page-transition-mask {
+    position: fixed;
+    inset: 0;
+    background: var(--bg-base);
+    z-index: 9999;
+    display: none;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+.page-transition-mask.active {
+    display: flex;
+    opacity: 1;
+}
+/* 页脚 */
+footer {
+    width: min(1200px, 92%);
+    margin: 0 auto;
+    padding: 50px 0;
+    text-align: center;
+    border-top: 1px solid var(--border-line);
+    color: #777;
+    font-size: 14px;
+}
 </style>
 </head>
 <body>
-<div class="debug-lock" id="debugLock">
-    <h2>后台代码保护锁</h2>
-    <input id="pwd" placeholder="管理员密码">
-    <input id="bir" placeholder="校验生日">
-    <button onclick="unlockDebug()">解锁后台权限</button>
+<div class="bg-flow-wrap">
+    <div class="light-strip"></div>
+    <div class="light-strip"></div>
 </div>
+<div class="page-transition-mask" id="pageMask"></div>
 
-<div class="verify-mask" id="verifyMask">
-    <div class="verify-box">
-        <h2>南阳官网真人安全校验</h2>
-        <p class="tip-text">自动调用前置摄像头3D人脸核验，识别完成自动进入官网；无相机请输入Yes</p>
+<header id="navBar">
+    <div class="nav-left">
+        <a href="./index.html" class="active">首页</a>
+        <a href="./feature.html" onclick="jumpPage(event,'./feature.html')">产品功能</a>
+        <a href="./about.html" onclick="jumpPage(event,'./about.html')">关于我们</a>
+    </div>
+    <div class="nav-right">
+        <span class="search-icon">🔍</span>
+        <a href="./download.html" onclick="jumpPage(event,'./download.html')" class="download-nav">客户端下载</a>
+    </div>
+</header>
 
-        <div class="face-box" id="facePanel">
-            <video id="camVideo" autoplay muted playsinline webkit-playsinline x5-playsinline></video>
-            <canvas id="face3dCanvas"></canvas>
-            <div class="face-check-icon" id="faceCheckIcon">✓</div>
+<div class="banner">
+    <div class="banner-title">
+        <h1>南阳音乐。</h1>
+        <p>纯粹的本地音乐体验</p>
+    </div>
+
+    <div class="card-stack">
+        <!-- 左侧卡片 图片1.png -->
+        <div class="card-small-1">
+            <img class="preview-img" src="1.png" alt="南阳音乐主界面">
+            <h3>南阳音乐</h3>
+            <p>本地曲库独立管理，脱离流媒体平台限制</p>
         </div>
-        <div class="result" id="faceResult"></div>
+        <!-- 右侧卡片 图片2.png -->
+        <div class="card-small-2">
+            <img class="preview-img" src="2.png" alt="智能AI播放模块">
+            <h3>智能AI播放</h3>
+            <p>AI智能推荐歌单，自动匹配本地无损音频</p>
+        </div>
 
-        <div class="input-box" id="inputWrap">
-            <input type="text" id="codeInput" placeholder="请输入 Yes">
-            <p>无摄像头设备，输入Yes自动放行</p>
+        <div class="card-main-download">
+            <h2>纯粹的本地音乐体验</h2>
+            <p>所有音乐文件本地存储，不存在歌曲下架、版权灰标；内置AI智能播放引擎，3D立体播放界面，纯净无广告无付费弹窗。</p>
+            <div class="download-btn-wrap">
+                <button class="download-main-btn" onclick="jumpPage(event,'./download.html')">下载客户端</button>
+                <a href="./feature.html" class="download-side-btn" onclick="jumpPage(event,'./feature.html')">查看全部功能</a>
+            </div>
         </div>
     </div>
 </div>
 
-<div class="site-wrap" id="siteWrap">
-<div class="nav">
-  <div class="light-spot"></div>
-  <div class="logo">南阳数码工作室</div>
-  <div class="menu">
-    <a href="./index.html">首页</a>
-    <a href="https://www.microsoft.com" target="_blank">微软官方地址</a>
-    <a onclick="openModal()">系统镜像下载</a>
-    <a href="./about.html">南阳MC服务中心</a>
-    <a href="./ai.html">AI 助手</a>
-    <span class="glass-text">毛玻璃调节透明度</span>
-    <input type="range" min="0" max="1" step="0.01" value="1" class="glass-opacity-slider" id="glassOpacitySlider">
-  </div>
-</div>
-<div class="left-sidebar">
-  <div class="light-spot"></div>
-  <h3>下载区</h3>
-  <a onclick="openFrame('https://www.microsoft.com/zh-cn/software-download/windows11')">Windows 11 官方</a>
-  <a onclick="openFrame('https://www.123684.com/s/s9H3Td-6tQg')">系统镜像Windows加魔改</a>
-  <a onclick="openFrame('https://pan.xunlei.com/s/VOlQYgS0mqDUNwzd6BEig76UA1#')">Windows 新系统镜像（提取码：6h6d）</a>
-  <a onclick="openFrame('https://www.123865.com/s/s9H3Td-TiQg')">小白PE云盘下载</a>
-  <a onclick="openFrame('https://www.wepe.com.cn')">微PE 官网</a>
-  <a onclick="openFrame('https://play.mcjs.cc/1.12.2wasm/')">我的世界网页模拟试玩区</a>
-  <a onclick="openFrame('https://firpe.cn/page-247')">FIRPE 维护系统（神通Win11 PE）</a>
-  <a onclick="openFrame('https://www.huorong.cn')">火绒官网</a>
-  <a onclick="openFrame('https://newsupport.lenovo.com.cn/')">联想官网</a>
-  <a onclick="openFrame('https://pcl2.aoe.top//')">PCL2</a>
-  <div class="sidebar-bottom-text">
-    <strong>说明：</strong>本官网已更新，请在关于我们观看官网说明<br>© 2026 南阳数码工作室
-  </div>
-</div>
-<div class="modal" id="modal">
-  <div class="modal-content">
-    <h2 style="margin-bottom:20px">系统镜像下载</h2>
-    <div class="btn-box">
-      <a href="https://www.microsoft.com/zh-cn/software-download/windows11" class="btn btn-red" target="_blank">微软 Windows 11 官方下载</a>
-      <div class="dropdown">
-        <button class="btn btn-blue">下载更多 Windows 系统经典版、魔改版 <span class="triangle">▼</span></button>
-        <div class="dropdown-content">
-          <a href="#" target="_blank">Windows 7 纯净版</a>
-          <a href="#" target="_blank">Windows 10 LTSC 精简版</a>
-          <a href="#" target="_blank">Windows 11 魔改优化版</a>
-          <a href="#" target="_blank">Windows XP 怀旧版</a>
-          <a href="#" target="_blank">Windows Server 2019 服务器版</a>
-          <div class="divider"></div>
-          <a href="https://www123684.com/s/s9H3Td-6tQg" target="_blank">123云盘下载</a>
-          <a href="https://pan.xunlei.com/s/VOlQYgS0mqDUNwzd6BEig76UA1#" target="_blank">迅雷云盘下载（提取码：6h6d）</a>
+<div class="player-section" id="playerWrap">
+    <h2 class="player-title">3D立体AI播放器</h2>
+    <div class="player-3d-box">
+        <div class="player-inner">
+            <h3>立体可视化播放界面</h3>
+            <p>立体波形动效、本地LRC歌词同步、无损全格式兼容，仅页面视觉展示</p>
+            <button class="download-side-btn" onclick="jumpPage(event,'./download.html')">下载体验完整播放器</button>
         </div>
-      </div>
     </div>
-    <div class="btn-box">
-      <a href="https://wwwbfp.lanzout.com/iyXKk3ihaz8" class="btn btn-green" target="_blank">下载激活工具</a>
-      <a href="https://www.123865.com/s/s9H3Td-TiQg" class="btn btn-cyan" target="_blank">新手PE下载</a>
-    </div>
-    <p class="tool-pw">激活工具解压密码：c2xm</p>
-    <p class="pe-info">新手小白不会安装PE，可直接点击上方「新手PE下载」</p>
-  </div>
 </div>
-<div class="iframe-modal" id="iframeModal">
-  <iframe id="showFrame"></iframe>
-</div>
-<div class="container">
-  <h1>南阳数码工作室</h1>
-  <p class="desc">专注电脑维修、系统魔改、刷机、服务器搭建<br>提供纯净Windows系统镜像，无捆绑、无篡改</p>
-  <p class="tip">此网站提供官方原版镜像，无任何捆绑软件，纯净无广告。<br>如无系统激活密钥，可下载下方激活工具，使用前请临时关闭安全管家/Windows Defender，避免被误报删除。</p>
-  <p class="tool-pw">激活工具解压密码：c2xm</p>
-  <p class="pe-info">新手小白不会安装PE，可直接点击上方「新手PE下载」</p>
-</div>
-<img src="https://picsum.photos/id/1036/80/80" class="ai-avatar" onclick="location.href='./ai.html'">
-</div>
+
+<footer>
+© 2026 南阳数码工作室 · 南阳音乐 | 仅页面视觉展示，非商用软件
+</footer>
 
 <script>
-window.addEventListener('mousemove',e=>{
-  document.querySelectorAll('.light-spot').forEach(spot=>{spot.style.left = e.clientX + 'px';spot.style.top = e.clientY + 'px';});
+// 页面跳转过渡动画
+const mask = document.getElementById('pageMask');
+function jumpPage(e, url) {
+    e.preventDefault();
+    mask.classList.add('active');
+    setTimeout(()=>{
+        window.location.href = url;
+    }, 300);
+}
+
+// 导航滚动样式切换
+const navBar = document.getElementById('navBar');
+window.addEventListener('scroll', ()=>{
+    if(window.scrollY > 60) {
+        navBar.classList.add('scroll-active');
+    } else {
+        navBar.classList.remove('scroll-active');
+    }
 })
-const slider=document.getElementById('glassOpacitySlider');
-const nav=document.querySelector('.nav');
-const sidebar=document.querySelector('.left-sidebar');
-function setGlassOpacity(val) {
-  nav.style.background=`rgba(255,255,255,${0.05*val})`;
-  sidebar.style.background=`rgba(255,255,255,${0.03*val})`;
-  nav.style.backdropFilter=`blur(${20*val}px)`;
-  sidebar.style.backdropFilter=`blur(${18*val}px)`;
-  slider.style.setProperty('--fill', `${val*100}%`);
-}
-slider.addEventListener('input',()=>setGlassOpacity(parseFloat(slider.value)));
-setGlassOpacity(1);
-function openModal(){document.getElementById('modal').classList.add('show');}
-document.getElementById('modal').addEventListener('click',function(e){if(e.target === this) this.classList.remove('show');});
-function openFrame(url){document.getElementById('showFrame').src = url;document.getElementById('iframeModal').classList.add('show');}
-</script>
 
-<script>
-const isGithub = window.location.hostname.includes("github.io");
-if(!isGithub){
-  fetch('https://ipapi.co/json/',{signal:AbortSignal.timeout(1800)})
-  .then(r=>r.json())
-  .then(d=>{
-    if(d.country_code!=='CN') document.body.innerHTML='<div style="background:#000;color:red;height:100vh;display:flex;align-items:center;justify-content:center;font-size:22px;">防火墙拦截：仅中国大陆网络可访问</div>';
-  }).catch(()=>{});
-}
-</script>
-
-<script>
-const KEY = 'ny_block';
-const PWD = 'NanYang256@G';
-const BIR = '20120201';
-const lockBox = document.getElementById("debugLock");
-const isMobile = /Android|iPhone|iPad|iPod|HarmonyOS/i.test(navigator.userAgent);
-function unlockDebug(){
-  const p = document.getElementById('pwd').value;
-  const b = document.getElementById('bir').value;
-  if(p===PWD&&b===BIR){localStorage.removeItem(KEY);lockBox.classList.remove("show");}else alert('解锁信息错误，禁止篡改网站代码');
-}
-if(!isMobile){
-  document.addEventListener('contextmenu',e=>{e.preventDefault();localStorage.setItem(KEY,'1');lockBox.classList.add("show");});
-}
-window.addEventListener('keydown',e=>{
-  if(e.key==='F12'||(e.ctrlKey&&e.shiftKey&&e.key==='I')){e.preventDefault();localStorage.setItem(KEY,'1');lockBox.classList.add("show");}
-});
-</script>
-
-<script>
-const STORAGE_KEY = "ny_verify_ip_cache";
-const EXPIRE_TIME = 3 * 24 * 60 * 60 * 1000;
-let currentIP = "";
-let camMediaStream = null;
-let threeDRenderLoop = null;
-
-async function checkVerifyCache(){
-    try{
-        const res = await fetch("https://ipapi.co/json/",{signal:AbortSignal.timeout(1500)});
-        const data = await res.json();
-        currentIP = data.ip;
-    }catch(e){
-        startVerify();
-        return;
+// 滚动触发播放器区域入场动画
+const playerTitle = document.querySelector('.player-title');
+const playerBox = document.querySelector('.player-3d-box');
+window.addEventListener('scroll', ()=>{
+    const rect = document.getElementById('playerWrap').getBoundingClientRect();
+    if(rect.top < window.innerHeight * 0.75) {
+        playerTitle.classList.add('show');
+        playerBox.classList.add('show');
     }
-    const cacheStr = localStorage.getItem(STORAGE_KEY);
-    if(cacheStr){
-        const cache = JSON.parse(cacheStr);
-        const now = Date.now();
-        if(cache.ip === currentIP && now < cache.expire){
-            document.getElementById("verifyMask").classList.add("hidden");
-            document.getElementById("siteWrap").classList.add("unlock");
-            return;
-        }
-    }
-    startVerify();
-}
-function saveIPCache(){
-    localStorage.setItem(STORAGE_KEY, JSON.stringify({ip:currentIP, expire:Date.now()+EXPIRE_TIME}));
-}
-function autoEnterSite(){
-    saveIPCache();
-    document.getElementById("verifyMask").classList.add("hidden");
-    document.getElementById("siteWrap").classList.add("unlock");
-    if(camMediaStream) camMediaStream.getTracks().forEach(t=>t.stop());
-    if(threeDRenderLoop) cancelAnimationFrame(threeDRenderLoop);
-}
-
-function startVerify(){
-    const mask = document.getElementById("verifyMask");
-    const siteWrap = document.getElementById("siteWrap");
-    const videoDom = document.getElementById("camVideo");
-    const canvas3d = document.getElementById("face3dCanvas");
-    const ctx = canvas3d.getContext("2d");
-    const faceIcon = document.getElementById("faceCheckIcon");
-    const faceResText = document.getElementById("faceResult");
-    const inputWrap = document.getElementById("inputWrap");
-    const inputBox = document.getElementById("codeInput");
-
-    // 3D人脸渲染引擎
-    function init3DFaceRender(){
-        canvas3d.width = videoDom.offsetWidth;
-        canvas3d.height = videoDom.offsetHeight;
-        let angle = 0;
-        threeDRenderLoop = requestAnimationFrame(function drawLoop(){
-            angle += 0.015;
-            ctx.clearRect(0,0,canvas3d.width,canvas3d.height);
-            ctx.save();
-            ctx.translate(canvas3d.width/2, canvas3d.height/2);
-            ctx.strokeStyle = "#42a5f5";
-            ctx.lineWidth = 3;
-            ctx.beginPath();
-            ctx.ellipse(0,0,90,110,angle,0,Math.PI*2);
-            ctx.stroke();
-            ctx.beginPath();
-            ctx.ellipse(-35,-22,14,18,angle*0.6,0,Math.PI*2);
-            ctx.ellipse(35,-22,14,18,angle*0.6,0,Math.PI*2);
-            ctx.stroke();
-            ctx.beginPath();
-            ctx.arc(0,32,30,Math.PI,0);
-            ctx.stroke();
-            ctx.restore();
-            threeDRenderLoop = requestAnimationFrame(drawLoop);
-        });
-    }
-
-    // 自动调用摄像头
-    navigator.mediaDevices.getUserMedia({video:{facingMode:"user"},audio:false})
-    .then(stream=>{
-        camMediaStream = stream;
-        videoDom.style.display = "block";
-        canvas3d.style.display = "block";
-        videoDom.srcObject = stream;
-        videoDom.onloadedmetadata = ()=>{
-            init3DFaceRender();
-            // 3秒自动识别完成，直接进官网，不用点按钮
-            setTimeout(()=>{
-                cancelAnimationFrame(threeDRenderLoop);
-                videoDom.style.opacity = 0;
-                faceIcon.classList.add("show");
-                faceResText.innerText = "3D人脸核验通过，自动进入官网";
-                faceResText.className = "result success";
-                setTimeout(autoEnterSite,1200);
-            },3000);
-        }
-    })
-    .catch(()=>{
-        // 无相机/拒绝权限，显示输入框，输入Yes自动放行
-        inputWrap.style.display = "block";
-        faceResText.innerText = "未获取相机权限，请输入Yes";
-        faceResText.className = "result fail";
-        inputBox.oninput = function(){
-            if(this.value.trim() === "Yes"){
-                faceResText.innerText = "输入校验通过，自动进入官网";
-                faceResText.className = "result success";
-                setTimeout(autoEnterSite,800);
-            }
-        }
-    });
-}
-checkVerifyCache();
+})
 </script>
 </body>
 </html>
