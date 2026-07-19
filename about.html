@@ -3,221 +3,36 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>南阳音乐 - 客户端下载</title>
+<title>关于我们 - 南阳数码工作室</title>
 <style>
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  font-family: "Microsoft YaHei", sans-serif;
-}
-html {
-  scroll-behavior: smooth;
-}
-body {
-  color: #e6e9f0;
-  background: #0b1220;
-  overflow-x: hidden;
-}
-/* 模板原版动态光效背景，完全不动 */
-.win11-bg {
-  position: fixed;
-  width: 100vw;
-  height: 100vh;
-  background: linear-gradient(150deg, #121a2f, #0d1322, #1a243a);
-  z-index: -2;
-}
-.win11-light {
-  position: fixed;
-  width: 200vmin;
-  height: 200vmin;
-  background: radial-gradient(circle,
-    rgba(59, 130, 246, 0.22),
-    rgba(14, 165, 233, 0.18),
-    rgba(124, 58, 237, 0.14),
-    transparent 65%);
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  animation: rotate 24s linear infinite;
-  z-index: -1;
-}
-@keyframes rotate {
-  0% { transform: translate(-50%, -50%) rotate(0deg); }
-  100% { transform: translate(-50%, -50%) rotate(360deg); }
-}
-/* 导航栏模板原样 */
-header {
-  position: fixed;
-  top: 0;
-  width: 100%;
-  padding: 18px 24px;
-  background: rgba(11, 18, 32, 0.85);
-  backdrop-filter: blur(15px);
-  border-bottom: 1px solid rgba(255,255,255,0.05);
-  z-index: 999;
-}
-.nav {
-  max-width: 1100px;
-  margin: 0 auto;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-.logo {
-  font-size: 20px;
-  font-weight: 600;
-  color: #4d9fff;
-}
-.menu a {
-  color: #a0aabc;
-  text-decoration: none;
-  margin-left: 32px;
-  font-size: 15px;
-  transition: color 0.2s;
-}
-.menu a:hover {
-  color: #4d9fff;
-}
-/* 下载主体区域 */
-.download-main {
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  padding: 120px 24px 60px;
-}
-.download-main h1 {
-  font-size: 44px;
-  font-weight: 500;
-  color: #ffffff;
-  margin-bottom: 12px;
-  opacity: 0;
-  transform: translateY(24px);
-  animation: fadeUp 0.7s ease forwards;
-}
-.download-main p {
-  font-size: 17px;
-  color: #a0aabc;
-  max-width: 580px;
-  line-height: 1.7;
-  margin-bottom: 40px;
-  opacity: 0;
-  transform: translateY(20px);
-  animation: fadeUp 0.7s 0.2s ease forwards;
-}
-@keyframes fadeUp {
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-/* 下载卡片区域 */
-.download-card-wrap {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 24px;
-  justify-content: center;
-  margin-bottom: 36px;
-  opacity: 0;
-  transform: translateY(28px);
-  animation: fadeUp 0.7s 0.4s ease forwards;
-}
-.download-card {
-  background: rgba(26, 36, 58, 0.85);
-  border: 1px solid rgba(255,255,255,0.06);
-  border-radius: 14px;
-  width: 280px;
-  padding: 36px 28px;
-  text-align: center;
-  transition: all 0.25s ease;
-}
-.download-card:hover {
-  transform: translateY(-6px);
-  border-color: rgba(77, 159, 255, 0.25);
-}
-.download-card h3 {
-  color: #4d9fff;
-  font-size: 18px;
-  margin-bottom: 8px;
-}
-.download-card p {
-  color: #9ca6b9;
-  font-size: 14px;
-  margin-bottom: 22px;
-}
-.download-card a {
-  display: inline-block;
-  padding: 10px 26px;
-  background: #3b82f6;
-  color: #fff;
-  border-radius: 6px;
-  text-decoration: none;
-  font-size: 14px;
-  transition: background 0.2s;
-}
-.download-card a:hover {
-  background: #2563eb;
-}
-.back-link {
-  display: inline-block;
-  color: #a0aabc;
-  text-decoration: none;
-  font-size: 15px;
-  opacity: 0;
-  transform: translateY(16px);
-  animation: fadeUp 0.7s 0.6s ease forwards;
-}
-.back-link:hover {
-  color: #4d9fff;
-}
-/* 页脚 */
-footer {
-  padding: 40px 24px;
-  text-align: center;
-  border-top: 1px solid rgba(255,255,255,0.05);
-  color: #7a8498;
-  font-size: 14px;
-}
+*{margin:0;padding:0;box-sizing:border-box;font-family:"Microsoft YaHei",sans-serif;}
+body{background:url(https://picsum.photos/id/1036/1920/1080) no-repeat center center fixed;background-size:cover;position:relative;min-height:100vh;color:#fff;}
+body::before{content:"";position:absolute;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.6);z-index:-1;}
+.nav{position:fixed;top:0;left:0;width:100%;padding:15px 30px;background:rgba(0,0,0,0.85);display:flex;justify-content:space-between;align-items:center;z-index:999;}
+.nav .logo{font-size:22px;font-weight:bold;color:#87CEEB;}
+.nav .menu a{color:#ccc;text-decoration:none;margin-left:25px;font-size:16px;}
+.nav .menu a:hover{color:#fff;}
+.container{width:100%;max-width:800px;margin:0 auto;padding:140px 20px 80px;text-align:center;}
+.container h1{font-size:36px;color:#87CEEB;margin-bottom:30px;}
+.about-text{background:rgba(0,0,0,0.4);border:1px solid #444;border-radius:12px;padding:40px;text-align:left;line-height:2;font-size:17px;}
 </style>
 </head>
 <body>
-<div class="win11-bg"></div>
-<div class="win11-light"></div>
-
-<header>
-  <div class="nav">
-    <div class="logo">南阳音乐</div>
-    <div class="menu">
-      <a href="./index.html">首页</a>
-      <a href="./feature.html">功能详情</a>
-      <a href="./download.html">客户端下载</a>
-    </div>
+<div class="nav">
+  <div class="logo">南阳数码工作室</div>
+  <div class="menu">
+    <a href="./index.html">首页</a>
+    <a href="https://www.microsoft.com" target="_blank">微软官方地址</a>
+    <a href="./index.html">系统镜像下载</a>
+    <a href="./about.html">关于我们</a>
   </div>
-</header>
-
-<section class="download-main">
-  <h1>客户端程序下载</h1>
-  <p>下载南阳音乐本地播放器，体验完整本地曲库、无损音质、AI智能播放功能</p>
-  <div class="download-card-wrap">
-    <div class="download-card">
-      <h3>Windows 桌面客户端</h3>
-      <p>完整曲库管理、3D可视化播放界面，当前正式发布版本</p>
-      <a href="#">Windows EXE 下载</a>
-    </div>
-    <div class="download-card">
-      <h3>安卓手机版本</h3>
-      <p>移动端本地曲库播放，正在适配开发中</p>
-      <a href="#" style="background:#666;pointer-events:none;">敬请期待</a>
-    </div>
+</div>
+<div class="container">
+  <h1>关于我们</h1>
+  <div class="about-text">
+    欢迎使用南阳数码工作室提供的官方镜像与魔改镜像，还有 PE，欢迎使用，使完记得好评哟。<br><br>
+    记住这个官网，我们永远支持您对我们的支持，我们不会像那些流氓官网似的，我们是纯净官网。
   </div>
-  <a href="./index.html" class="back-link">← 返回首页查看软件介绍</a>
-</section>
-
-<footer>
-© 2026 南阳数码工作室 · 南阳音乐
-</footer>
+</div>
 </body>
 </html>
