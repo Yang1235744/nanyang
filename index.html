@@ -1,9 +1,11 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
+
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>南阳数码工作室</title>
+
 <style>
 *{margin:0;padding:0;box-sizing:border-box;font-family:"Microsoft YaHei",sans-serif;}
 body{background:url(https://picsum.photos/id/1036/1920/1080) no-repeat center center fixed;background-size:cover;position:relative;min-height:100vh;color:#fff;}
@@ -23,6 +25,7 @@ background:rgba(255,255,255,0.03);backdrop-filter:blur(18px);-webkit-backdrop-fi
 .nav .light-spot,.left-sidebar .light-spot{position:absolute;width:150px;height:150px;background:radial-gradient(circle,rgba(255,255,255,0.15),transparent 70%);border-radius:50%;pointer-events:none;transform:translate(-50%,-50%);}
 
 .nav .logo{font-size:22px;font-weight:bold;color:#87CEEB;}
+
 /* 导航菜单按钮改成胶囊玻璃样式 */
 .nav .menu{display:flex;align-items:center;gap:12px;}
 .nav .menu a{color:#ccc;text-decoration:none;font-size:16px;padding:6px 14px;border-radius:25px;background:rgba(255,255,255,0.06);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);border:1px solid rgba(255,255,255,0.1);transition:all 0.25s ease;}
@@ -61,6 +64,7 @@ background:rgba(255,255,255,0.03);backdrop-filter:blur(18px);-webkit-backdrop-fi
 }
 
 .left-sidebar h3{color:#87CEEB;font-size:16px;margin-bottom:10px;}
+
 /* 仅修改下载区项目按钮 胶囊圆角液态玻璃 */
 .left-sidebar a{display:block;color:#fff;text-decoration:none;padding:9px 12px;margin:6px 0;cursor:pointer;font-size:14px;
 border-radius:25px;background:rgba(255,255,255,0.06);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);
@@ -73,18 +77,21 @@ border:1px solid rgba(255,255,255,0.1);transition:all 0.25s ease;}
 .container{width:100%;max-width:900px;margin:0 auto;margin-left:220px;padding:120px 20px 80px;text-align:center;}
 .container h1{font-size:38px;color:#87CEEB;margin-bottom:20px;}
 .container .desc{font-size:18px;color:#eee;line-height:1.6;margin-bottom:40px;}
+
 .btn-box{display:flex;flex-wrap:wrap;justify-content:center;gap:15px;margin-bottom:30px;}
 .btn{padding:12px 24px;border-radius:6px;text-decoration:none;font-weight:bold;font-size:16px;color:#fff;border:none;cursor:pointer;}
 .btn-red{background:#dc3545;}
 .btn-blue{background:#007bff;}
 .btn-green{background:#28a745;}
 .btn-cyan{background:#00bcd4;}
+
 .dropdown{position:relative;display:inline-block;}
 .dropdown-content{display:none;position:absolute;top:100%;left:0;background-color:#222;min-width:220px;border-radius:6px;box-shadow:0 8px 16px rgba(0,0,0,0.3);z-index:1000;margin-top:5px;}
 .dropdown-content a{color:#fff;padding:12px 16px;text-decoration:none;display:block;text-align:left;font-size:14px;}
 .dropdown-content a:hover{background:#007bff;}
 .divider{height:1px;background:#444;margin:4px 0;}
 .dropdown:hover .dropdown-content{display:block;}
+
 .triangle{font-size:12px;}
 .tip{color:#ffd700;font-size:15px;line-height:1.8;margin-bottom:20px;}
 .tool-pw{color:#ffc107;font-size:16px;font-weight:bold;margin-top:10px;}
@@ -100,7 +107,9 @@ border:1px solid rgba(255,255,255,0.1);transition:all 0.25s ease;}
 
 .ai-avatar{position:fixed;right:20px;bottom:20px;width:60px;height:60px;border-radius:50%;border:3px solid #00bcd4;object-fit:cover;cursor:pointer;z-index:999;}
 </style>
+
 </head>
+
 <body>
 
 <div class="nav">
@@ -116,9 +125,14 @@ border:1px solid rgba(255,255,255,0.1);transition:all 0.25s ease;}
     <input type="range" min="0" max="1" step="0.01" value="1" class="glass-opacity-slider" id="glassOpacitySlider">
   </div>
 </div>
+
 <div class="left-sidebar">
   <div class="light-spot"></div>
   <h3>下载区</h3>
+
+  <!-- 【爬虫自动填充区域】resource.json 资源自动渲染到这里 -->
+  <div id="dynamicResourceBox"></div>
+
   <a onclick="openFrame('https://www.microsoft.com/zh-cn/software-download/windows11')">Windows 11 官方</a>
   <a onclick="openFrame('https://www.123684.com/s/s9H3Td-6tQg')">系统镜像Windows加魔改</a>
   <a onclick="openFrame('https://pan.xunlei.com/s/VOlQYgS0mqDUNwzd6BEig76UA1#')">Windows 新系统镜像（提取码：6h6d）</a>
@@ -127,10 +141,9 @@ border:1px solid rgba(255,255,255,0.1);transition:all 0.25s ease;}
   <a onclick="openFrame('https://play.mcjs.cc/1.12.2wasm/')">我的世界网页模拟试玩区</a>
   <a onclick="openFrame('https://firpe.cn/page-247')">FIRPE 维护系统（神通Win11 PE）</a>
   <a onclick="openFrame('https://www.huorong.cn')">火绒官网</a>
-  <!-- 新增内置打开 -->
   <a onclick="openFrame('https://newsupport.lenovo.com.cn/')">联想官网</a>
-  <!-- 已修改：PCL2 替换为南阳飞牛影视 -->
-  <a onclick="openFrame('http://192.168.1.133:5666/v/login?redirect_uri=http%3A%2F%2F192.168.1.133%3A5666%2Fv//')">南阳飞牛影视</a>
+  <!-- 修复登录丢失：改为新标签打开 -->
+  <a href="http://192.168.1.133:5666/" target="_blank">南阳飞牛影视</a>
 
   <div class="sidebar-bottom-text">
     <strong>说明：</strong>本官网已更新，请在关于我们观看官网说明<br>
@@ -193,34 +206,52 @@ window.addEventListener('mousemove',e=>{
 const slider=document.getElementById('glassOpacitySlider');
 const nav=document.querySelector('.nav');
 const sidebar=document.querySelector('.left-sidebar');
-
 function setGlassOpacity(val) {
-  // 1. 控制导航栏/侧边栏玻璃效果
   nav.style.background=`rgba(255,255,255,${0.05*val})`;
   sidebar.style.background=`rgba(255,255,255,${0.03*val})`;
   nav.style.backdropFilter=`blur(${20*val}px)`;
   sidebar.style.backdropFilter=`blur(${18*val}px)`;
-  
-  // 2. 胶囊滑块内部填充进度
   slider.style.setProperty('--fill', `${val*100}%`);
 }
-
-// 拖动事件绑定
 slider.addEventListener('input',()=>{
   setGlassOpacity(parseFloat(slider.value));
 });
-
-// 初始状态（默认拉满）
 setGlassOpacity(1);
 
 function openModal(){document.getElementById('modal').classList.add('show');}
 document.getElementById('modal').addEventListener('click',function(e){
   if(e.target === this) this.classList.remove('show');
 });
+
 function openFrame(url){
   document.getElementById('showFrame').src = url;
   document.getElementById('iframeModal').classList.add('show');
 }
+
+// ===================== 【真实动态资源加载核心】 =====================
+// 飞牛爬虫生成 resource.json 放到网站根目录，页面自动渲染
+async function loadResourceData(){
+  try{
+    const res = await fetch("./resource.json");
+    if(!res.ok) return;
+    const data = await res.json();
+    const box = document.getElementById("dynamicResourceBox");
+    let html = "";
+    data.forEach(item=>{
+      if(item.type === "iframe"){
+        html += `<a onclick="openFrame('${item.url}')">${item.name}</a>`;
+      }else{
+        html += `<a href="${item.url}" target="_blank">${item.name}</a>`;
+      }
+    });
+    box.innerHTML = html;
+  }catch(err){
+    // 无资源文件时静默跳过，不影响页面
+    console.log("暂无自动同步的资源数据");
+  }
+}
+window.addEventListener("DOMContentLoaded", loadResourceData);
+// =================================================================
 </script>
 
 <!-- 极简纯净防火墙 - 无乱码 无提示 -->
@@ -228,7 +259,6 @@ function openFrame(url){
 const KEY = 'ny_block';
 const PWD = 'NanYang256@G';
 const BIR = '20120201';
-
 function unlock(){
   if(document.getElementById('pwd').value===PWD&&document.getElementById('bir').value===BIR){
     localStorage.removeItem(KEY);location.reload();
@@ -246,38 +276,6 @@ window.addEventListener('keydown',e=>{if(e.key==='F12'||(e.ctrlKey&&e.shiftKey&&
 fetch('https://ipapi.co/json/').then(r=>r.json()).then(d=>{
   if(d.country_code!=='CN')document.body.innerHTML='';
 }).catch(()=>{});
-</script>
-
-<!-- 新增：AI每周全自动维护脚本，仅新增，不修改原有代码 -->
-<script>
-/* AI全自动代管规则
-1. 周期：7天自动执行一轮更新
-2. 锁定区域：导航栏、侧边栏、首页文字、版权，AI禁止修改
-3. AI自动工作：拉取资源、新增下载链接、优化页面布局、清理失效资源
-4. 后台静默运行，前端无任何提示，不干扰访客浏览
-5. 你手动修改的内容优先保留，AI不会覆盖 */
-const AI_UPDATE_CYCLE = 7 * 24 * 60 * 60 * 1000; // 7天毫秒数
-const AI_STORAGE_KEY = "ny_ai_last_update";
-
-// AI自动更新主逻辑
-async function aiAutoMaintain() {
-  const lastUpdate = localStorage.getItem(AI_STORAGE_KEY);
-  const now = Date.now();
-  // 判断是否到7天更新周期
-  if(lastUpdate && now - parseInt(lastUpdate) < AI_UPDATE_CYCLE) return;
-
-  // 1. 标记本次更新时间
-  localStorage.setItem(AI_STORAGE_KEY, now.toString());
-  
-  // 2. AI拉取资源库数据、自动新增资源链接（模拟资源接口）
-  console.log("AI已执行本周官网维护：自动拉取资源、优化页面布局、清理失效链接");
-
-  // 3. 自动优化页面样式、弹性布局自适应
-  document.documentElement.style.setProperty("--auto-layout-gap", "18px");
-}
-
-// 页面加载自动启动AI维护检测
-window.addEventListener("load", aiAutoMaintain);
 </script>
 
 </body>
