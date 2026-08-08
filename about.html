@@ -2,8 +2,9 @@
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>关于我们 - 南阳数码工作室</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum‑scale=1.0, user‑scalable=no"/>
+<title>漫画图文字朗读 - 南阳数码工作室</title>
+<script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
 <style>
 *{margin:0;padding:0;box-sizing:border-box;font-family:"Microsoft YaHei",sans-serif;}
 body{background:url(https://picsum.photos/id/1036/1920/1080) no-repeat center center fixed;background-size:cover;position:relative;min-height:100vh;color:#fff;}
@@ -12,9 +13,38 @@ body::before{content:"";position:absolute;top:0;left:0;width:100%;height:100%;ba
 .nav .logo{font-size:22px;font-weight:bold;color:#87CEEB;}
 .nav .menu a{color:#ccc;text-decoration:none;margin-left:25px;font-size:16px;}
 .nav .menu a:hover{color:#fff;}
-.container{width:100%;max-width:800px;margin:0 auto;padding:140px 20px 80px;text-align:center;}
-.container h1{font-size:36px;color:#87CEEB;margin-bottom:30px;}
-.about-text{background:rgba(0,0,0,0.4);border:1px solid #444;border-radius:12px;padding:40px;text-align:left;line-height:2;font-size:17px;}
+
+.container{width:100%;max-width:700px;margin:0 auto;padding:120px 15px 60px;text-align:center;}
+
+/*方形摄像头取景框*/
+.camera-wrap{
+    width:100%;
+    aspect-ratio:1 / 1;
+    margin:0 auto 14px;
+    overflow:hidden;
+    position:relative;
+    border:2px solid #4096ff;
+    border-radius:10px;
+}
+video{
+    position:absolute;
+    top:50%;
+    left:50%;
+    transform:translate(-50%,-50%);
+    min-width:100%;
+    min-height:100%;
+}
+
+.divider{height:4px;background:#297bff;width:100%;margin:12px 0}
+
+.tool-wrap{text-align:left}
+button{width:100%;padding:13px;margin:6px 0;border:none;border-radius:9px;font-size:16px;color:#fff}
+#btnScan{background:#2773ff}
+#btnCopyText{background:#20aa58}
+#btnCopyImgUrl{background:#9449dd}
+#btnStopSpeak{background:#bb3333}
+#status{padding:8px 0;color:#cccccc}
+#textResult{min-height:140px;background:rgba(30,30,36,0.7);padding:10px;border-radius:8px;white-space:pre-wrap;margin-top:8px}
 </style>
 </head>
 <body>
@@ -27,63 +57,25 @@ body::before{content:"";position:absolute;top:0;left:0;width:100%;height:100%;ba
     <a href="./about.html">漫画图文字朗读</a>
   </div>
 </div>
-<!DOCTYPE html>
-<html lang="zh-CN">
-<head>
-<meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width, initial‑scale=1.0, maximum‑scale=1.0, user‑scalable=no"/>
-<title>方形框摄像头漫画文字识别朗读工具</title>
-<script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
-<style>
-*{box-sizing:border-box;margin:0;padding:0}
-body{background:#121214;color:#eee;font‑size:15px}
 
-/* 方形摄像头容器 */
-.camera‑wrap{
-    width:100%;
-    max‑width:600px;
-    aspect‑ratio:1 / 1;
-    margin:0 auto;
-    overflow:hidden;
-    position:relative;
-    border:2px solid #4096ff;
-}
-video{
-    position:absolute;
-    /* 居中裁切，填满正方形方框 */
-    top:50%;
-    left:50%;
-    transform:translate(-50%,-50%);
-    min‑width:100%;
-    min‑height:100%;
-}
+<div class="container">
+    <h2 style="margin-bottom:16px;color:#87CEEB">摄像头漫画文字识别朗读</h2>
 
-.divider{height:4px;background:#297bff;width:100%;margin:12px 0}
+    <!--摄像头拍照区域-->
+    <div class="camera-wrap">
+        <video id="video" autoplay playsinline muted></video>
+    </div>
 
-.tool‑wrap{padding:0 12px 12px}
-button{width:100%;padding:13px;margin:6px 0;border:none;border‑radius:9px;font‑size:16px}
-#btnScan{background:#2773ff;color:#fff}
-#btnCopyText{background:#20aa58;color:#fff}
-#btnCopyImgUrl{background:#9449dd;color:#fff}
-#btnStopSpeak{background:#bb3333;color:#fff}
-#status{padding:8px 0;color:#aaa}
-#textResult{min‑height:140px;background:#1e1e24;padding:10px;border‑radius:8px;white‑space:pre‑wrap;margin‑top:8px}
-</style>
-</head>
-<body>
-<div class="camera‑wrap">
-<video id="video" autoplay playsinline muted></video>
-</div>
+    <div class="divider"></div>
 
-<div class="divider"></div>
-
-<div class="tool‑wrap">
-<div id="status">正在启动摄像头……</div>
-<button id="btnScan">拍摄识别并朗读</button>
-<button id="btnCopyText">复制识别文字</button>
-<button id="btnCopyImgUrl">复制画面图片链接</button>
-<button id="btnStopSpeak">停止朗读</button>
-<div id="textResult">识别结果会显示在这里</div>
+    <div class="tool-wrap">
+        <div id="status">正在启动摄像头……</div>
+        <button id="btnScan">拍摄识别并朗读</button>
+        <button id="btnCopyText">复制识别文字</button>
+        <button id="btnCopyImgUrl">复制画面图片链接</button>
+        <button id="btnStopSpeak">停止朗读</button>
+        <div id="textResult">识别结果会显示在这里</div>
+    </div>
 </div>
 
 <script>
@@ -98,21 +90,22 @@ const resultBox = document.getElementById('textResult');
 let lastImageUrl = "";
 let lastText = "";
 
+//启动手机后置摄像头
 navigator.mediaDevices.getUserMedia({
     video:{facingMode:"environment"}
 }).then(stream=>{
     video.srcObject = stream;
     statusBox.innerText="方形取景框就绪，把漫画完整放进方框内，点按钮识别";
 }).catch(err=>{
-    statusBox.innerText="摄像头权限失败："+err.message+"\n必须http服务打开，不能直接双击html";
+    statusBox.innerText="摄像头权限失败："+err.message+"\n线上网站必须HTTPS，本地要用http服务，不能直接双击html";
 })
 
+//点击拍照识别
 btnScan.onclick = async function(){
     btnScan.disabled=true;
     statusBox.innerText="正在截图+识别文字……";
     resultBox.innerText="处理中……";
 
-    // 取视频中间正方形区域截图，和预览框对齐
     const vw = video.videoWidth;
     const vh = video.videoHeight;
     const squareSize = Math.min(vw, vh);
