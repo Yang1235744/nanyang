@@ -14,162 +14,123 @@
 
         /* 背景光效 */
         .bg-glow { position: fixed; top: -10%; left: -10%; width: 500px; height: 500px; background: radial-gradient(circle, rgba(99,102,241,0.4) 0%, rgba(0,0,0,0) 70%); z-index: -1; filter: blur(60px); pointer-events: none; }
-        .bg-glow-2 { position: fixed; bottom: -10%; right: -10%; width: 600px; height: 600px; background: radial-gradient(circle, rgba(168,85,247,0.3) 0%, rgba(0,0,0,0) 70%); z-index: -1; filter: blur(80px); pointer-events: none; }
-
+        
         /* 导航栏 */
-        nav { display: flex; justify-content: space-between; align-items: center; padding: 20px 10%; max-width: 1200px; margin: 0 auto; }
-        .logo { font-size: 1.5rem; font-weight: 800; letter-spacing: -0.5px; color: #fff; }
-        .logo span { color: #818cf8; }
-        .nav-links a { margin-left: 30px; font-size: 0.9rem; opacity: 0.8; }
-        .nav-links a:hover { opacity: 1; color: #818cf8; }
+        nav { display: flex; justify-content: space-between; align-items: center; padding: 20px 5%; backdrop-filter: blur(10px); background: rgba(15, 23, 42, 0.8); position: sticky; top: 0; z-index: 100; border-bottom: 1px solid rgba(255,255,255,0.05); }
+        .logo { font-size: 1.5rem; font-weight: bold; color: #818cf8; letter-spacing: 1px; }
+        .nav-links a { margin-left: 30px; font-size: 0.95rem; color: #94a3b8; }
+        .nav-links a:hover { color: #fff; }
 
-        /* 首屏 Hero 区域 */
-        .hero { text-align: center; padding: 100px 20px 80px; max-width: 800px; margin: 0 auto; }
-        .hero h1 { font-size: 3.5rem; font-weight: 800; line-height: 1.2; margin-bottom: 20px; background: linear-gradient(to right, #fff, #94a3b8); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        /* 首屏区域 */
+        .hero { text-align: center; padding: 100px 20px 60px; max-width: 800px; margin: 0 auto; }
+        .hero h1 { font-size: 3.5rem; margin-bottom: 20px; background: linear-gradient(to right, #818cf8, #c084fc); -webkit-background-clip: text; color: transparent; }
         .hero p { font-size: 1.2rem; color: #94a3b8; margin-bottom: 40px; }
         
-        /* 按钮组 */
-        .btn-group { display: flex; gap: 15px; justify-content: center; flex-wrap: wrap; }
-        .btn-primary { padding: 14px 32px; background: #6366f1; color: #fff; border-radius: 8px; font-weight: 600; font-size: 1rem; box-shadow: 0 4px 20px rgba(99, 102, 241, 0.4); }
-        .btn-primary:hover { background: #4f46e5; transform: translateY(-2px); }
-        .btn-secondary { padding: 14px 32px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: #fff; border-radius: 8px; font-weight: 600; font-size: 1rem; }
-        .btn-secondary:hover { background: rgba(255,255,255,0.1); border-color: rgba(255,255,255,0.2); }
+        /* 按钮样式 */
+        .btn { display: inline-block; padding: 12px 35px; border-radius: 30px; font-weight: bold; font-size: 1rem; cursor: pointer; transition: transform 0.2s, box-shadow 0.2s; }
+        .btn-primary { background: #6366f1; color: white; box-shadow: 0 4px 15px rgba(99, 102, 241, 0.4); }
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(99, 102, 241, 0.6); background: #4f46e5; }
+        .btn-secondary { background: rgba(255,255,255,0.1); color: white; margin-left: 15px; border: 1px solid rgba(255,255,255,0.1); }
+        .btn-secondary:hover { background: rgba(255,255,255,0.2); }
 
-        /* 特性展示区 */
-        .features { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 30px; padding: 60px 10%; max-width: 1200px; margin: 0 auto; }
-        .feature-card { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05); padding: 30px; border-radius: 16px; transition: 0.3s; }
-        .feature-card:hover { background: rgba(255,255,255,0.06); transform: translateY(-5px); border-color: rgba(99,102,241,0.3); }
-        .icon { font-size: 2rem; margin-bottom: 15px; display: block; }
-        .feature-card h3 { font-size: 1.2rem; margin-bottom: 10px; color: #fff; }
-        .feature-card p { font-size: 0.9rem; color: #94a3b8; }
-
-        /* 软件截图展示区 */
-        .screenshot-section { text-align: center; padding: 40px 10% 80px; max-width: 1000px; margin: 0 auto; }
-        .screenshot-section h2 { font-size: 2rem; margin-bottom: 30px; color: #fff; }
-        .screenshot-box {
-            width: 100%; height: 400px; background: rgba(255,255,255,0.05); 
-            border: 2px dashed rgba(255,255,255,0.2); border-radius: 16px; 
-            display: flex; align-items: center; justify-content: center; color: #64748b; font-size: 1.2rem;
+        /* 截图展示区 */
+        .showcase { max-width: 1000px; margin: 0 auto 80px; padding: 0 20px; }
+        .screenshot-container { 
+            width: 100%; 
+            border-radius: 16px; 
+            overflow: hidden; 
+            border: 1px solid rgba(255,255,255,0.1); 
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+            background: #1e293b;
+            position: relative;
+        }
+        .screenshot-container img {
+            width: 100%;
+            height: auto;
+            display: block;
         }
 
-        /* 安全防护与自动维护区样式 */
-        .security-system { padding: 80px 10%; max-width: 1200px; margin: 0 auto; text-align: center; }
-        .section-title { font-size: 2rem; margin-bottom: 40px; color: #fff; }
-        .security-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 30px; }
-        .sys-card {
-            background: rgba(16, 185, 129, 0.05); border: 1px solid rgba(16, 185, 129, 0.2); 
-            padding: 30px; border-radius: 16px; transition: 0.3s; text-align: left;
-        }
-        .sys-card:hover { background: rgba(16, 185, 129, 0.1); transform: translateY(-5px); border-color: rgba(16, 185, 129, 0.5); }
-        .sys-card .icon { font-size: 2.5rem; margin-bottom: 15px; display: block; }
-        .sys-card h3 { font-size: 1.3rem; margin-bottom: 10px; color: #10b981; }
-        .sys-card p { font-size: 0.95rem; color: #94a3b8; line-height: 1.6; }
+        /* 特性列表 */
+        .features { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 30px; max-width: 1200px; margin: 0 auto 80px; padding: 0 20px; }
+        .feature-card { background: rgba(30, 41, 59, 0.5); padding: 30px; border-radius: 16px; border: 1px solid rgba(255,255,255,0.05); transition: 0.3s; }
+        .feature-card:hover { transform: translateY(-5px); background: rgba(30, 41, 59, 0.8); border-color: rgba(99, 102, 241, 0.3); }
+        .feature-card h3 { margin-bottom: 10px; color: #e2e8f0; font-size: 1.2rem; }
+        .feature-card p { color: #94a3b8; font-size: 0.95rem; }
 
-        /* 综合安全与防伪声明区 */
-        .security-section { max-width: 800px; margin: 0 auto; padding: 40px 20px; }
-        .security-card {
-            background: rgba(239, 68, 68, 0.05); border: 1px solid rgba(239, 68, 68, 0.3);
-            padding: 30px; border-radius: 16px; text-align: left;
-        }
-        .security-card h3 { color: #f87171; font-size: 1.5rem; margin-bottom: 15px; text-align: center;}
-        .security-card p { color: #cbd5e1; font-size: 1rem; margin-bottom: 10px; }
-        .security-card a { color: #818cf8; font-weight: bold; }
-        .security-card a:hover { text-decoration: underline; }
+        /* 声明与法律部分 */
+        .legal-section { max-width: 800px; margin: 0 auto 100px; padding: 40px; background: rgba(220, 38, 38, 0.05); border: 1px solid rgba(220, 38, 38, 0.2); border-radius: 16px; text-align: center; }
+        .legal-section h2 { color: #ef4444; margin-bottom: 20px; font-size: 1.5rem; }
+        .legal-section p { color: #cbd5e1; margin-bottom: 15px; font-size: 0.95rem; }
+        .warning-text { color: #fca5a5; font-weight: bold; margin-top: 20px; display: block; }
 
         /* 页脚 */
-        footer { text-align: center; padding: 40px 20px; margin-top: 60px; border-top: 1px solid rgba(255,255,255,0.05); color: #64748b; font-size: 0.85rem; }
+        footer { text-align: center; padding: 40px 20px; color: #64748b; font-size: 0.9rem; border-top: 1px solid rgba(255,255,255,0.05); }
 
-        @media (max-width: 768px) { .hero h1 { font-size: 2.5rem; } nav { padding: 20px 5%; } .features { padding: 40px 5%; } }
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 2.5rem; }
+            .nav-links { display: none; }
+        }
     </style>
 </head>
 <body>
+
     <div class="bg-glow"></div>
-    <div class="bg-glow-2"></div>
 
     <nav>
-        <div class="logo">NanYang<span>AI</span></div>
+        <div class="logo">极客南洋</div>
         <div class="nav-links">
-            <a href="#features">功能</a>
-            <a href="download.html">下载</a>
-            <a href="https://github.com/yang1235744/nanyang" target="_blank">GitHub</a>
+            <a href="#features">功能特性</a>
+            <a href="#download">下载中心</a>
+            <a href="#legal">法律声明</a>
         </div>
     </nav>
 
     <section class="hero">
-        <h1>南阳AI助手<br>你的专属智能伙伴</h1>
-        <p>由极客南洋团队倾力打造的本地化 AI 工具。<br>一键安装，开箱即用，为你提供极速、安全、懂你的智能辅助体验。</p>
-        <div class="btn-group">
-            <a href="download.html" class="btn-primary">立即下载 v1.0</a>
-            <a href="https://github.com/yang1235744/nanyang" class="btn-secondary" target="_blank">查看源码</a>
+        <h1>南阳AI助手</h1>
+        <p>专为本地环境打造的智能辅助工具，轻量、极速、安全。</p>
+        <div>
+            <a href="#download" class="btn btn-primary">立即下载</a>
+            <a href="#features" class="btn btn-secondary">了解更多</a>
         </div>
     </section>
 
-    <section class="features" id="features">
-        <div class="feature-card">
-            <span class="icon">💬</span>
-            <h3>智能对话交互</h3>
-            <p>支持自然语言问答、文本创作、代码辅助，像真人一样懂你的需求。</p>
+    <section class="showcase">
+        <div class="screenshot-container">
+            <!-- 这里已经替换为你上传的图片 lualn.png -->
+            <img src="lualn.png" alt="南阳AI助手软件界面截图">
         </div>
+    </section>
+
+    <section id="features" class="features">
         <div class="feature-card">
-            <span class="icon">⚡</span>
-            <h3>本地极速运行</h3>
-            <p>无需联网等待，本地模型驱动，断网也能用，响应速度毫秒级。</p>
-        </div>
-        <div class="feature-card">
-            <span class="icon">🔒</span>
-            <h3>数据绝对安全</h3>
-            <p>所有聊天记录与文件仅保存在你的电脑本地，隐私绝不上传云端。</p>
+            <h3>⚡ 极速响应</h3>
+            <p>底层算法深度优化，毫秒级启动，告别卡顿等待。</p>
         </div>
         <div class="feature-card">
-            <span class="icon">🛠️</span>
-            <h3>极客开源精神</h3>
-            <p>完全开源免费，支持自定义配置，欢迎开发者一起共建极客生态。</p>
+            <h3>🛡️ 纯净安全</h3>
+            <p>无任何后台驻留进程，不收集隐私数据，绿色免安装。</p>
+        </div>
+        <div class="feature-card">
+            <h3>🎨 极简设计</h3>
+            <p>现代化深色界面，沉浸式交互体验，操作更顺手。</p>
         </div>
     </section>
 
-    <!-- 软件界面展示区 -->
-    <section class="screenshot-section">
-        <h2>产品界面展示</h2>
-        <div class="screenshot-box">
-            [ 软件截图占位区：请在此处替换为真实的软件截图 ]
-        </div>
+    <section id="legal" class="legal-section">
+        <h2>⚠️ 严正声明与安全警告</h2>
+        <p>本软件由“极客南洋”独立开发并拥有全部版权。</p>
+        <p>我们致力于提供安全、纯净的软件体验。请认准官方发布渠道。</p>
+        <span class="warning-text">
+            【禁止二次打包】<br>
+            严禁任何个人或组织对本软件进行反编译、修改、二次打包或篡改后发布至任何网站/平台。<br>
+            一经发现此类侵权行为，本人将保留追究其法律责任的权利，绝不姑息！
+        </span>
     </section>
 
-    <!-- 安全防护与自动维护区 -->
-    <section class="security-system">
-        <h2 class="section-title">全天候安全防护机制</h2>
-        <div class="security-grid">
-            <div class="sys-card">
-                <span class="icon">🛡️</span>
-                <h3>网站安全维护</h3>
-                <p>全站启用最高级别安全协议，24小时实时拦截恶意攻击与非法请求，保障官方数据与用户访问的绝对安全。</p>
-            </div>
-            <div class="sys-card">
-                <span class="icon">🤖</span>
-                <h3>智能自动维护</h3>
-                <p>内置自动化巡检引擎，定期自动清理系统缓存与潜在威胁。无需人工干预，始终保持系统处于最佳防御状态。</p>
-            </div>
-            <div class="sys-card">
-                <span class="icon">🚫</span>
-                <h3>病毒入侵拦截</h3>
-                <p>严格禁止任何形式的木马、病毒及恶意代码注入。我们承诺：官方下载通道纯净无毒，守护您的设备安全。</p>
-            </div>
-        </div>
-    </section>
-
-    <!-- 综合安全与防伪声明区 -->
-    <section class="security-section">
-        <div class="security-card">
-            <h3>⚠️ 官方防伪与安全声明</h3>
-            <p>1. 本页面为“南阳AI助手”唯一官方网站。目前产品处于<strong>早期开发版本</strong>，部分高级功能正在持续开发补全中，敬请期待。</p>
-            <p>2. 我们承诺：南阳AI助手是纯净的首发开发产品，<strong>绝对不是病毒或恶意软件</strong>，请放心安装使用。</p>
-            <p>3. 请警惕“云狐”等钓鱼网站！如对本页面有任何疑问，请前往抖音搜索【<strong>极客南阳科技</strong>】，点击其主页中的正规官方链接进行验证。</p>
-            <p>4. <strong>【严正警告】</strong>严禁任何个人或组织对“南阳AI助手”进行二次打包、篡改或分发至各类非官方网站。一经发现，<strong>本人必将追究到底，绝不姑息，并保留诉诸法律的权利！</strong></p>
-        </div>
-    </section>
-
-    <footer>
-        <p>&copy; 2026 南阳工作室 | 极客南阳出品 | 用代码改变世界</p>
+    <footer id="download">
+        <p>&copy; 2026 极客南洋. All Rights Reserved.</p>
+        <p style="margin-top: 10px; font-size: 0.8rem;">当前版本：v1.0.0 | 更新日期：2026-08-10</p>
     </footer>
+
 </body>
 </html>
