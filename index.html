@@ -1,282 +1,175 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
-
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>南阳数码工作室</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>南阳AI助手 - 官方主页</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+            background-color: #0f172a; color: #e2e8f0; line-height: 1.6; overflow-x: hidden;
+        }
+        a { text-decoration: none; color: inherit; transition: 0.3s; }
 
-<style>
-*{margin:0;padding:0;box-sizing:border-box;font-family:"Microsoft YaHei",sans-serif;}
-body{background:url(https://picsum.photos/id/1036/1920/1080) no-repeat center center fixed;background-size:cover;position:relative;min-height:100vh;color:#fff;}
-body::before{content:"";position:absolute;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.6);z-index:-1;}
+        /* 背景光效 */
+        .bg-glow { position: fixed; top: -10%; left: -10%; width: 500px; height: 500px; background: radial-gradient(circle, rgba(99,102,241,0.4) 0%, rgba(0,0,0,0) 70%); z-index: -1; filter: blur(60px); pointer-events: none; }
+        .bg-glow-2 { position: fixed; bottom: -10%; right: -10%; width: 600px; height: 600px; background: radial-gradient(circle, rgba(168,85,247,0.3) 0%, rgba(0,0,0,0) 70%); z-index: -1; filter: blur(80px); pointer-events: none; }
 
-/* 液态玻璃开启样式 极致透明 */
-.nav{position:fixed;top:0;left:0;width:100%;padding:15px 30px;display:flex;justify-content:space-between;align-items:center;z-index:999;
-background:rgba(255,255,255,0.05);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-bottom:1px solid rgba(255,255,255,0.08);overflow:hidden;transition: background 0.3s ease, backdrop-filter 0.3s ease;}
-.left-sidebar{position:fixed;top:70px;left:0;width:200px;height:calc(100vh - 70px);padding:20px;
-background:rgba(255,255,255,0.03);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border-right:1px solid rgba(255,255,255,0.06);overflow:hidden;transition: background 0.3s ease, backdrop-filter 0.3s ease;}
+        /* 导航栏 */
+        nav { display: flex; justify-content: space-between; align-items: center; padding: 20px 10%; max-width: 1200px; margin: 0 auto; }
+        .logo { font-size: 1.5rem; font-weight: 800; letter-spacing: -0.5px; color: #fff; }
+        .logo span { color: #818cf8; }
+        .nav-links a { margin-left: 30px; font-size: 0.9rem; opacity: 0.8; }
+        .nav-links a:hover { opacity: 1; color: #818cf8; }
 
-/* 关闭样式 完全不吃性能 */
-.nav.no-glass{background:transparent !important;backdrop-filter:none !important;-webkit-backdrop-filter:none !important;border:none !important;}
-.left-sidebar.no-glass{background:transparent !important;backdrop-filter:none !important;-webkit-backdrop-filter:none !important;border:none !important;}
+        /* 首屏 Hero 区域 */
+        .hero { text-align: center; padding: 100px 20px 80px; max-width: 800px; margin: 0 auto; }
+        .hero h1 { font-size: 3.5rem; font-weight: 800; line-height: 1.2; margin-bottom: 20px; background: linear-gradient(to right, #fff, #94a3b8); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .hero p { font-size: 1.2rem; color: #94a3b8; margin-bottom: 40px; }
+        
+        /* 按钮组 */
+        .btn-group { display: flex; gap: 15px; justify-content: center; flex-wrap: wrap; }
+        .btn-primary { padding: 14px 32px; background: #6366f1; color: #fff; border-radius: 8px; font-weight: 600; font-size: 1rem; box-shadow: 0 4px 20px rgba(99, 102, 241, 0.4); }
+        .btn-primary:hover { background: #4f46e5; transform: translateY(-2px); }
+        .btn-secondary { padding: 14px 32px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: #fff; border-radius: 8px; font-weight: 600; font-size: 1rem; }
+        .btn-secondary:hover { background: rgba(255,255,255,0.1); border-color: rgba(255,255,255,0.2); }
 
-/* 鼠标跟随光斑 */
-.nav .light-spot,.left-sidebar .light-spot{position:absolute;width:150px;height:150px;background:radial-gradient(circle,rgba(255,255,255,0.15),transparent 70%);border-radius:50%;pointer-events:none;transform:translate(-50%,-50%);}
+        /* 特性展示区 */
+        .features { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 30px; padding: 60px 10%; max-width: 1200px; margin: 0 auto; }
+        .feature-card { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05); padding: 30px; border-radius: 16px; transition: 0.3s; }
+        .feature-card:hover { background: rgba(255,255,255,0.06); transform: translateY(-5px); border-color: rgba(99,102,241,0.3); }
+        .icon { font-size: 2rem; margin-bottom: 15px; display: block; }
+        .feature-card h3 { font-size: 1.2rem; margin-bottom: 10px; color: #fff; }
+        .feature-card p { font-size: 0.9rem; color: #94a3b8; }
 
-.nav .logo{font-size:22px;font-weight:bold;color:#87CEEB;}
+        /* 软件截图展示区 */
+        .screenshot-section { text-align: center; padding: 40px 10% 80px; max-width: 1000px; margin: 0 auto; }
+        .screenshot-section h2 { font-size: 2rem; margin-bottom: 30px; color: #fff; }
+        .screenshot-box {
+            width: 100%; height: 400px; background: rgba(255,255,255,0.05); 
+            border: 2px dashed rgba(255,255,255,0.2); border-radius: 16px; 
+            display: flex; align-items: center; justify-content: center; color: #64748b; font-size: 1.2rem;
+        }
 
-/* 导航菜单按钮改成胶囊玻璃样式 */
-.nav .menu{display:flex;align-items:center;gap:12px;}
-.nav .menu a{color:#ccc;text-decoration:none;font-size:16px;padding:6px 14px;border-radius:25px;background:rgba(255,255,255,0.06);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);border:1px solid rgba(255,255,255,0.1);transition:all 0.25s ease;}
-.nav .menu a:hover{color:#fff;background:rgba(0,123,255,0.25);border-color:rgba(0,123,255,0.35);}
+        /* 安全防护与自动维护区样式 */
+        .security-system { padding: 80px 10%; max-width: 1200px; margin: 0 auto; text-align: center; }
+        .section-title { font-size: 2rem; margin-bottom: 40px; color: #fff; }
+        .security-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 30px; }
+        .sys-card {
+            background: rgba(16, 185, 129, 0.05); border: 1px solid rgba(16, 185, 129, 0.2); 
+            padding: 30px; border-radius: 16px; transition: 0.3s; text-align: left;
+        }
+        .sys-card:hover { background: rgba(16, 185, 129, 0.1); transform: translateY(-5px); border-color: rgba(16, 185, 129, 0.5); }
+        .sys-card .icon { font-size: 2.5rem; margin-bottom: 15px; display: block; }
+        .sys-card h3 { font-size: 1.3rem; margin-bottom: 10px; color: #10b981; }
+        .sys-card p { font-size: 0.95rem; color: #94a3b8; line-height: 1.6; }
 
-/* 文字标签样式 */
-.glass-text{color:#ccc;font-size:14px;}
+        /* 综合安全与防伪声明区 */
+        .security-section { max-width: 800px; margin: 0 auto; padding: 40px 20px; }
+        .security-card {
+            background: rgba(239, 68, 68, 0.05); border: 1px solid rgba(239, 68, 68, 0.3);
+            padding: 30px; border-radius: 16px; text-align: left;
+        }
+        .security-card h3 { color: #f87171; font-size: 1.5rem; margin-bottom: 15px; text-align: center;}
+        .security-card p { color: #cbd5e1; font-size: 1rem; margin-bottom: 10px; }
+        .security-card a { color: #818cf8; font-weight: bold; }
+        .security-card a:hover { text-decoration: underline; }
 
-/* 鸿蒙胶囊式亮度滑块（修复版） */
-.glass-opacity-slider{
-  -webkit-appearance:none;appearance:none;
-  width:120px;height:32px;border-radius:16px;
-  background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.15);
-  outline:none;cursor:pointer;
-  position:relative;
-  --fill:100%;
-}
-/* 滑块轨道背景 */
-.glass-opacity-slider::-webkit-slider-runnable-track{
-  height:32px;border-radius:16px;background:transparent;
-}
-/* 滑块按钮 */
-.glass-opacity-slider::-webkit-slider-thumb{
-  -webkit-appearance:none;appearance:none;
-  width:28px;height:28px;border-radius:50%;background:#fff;
-  border:none;cursor:pointer;margin-top:2px;
-  box-shadow:0 2px 8px rgba(0,0,0,0.2);
-}
-/* 滑动填充效果 */
-.glass-opacity-slider::before{
-  content:"";
-  position:absolute;top:0;left:0;height:100%;border-radius:16px;
-  background:rgba(135,206,235,0.6);
-  z-index:0;
-  width:var(--fill);
-}
+        /* 页脚 */
+        footer { text-align: center; padding: 40px 20px; margin-top: 60px; border-top: 1px solid rgba(255,255,255,0.05); color: #64748b; font-size: 0.85rem; }
 
-.left-sidebar h3{color:#87CEEB;font-size:16px;margin-bottom:10px;}
-
-/* 仅修改下载区项目按钮 胶囊圆角液态玻璃 */
-.left-sidebar a{display:block;color:#fff;text-decoration:none;padding:9px 12px;margin:6px 0;cursor:pointer;font-size:14px;
-border-radius:25px;background:rgba(255,255,255,0.06);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);
-border:1px solid rgba(255,255,255,0.1);transition:all 0.25s ease;}
-.left-sidebar a:hover{background:rgba(0,123,255,0.25);border-color:rgba(0,123,255,0.35);border-radius:25px;}
-
-.sidebar-bottom-text{margin-top:15px;font-size:12px;color:#ccc;line-height:1.4;}
-.sidebar-bottom-text strong{color:#fff;}
-
-.container{width:100%;max-width:900px;margin:0 auto;margin-left:220px;padding:120px 20px 80px;text-align:center;}
-.container h1{font-size:38px;color:#87CEEB;margin-bottom:20px;}
-.container .desc{font-size:18px;color:#eee;line-height:1.6;margin-bottom:40px;}
-
-.btn-box{display:flex;flex-wrap:wrap;justify-content:center;gap:15px;margin-bottom:30px;}
-.btn{padding:12px 24px;border-radius:6px;text-decoration:none;font-weight:bold;font-size:16px;color:#fff;border:none;cursor:pointer;}
-.btn-red{background:#dc3545;}
-.btn-blue{background:#007bff;}
-.btn-green{background:#28a745;}
-.btn-cyan{background:#00bcd4;}
-
-.dropdown{position:relative;display:inline-block;}
-.dropdown-content{display:none;position:absolute;top:100%;left:0;background-color:#222;min-width:220px;border-radius:6px;box-shadow:0 8px 16px rgba(0,0,0,0.3);z-index:1000;margin-top:5px;}
-.dropdown-content a{color:#fff;padding:12px 16px;text-decoration:none;display:block;text-align:left;font-size:14px;}
-.dropdown-content a:hover{background:#007bff;}
-.divider{height:1px;background:#444;margin:4px 0;}
-.dropdown:hover .dropdown-content{display:block;}
-
-.triangle{font-size:12px;}
-.tip{color:#ffd700;font-size:15px;line-height:1.8;margin-bottom:20px;}
-.tool-pw{color:#ffc107;font-size:16px;font-weight:bold;margin-top:10px;}
-.pe-info{color:#fff;font-size:14px;margin-top:8px;}
-
-.iframe-modal{position:fixed;top:80px;left:220px;right:0;bottom:0;background:rgba(0,0,0,0.7);display:none;z-index:990;}
-.iframe-modal.show{display:block;}
-.iframe-modal iframe{width:100%;height:100%;border:none;}
-
-.modal{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.6);z-index:998;align-items:center;justify-content:center;}
-.modal.show{display:flex;}
-.modal-content{background:#1a1a1a;border:1px solid #444;border-radius:10px;width:90%;max-width:700px;padding:30px;text-align:center;}
-
-.ai-avatar{position:fixed;right:20px;bottom:20px;width:60px;height:60px;border-radius:50%;border:3px solid #00bcd4;object-fit:cover;cursor:pointer;z-index:999;}
-</style>
-
+        @media (max-width: 768px) { .hero h1 { font-size: 2.5rem; } nav { padding: 20px 5%; } .features { padding: 40px 5%; } }
+    </style>
 </head>
-
 <body>
+    <div class="bg-glow"></div>
+    <div class="bg-glow-2"></div>
 
-<div class="nav">
-  <div class="light-spot"></div>
-  <div class="logo">南阳数码工作室</div>
-  <div class="menu">
-    <a href="./index.html">首页</a>
-    <a href="https://www.microsoft.com" target="_blank">微软官方地址</a>
-    <a onclick="openModal()">系统镜像下载</a>
-    <a href="./about.html">关于我们</a>
-    <a href="./ai.html">AI 助手</a>
-    <span class="glass-text">毛玻璃调节透明度</span>
-    <input type="range" min="0" max="1" step="0.01" value="1" class="glass-opacity-slider" id="glassOpacitySlider">
-  </div>
-</div>
-
-<div class="left-sidebar">
-  <div class="light-spot"></div>
-  <h3>下载区</h3>
-
-  <!-- 【爬虫自动填充区域】resource.json 资源自动渲染到这里 -->
-  <div id="dynamicResourceBox"></div>
-
-  <a onclick="openFrame('https://www.microsoft.com/zh-cn/software-download/windows11')">Windows 11 官方</a>
-  <a onclick="openFrame('https://www.123684.com/s/s9H3Td-6tQg')">系统镜像Windows加魔改</a>
-  <a onclick="openFrame('https://pan.xunlei.com/s/VOlQYgS0mqDUNwzd6BEig76UA1#')">Windows 新系统镜像（提取码：6h6d）</a>
-  <a onclick="openFrame('https://www.123865.com/s/s9H3Td-TiQg')">小白PE云盘下载</a>
-  <a onclick="openFrame('https://www.wepe.com.cn')">微PE 官网</a>
-  <a onclick="openFrame('https://play.mcjs.cc/1.12.2wasm/')">我的世界网页模拟试玩区</a>
-  <a onclick="openFrame('https://firpe.cn/page-247')">FIRPE 维护系统（神通Win11 PE）</a>
-  <a onclick="openFrame('https://www.huorong.cn')">火绒官网</a>
-  <a onclick="openFrame('https://newsupport.lenovo.com.cn/')">联想官网</a>
-  <!-- 修复登录丢失：改为新标签打开 -->
-  <a href="http://192.168.1.133:5666/" target="_blank">南阳飞牛影视</a>
-
-  <div class="sidebar-bottom-text">
-    <strong>说明：</strong>本官网已更新，请在关于我们观看官网说明<br>
-    © 2026 南阳数码工作室
-  </div>
-</div>
-
-<div class="modal" id="modal">
-  <div class="modal-content">
-    <h2 style="margin-bottom:20px">系统镜像下载</h2>
-    <div class="btn-box">
-      <a href="https://www.microsoft.com/zh-cn/software-download/windows11" class="btn btn-red" target="_blank">微软 Windows 11 官方下载</a>
-      <div class="dropdown">
-        <button class="btn btn-blue">下载更多 Windows 系统经典版、魔改版 <span class="triangle">▼</span></button>
-        <div class="dropdown-content">
-          <a href="#" target="_blank">Windows 7 纯净版</a>
-          <a href="#" target="_blank">Windows 10 LTSC 精简版</a>
-          <a href="#" target="_blank">Windows 11 魔改优化版</a>
-          <a href="#" target="_blank">Windows XP 怀旧版</a>
-          <a href="#" target="_blank">Windows Server 2019 服务器版</a>
-          <div class="divider"></div>
-          <a href="https://www123684.com/s/s9H3Td-6tQg" target="_blank">123云盘下载</a>
-          <a href="https://pan.xunlei.com/s/VOlQYgS0mqDUNwzd6BEig76UA1#" target="_blank">迅雷云盘下载（提取码：6h6d）</a>
+    <nav>
+        <div class="logo">NanYang<span>AI</span></div>
+        <div class="nav-links">
+            <a href="#features">功能</a>
+            <a href="download.html">下载</a>
+            <a href="https://github.com/yang1235744/nanyang" target="_blank">GitHub</a>
         </div>
-      </div>
-    </div>
-    <div class="btn-box">
-      <a href="https://wwwbfp.lanzout.com/iyXKk3ihaz8" class="btn btn-green" target="_blank">下载激活工具</a>
-      <a href="https://www.123865.com/s/s9H3Td-TiQg" class="btn btn-cyan" target="_blank">新手PE下载</a>
-    </div>
-    <p class="tool-pw">激活工具解压密码：c2xm</p>
-    <p class="pe-info">新手小白不会安装PE，可直接点击上方「新手PE下载」</p>
-  </div>
-</div>
+    </nav>
 
-<div class="iframe-modal" id="iframeModal">
-  <iframe id="showFrame"></iframe>
-</div>
+    <section class="hero">
+        <h1>南阳AI助手<br>你的专属智能伙伴</h1>
+        <p>由极客南洋团队倾力打造的本地化 AI 工具。<br>一键安装，开箱即用，为你提供极速、安全、懂你的智能辅助体验。</p>
+        <div class="btn-group">
+            <a href="download.html" class="btn-primary">立即下载 v1.0</a>
+            <a href="https://github.com/yang1235744/nanyang" class="btn-secondary" target="_blank">查看源码</a>
+        </div>
+    </section>
 
-<div class="container">
-  <h1>南阳数码工作室</h1>
-  <p class="desc">专注电脑维修、系统魔改、刷机、服务器搭建<br>提供纯净Windows系统镜像，无捆绑、无篡改</p>
-  <p class="tip">此网站提供官方原版镜像，无任何捆绑软件，纯净无广告。<br>如无系统激活密钥，可下载下方激活工具，使用前请临时关闭安全管家/Windows Defender，避免被误报删除。</p>
-  <p class="tool-pw">激活工具解压密码：c2xm</p>
-  <p class="pe-info">新手小白不会安装PE，可直接点击上方「新手PE下载」</p>
-</div>
+    <section class="features" id="features">
+        <div class="feature-card">
+            <span class="icon">💬</span>
+            <h3>智能对话交互</h3>
+            <p>支持自然语言问答、文本创作、代码辅助，像真人一样懂你的需求。</p>
+        </div>
+        <div class="feature-card">
+            <span class="icon">⚡</span>
+            <h3>本地极速运行</h3>
+            <p>无需联网等待，本地模型驱动，断网也能用，响应速度毫秒级。</p>
+        </div>
+        <div class="feature-card">
+            <span class="icon">🔒</span>
+            <h3>数据绝对安全</h3>
+            <p>所有聊天记录与文件仅保存在你的电脑本地，隐私绝不上传云端。</p>
+        </div>
+        <div class="feature-card">
+            <span class="icon">🛠️</span>
+            <h3>极客开源精神</h3>
+            <p>完全开源免费，支持自定义配置，欢迎开发者一起共建极客生态。</p>
+        </div>
+    </section>
 
-<img src="https://picsum.photos/id/1036/80/80" class="ai-avatar" onclick="location.href='./ai.html'">
+    <!-- 软件界面展示区 -->
+    <section class="screenshot-section">
+        <h2>产品界面展示</h2>
+        <div class="screenshot-box">
+            [ 软件截图占位区：请在此处替换为真实的软件截图 ]
+        </div>
+    </section>
 
-<script>
-// 鼠标跟随光斑
-window.addEventListener('mousemove',e=>{
-  document.querySelectorAll('.light-spot').forEach(spot=>{
-    spot.style.left = e.clientX + 'px';
-    spot.style.top = e.clientY + 'px';
-  });
-})
+    <!-- 安全防护与自动维护区 -->
+    <section class="security-system">
+        <h2 class="section-title">全天候安全防护机制</h2>
+        <div class="security-grid">
+            <div class="sys-card">
+                <span class="icon">🛡️</span>
+                <h3>网站安全维护</h3>
+                <p>全站启用最高级别安全协议，24小时实时拦截恶意攻击与非法请求，保障官方数据与用户访问的绝对安全。</p>
+            </div>
+            <div class="sys-card">
+                <span class="icon">🤖</span>
+                <h3>智能自动维护</h3>
+                <p>内置自动化巡检引擎，定期自动清理系统缓存与潜在威胁。无需人工干预，始终保持系统处于最佳防御状态。</p>
+            </div>
+            <div class="sys-card">
+                <span class="icon">🚫</span>
+                <h3>病毒入侵拦截</h3>
+                <p>严格禁止任何形式的木马、病毒及恶意代码注入。我们承诺：官方下载通道纯净无毒，守护您的设备安全。</p>
+            </div>
+        </div>
+    </section>
 
-// 玻璃透明度+鸿蒙式胶囊填充（修复版）
-const slider=document.getElementById('glassOpacitySlider');
-const nav=document.querySelector('.nav');
-const sidebar=document.querySelector('.left-sidebar');
-function setGlassOpacity(val) {
-  nav.style.background=`rgba(255,255,255,${0.05*val})`;
-  sidebar.style.background=`rgba(255,255,255,${0.03*val})`;
-  nav.style.backdropFilter=`blur(${20*val}px)`;
-  sidebar.style.backdropFilter=`blur(${18*val}px)`;
-  slider.style.setProperty('--fill', `${val*100}%`);
-}
-slider.addEventListener('input',()=>{
-  setGlassOpacity(parseFloat(slider.value));
-});
-setGlassOpacity(1);
+    <!-- 综合安全与防伪声明区 -->
+    <section class="security-section">
+        <div class="security-card">
+            <h3>⚠️ 官方防伪与安全声明</h3>
+            <p>1. 本页面为“南阳AI助手”唯一官方网站。目前产品处于<strong>早期开发版本</strong>，部分高级功能正在持续开发补全中，敬请期待。</p>
+            <p>2. 我们承诺：南阳AI助手是纯净的首发开发产品，<strong>绝对不是病毒或恶意软件</strong>，请放心安装使用。</p>
+            <p>3. 请警惕“云狐”等钓鱼网站！如对本页面有任何疑问，请前往抖音搜索【<strong>极客南阳科技</strong>】，点击其主页中的正规官方链接进行验证。</p>
+            <p>4. <strong>【严正警告】</strong>严禁任何个人或组织对“南阳AI助手”进行二次打包、篡改或分发至各类非官方网站。一经发现，<strong>本人必将追究到底，绝不姑息，并保留诉诸法律的权利！</strong></p>
+        </div>
+    </section>
 
-function openModal(){document.getElementById('modal').classList.add('show');}
-document.getElementById('modal').addEventListener('click',function(e){
-  if(e.target === this) this.classList.remove('show');
-});
-
-function openFrame(url){
-  document.getElementById('showFrame').src = url;
-  document.getElementById('iframeModal').classList.add('show');
-}
-
-// ===================== 【真实动态资源加载核心】 =====================
-// 飞牛爬虫生成 resource.json 放到网站根目录，页面自动渲染
-async function loadResourceData(){
-  try{
-    const res = await fetch("./resource.json");
-    if(!res.ok) return;
-    const data = await res.json();
-    const box = document.getElementById("dynamicResourceBox");
-    let html = "";
-    data.forEach(item=>{
-      if(item.type === "iframe"){
-        html += `<a onclick="openFrame('${item.url}')">${item.name}</a>`;
-      }else{
-        html += `<a href="${item.url}" target="_blank">${item.name}</a>`;
-      }
-    });
-    box.innerHTML = html;
-  }catch(err){
-    // 无资源文件时静默跳过，不影响页面
-    console.log("暂无自动同步的资源数据");
-  }
-}
-window.addEventListener("DOMContentLoaded", loadResourceData);
-// =================================================================
-</script>
-
-<!-- 极简纯净防火墙 - 无乱码 无提示 -->
-<script>
-const KEY = 'ny_block';
-const PWD = 'NanYang256@G';
-const BIR = '20120201';
-function unlock(){
-  if(document.getElementById('pwd').value===PWD&&document.getElementById('bir').value===BIR){
-    localStorage.removeItem(KEY);location.reload();
-  }else{alert('失败');}
-}
-
-if(localStorage.getItem(KEY)){
-  document.body.innerHTML=`<div style="background:#000;color:red;height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;"><input id=pwd placeholder=密码><input id=bir placeholder=生日 style=margin-top:6px;><button onclick=unlock() style=margin-top:10px;>解锁</button></div>`;
-  return;
-}
-
-document.addEventListener('contextmenu',e=>{e.preventDefault();localStorage.setItem(KEY,'1');location.reload();});
-window.addEventListener('keydown',e=>{if(e.key==='F12'||(e.ctrlKey&&e.shiftKey&&e.key==='I')){localStorage.setItem(KEY,'1');location.reload();}});
-
-fetch('https://ipapi.co/json/').then(r=>r.json()).then(d=>{
-  if(d.country_code!=='CN')document.body.innerHTML='';
-}).catch(()=>{});
-</script>
-
+    <footer>
+        <p>&copy; 2026 南阳工作室 | 极客南阳出品 | 用代码改变世界</p>
+    </footer>
 </body>
 </html>
