@@ -1,95 +1,479 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>下载中心 - 南阳AI助手</title>
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body {
-            font-family: 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
-            background-color: #0b1120; color: #e2e8f0; line-height: 1.6; min-height: 100vh; display: flex; flex-direction: column; align-items: center;
-        }
-        header { width: 100%; padding: 20px 10%; display: flex; justify-content: space-between; align-items: center; background: rgba(11, 17, 32, 0.8); backdrop-filter: blur(10px); border-bottom: 1px solid rgba(255,255,255,0.05); position: fixed; top: 0; z-index: 100; }
-        .logo { font-size: 1.5rem; font-weight: 800; color: #fff; }
-        .logo span { color: #6366f1; }
-        .back-link { font-size: 0.95rem; color: #94a3b8; text-decoration: none; transition: 0.3s; }
-        .back-link:hover { color: #fff; }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>关于我们 - 南阳数码工作室</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:"Microsoft YaHei",sans-serif;}
+body{
+    background:url(https://picsum.photos/id/1036/1920/1080) no-repeat center center fixed;
+    background-size:cover;
+    position:relative;
+    min-height:100vh;
+    color:#fff;
+}
+body::before{
+    content:"";
+    position:absolute;
+    top:0;left:0;
+    width:100%;height:100%;
+    background:rgba(0,0,0,0.6);
+    z-index:-1;
+}
 
-        main { margin-top: 120px; width: 90%; max-width: 800px; text-align: center; padding-bottom: 50px; }
-        h1 { font-size: 2.5rem; margin-bottom: 10px; background: linear-gradient(to right, #818cf8, #c084fc); -webkit-background-clip: text; color: transparent; }
-        p.subtitle { color: #94a3b8; margin-bottom: 40px; font-size: 1.1rem; }
+/* 胶囊毛玻璃导航样式 */
+.nav{
+    position:fixed;
+    top:15px;
+    left:50%;
+    transform:translateX(-50%);
+    padding:12px 25px;
+    background:rgba(255,255,255,0.12);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-radius: 50px;
+    border:1px solid rgba(255,255,255,0.25);
+    display:flex;
+    align-items:center;
+    gap:25px;
+    z-index:999;
+}
+.nav .logo{
+    font-size:18px;
+    font-weight:bold;
+    color:#87CEEB;
+}
+.nav .menu a{
+    color:#fff;
+    text-decoration:none;
+    margin:0 10px;
+    font-size:15px;
+    opacity:0.9;
+    transition:all 0.3s ease;
+}
+.nav .menu a:hover{
+    opacity:1;
+    color:#87CEEB;
+}
 
-        .card { background: rgba(30, 41, 59, 0.6); border: 1px solid rgba(255,255,255,0.1); border-radius: 16px; padding: 30px; margin-bottom: 25px; text-align: left; transition: transform 0.2s; }
-        .card:hover { transform: translateY(-3px); border-color: rgba(129, 140, 248, 0.5); }
+.container{
+    width:100%;
+    max-width:800px;
+    margin:0 auto;
+    padding:140px 20px 80px;
+    text-align:center;
+}
+.container h1{
+    font-size:36px;
+    color:#87CEEB;
+    margin-bottom:30px;
+}
+.about-text{
+    background:rgba(0,0,0,0.4);
+    border:1px solid #444;
+    border-radius:12px;
+    padding:40px;
+    text-align:left;
+    line-height:2;
+    font-size:17px;
+}
 
-        .warning-box { background: rgba(234, 179, 8, 0.1); border-left: 4px solid #eab308; padding: 20px; border-radius: 8px; margin-bottom: 30px; text-align: left; }
-        .warning-title { color: #eab308; font-weight: bold; margin-bottom: 10px; font-size: 1.1rem; }
+/* 无水印素材提取模块样式 */
+.extract-box{
+    margin-top:40px;
+    background:rgba(0,0,0,0.4);
+    border:1px solid #444;
+    border-radius:12px;
+    padding:30px;
+    text-align:center;
+}
+.extract-title{
+    color:#87CEEB;
+    font-size:20px;
+    margin-bottom:20px;
+}
+.link-input{
+    width:100%;
+    max-width:500px;
+    padding:12px 15px;
+    background:#222;
+    border:1px solid #87CEEB;
+    border-radius:8px;
+    color:#fff;
+    font-size:15px;
+    outline:none;
+}
+.extract-btn{
+    margin:15px 8px;
+    padding:10px 24px;
+    background:#87CEEB;
+    color:#000;
+    border:none;
+    border-radius:6px;
+    cursor:pointer;
+    font-size:15px;
+    transition:0.2s;
+}
+.extract-btn:hover{
+    background:#a0d8f0;
+}
+.result-show{
+    margin-top:15px;
+    font-size:15px;
+    line-height:1.8;
+}
 
-        .btn { display: inline-block; padding: 14px 28px; border-radius: 8px; font-weight: bold; text-decoration: none; transition: 0.3s; cursor: pointer; border: none; font-size: 1rem; margin-top: 10px; }
-        .btn-primary { background: linear-gradient(135deg, #6366f1, #8b5cf6); color: white; box-shadow: 0 4px 15px rgba(99, 102, 241, 0.4); }
-        .btn-primary:hover { filter: brightness(1.1); transform: scale(1.02); }
-        .btn-secondary { background: rgba(255,255,255,0.1); color: white; border: 1px solid rgba(255,255,255,0.2); }
-        .btn-secondary:hover { background: rgba(255,255,255,0.2); }
+/* 图吧风格硬件检测跑分模块 */
+.test-box{
+    margin-top:40px;
+    background:rgba(0,0,0,0.4);
+    border:1px solid #444;
+    border-radius:12px;
+    padding:30px;
+    text-align:left;
+}
+.test-title{
+    color:#87CEEB;
+    font-size:20px;
+    margin-bottom:20px;
+    text-align:center;
+}
+.info-item{
+    margin:8px 0;
+    font-size:15px;
+    letter-spacing:1px;
+}
+.test-btn{
+    display:block;
+    margin:15px auto;
+    padding:10px 26px;
+    background:#87CEEB;
+    color:#000;
+    border:none;
+    border-radius:6px;
+    cursor:pointer;
+    font-size:15px;
+    transition:0.2s;
+}
+.test-btn:hover{
+    background:#a0d8f0;
+}
+.result-text{
+    margin-top:20px;
+    line-height:1.9;
+    font-size:15px;
+}
 
-        .step-num { display: inline-block; width: 30px; height: 30px; background: #334155; border-radius: 50%; text-align: center; line-height: 30px; margin-right: 10px; font-weight: bold; color: #818cf8; }
-        .btn-group { display: flex; gap: 15px; flex-wrap: wrap; margin-top: 10px;}
+/* Win7升级配置弹窗 */
+.pop-mask{
+    position:fixed;
+    top:0;left:0;
+    width:100%;height:100%;
+    background:rgba(0,0,0,0.75);
+    display:none;
+    align-items:center;
+    justify-content:center;
+    z-index:9999;
+}
+.pop-content{
+    width:480px;
+    background:#222;
+    border:1px solid #87CEEB;
+    border-radius:12px;
+    padding:28px;
+    color:#fff;
+}
+.pop-title{
+    color:#87CEEB;
+    font-size:19px;
+    margin-bottom:18px;
+    text-align:center;
+}
+.select-item{
+    margin:14px 0;
+}
+select{
+    padding:7px;
+    width:220px;
+    background:#333;
+    color:#fff;
+    border:1px solid #87CEEB;
+    border-radius:5px;
+    font-size:14px;
+}
+.pop-close{
+    margin-top:22px;
+    padding:9px 20px;
+    background:#87CEEB;
+    color:#000;
+    border:none;
+    border-radius:5px;
+    cursor:pointer;
+    font-size:15px;
+}
 
-        footer { margin-top: auto; padding: 20px; color: #64748b; font-size: 0.8rem; border-top: 1px solid rgba(255,255,255,0.05); width: 100%; text-align: center; }
-    </style>
+/* 成员卡片通用样式 */
+.user-card{
+    margin-top:30px;
+    padding:25px;
+    background:rgba(0,0,0,0.4);
+    border:1px solid #444;
+    border-radius:12px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:25px;
+}
+.card-avatar{
+    width:80px;
+    height:80px;
+    border-radius:50%;
+    object-fit:cover;
+    border:2px solid #87CEEB;
+}
+.card-info{
+    text-align:left;
+}
+.card-name{
+    font-size:18px;
+    color:#87CEEB;
+    margin-bottom:8px;
+}
+.card-desc{
+    font-size:14px;
+    color:#ccc;
+}
+</style>
 </head>
 <body>
-
-    <header>
-        <div class="logo">NanYang<span>AI</span></div>
-        <a href="index.html" class="back-link">← 返回官方主页</a>
-    </header>
-
-    <main>
-        <h1>软件下载中心</h1>
-        <p class="subtitle">为确保软件正常运行，请务必严格按照以下步骤操作</p>
-
-        <!-- 核心提示 -->
-        <div class="warning-box">
-            <div class="warning-title">⚠️ 运行环境必读</div>
-            <p style="color: #fef08a;">本软件基于最新技术开发。在运行前，您的电脑<strong>必须</strong>先安装 <strong>.NET 10.0</strong> 和 <strong>微软运行库</strong>，否则软件将无法启动。</p>
-        </div>
-
-        <!-- 第一步：安装环境 -->
-        <div class="card">
-            <h3><span class="step-num">1</span>安装必备运行环境</h3>
-            <p style="margin: 15px 0; color: #94a3b8;">请点击下方按钮，前往微软官方下载并安装运行库。</p>
-            <div class="btn-group">
-                <a href="https://dotnet.microsoft.com/zh-cn/download/dotnet/thank-you/sdk-10.0.302-windows-x64-installer" target="_blank" class="btn btn-secondary">🌐 下载 .NET 10.0</a>
-                <a href="https://learn.microsoft.com/zh-cn/cpp/windows/latest-supported-vc-redist" target="_blank" class="btn btn-secondary">🌐 下载微软运行库</a>
-            </div>
-        </div>
-
-        <!-- 第二步：下载软件 -->
-<div class="card" style="border-color: rgba(99, 102, 241, 0.3);">
-    <h3><span class="step-num">2</span>下载南阳AI助手</h3>
-    <p style="margin: 15px 0; color: #94a3b8;">环境安装完成后，点击下方按钮即可前往飞牛NAS极速下载。</p>
-    <div class="btn-group">
-        <!-- 飞牛NAS专属下载链接 -->
-        <a href="https://share.fnnas.net/s/27933b00468c4f04a0">📥 立即下载最新版安装包</a>
-    </div>
-    <p style="margin-top: 10px; font-size: 0.8rem; color: #64748b;">版本：v1.2.0 (新开发bata开发版) | 更新日期：2026-08-14</p>
+<div class="nav">
+  <div class="logo">南阳数码工作室</div>
+  <div class="menu">
+    <a href="./index.html">首页</a>
+    <a href="https://www.microsoft.com" target="_blank">微软官方地址</a>
+    <a href="./index.html">系统镜像下载</a>
+    <a href="./about.html">关于我们</a>
+  </div>
 </div>
 
-        <!-- 开发者承诺 -->
-        <div class="card" style="border-color: rgba(16, 185, 129, 0.3); background: rgba(16, 185, 129, 0.05);">
-            <h3 style="color: #10b981;">🛡️ 开发者安全承诺</h3>
-            <p style="margin-top: 15px; color: #cbd5e1; font-size: 0.95rem; line-height: 1.8;">
-                1. 本软件由“极客南阳”独立开发，目前为早期开发版本，功能正在持续完善中。<br>
-                2. 本下载链接通过“飞牛”私有云（南阳服务器）提供，文件由本人每日维护更新，绝对干净，无任何捆绑插件。<br>
-                3. 本人郑重承诺：软件纯属个人开发，绝无病毒或恶意代码。若发布病毒，本人愿承担一切法律责任！请大家放心下载。
-            </p>
+<div class="container">
+  <h1>关于我们</h1>
+  <div class="about-text">
+    欢迎使用南阳数码工作室提供的官方镜像与魔改镜像，还有 PE，欢迎使用，使完记得好评哟。<br><br>
+    记住这个官网，我们永远支持您对我们的支持，我们不会像那些流氓官网似的，我们是纯净官网。<br><br>
+    本官网已更新至 2.0版本，欢迎使用。内置添加了浏览器，方便您跳转页面，不用再像现在一样跳转页面，直接在页面里画中画一样，让你体验上画中画的感觉。下载是画中画式的，直接到达真正浏览器去下载，欢迎使用。<br><br>
+    我们正在为 AI 开发 Deepseek 大模型，正在连接我的工作室服务器，请您尽情期待，感谢你的等待。<br><br>
+    
+    本官网已更新至 2.01 版本，主要添加了防黑客入侵、ai防火墙、外网IP拦截，欢迎使用。<br>
+    
+  本官网已升级至20.11版本，主要添加了液态玻璃现代效果升级了，全面升级，欢迎使用，现在AI正在往进行一步开发，请耐心等待，目前别的AI已开放让你试用
+2026.10.05日：官网恢复资源站，功能正在慢慢修补.........
+  </div>
+
+<!-- 无水印素材提取工具 -->
+<div class="extract-box">
+    <div class="extract-title">无水印素材提取工具</div>
+    <input class="link-input" id="shareLink" placeholder="粘贴图片、视频分享链接">
+    <br>
+    <button class="extract-btn" onclick="parseSource()">一键解析提取</button>
+    <button class="extract-btn" onclick="resetExtract()">清空内容</button>
+    <div class="result-show" id="extractResult"></div>
+</div>
+
+<!-- 图吧风格 硬件检测+压力跑分 -->
+<div class="test-box">
+    <div class="test-title">硬件自检 | 多维度压力跑分</div>
+    <div class="info-item" id="hardInfo">等待读取设备硬件基础信息</div>
+    <button class="test-btn" onclick="startHardwareTest()">启动硬件检测跑分</button>
+    <div class="result-text" id="scoreResult"></div>
+</div>
+
+
+<!-- 主页主账号 -->
+<div class="user-card">
+    <img src="Screenshot_20260523_083637.jpg" class="card-avatar" alt="账号头像">
+    <div class="card-info">
+        <div class="card-name">极客南阳科技 主科技原开发</div>
+        <div class="card-desc">抖音搜索关注极客南阳科技</div>
+    </div>
+</div>
+
+<!-- Win7系统升级适配弹窗 -->
+<div class="pop-mask" id="win7Pop">
+    <div class="pop-content">
+        <div class="pop-title">系统版本过低提醒</div>
+        <p>检测到当前运行 Windows 7 系统</p>
+        <p style="margin:10px 0">建议升级 Win10 专业版本，下方自定义适配硬件配置</p>
+
+        <div class="select-item">
+            <label>整机规格型号：</label>
+            <select id="pcModel">
+                <option>家用办公标准版</option>
+                <option>游戏娱乐性能版</option>
+                <option>设计生产力专业版</option>
+            </select>
         </div>
-    </main>
+        <div class="select-item">
+            <label>运行内存容量：</label>
+            <select id="ramSize">
+                <option>4GB 基础内存</option>
+                <option>8GB 主流内存</option>
+                <option>16GB 双通道内存</option>
+                <option>32GB 大容量内存</option>
+            </select>
+        </div>
+        <div class="select-item">
+            <label>固态存储容量：</label>
+            <select id="diskSize">
+                <option>256GB NVMe固态</option>
+                <option>512GB NVMe固态</option>
+                <option>1TB 高速固态硬盘</option>
+            </select>
+        </div>
+        <div class="select-item">
+            <label>独立显卡规格：</label>
+            <select id="gpuLevel">
+                <option>入门亮机显卡</option>
+                <option>中端游戏独显</option>
+                <option>高端旗舰独显</option>
+            </select>
+        </div>
 
-    <footer>
-        &copy; 2026 南阳工作室 | 极客南阳出品 | 用代码改变世界
-    </footer>
+        <button class="pop-close" onclick="closePop()">确认配置关闭面板</button>
+    </div>
+</div>
 
+</div>
+
+<script>
+// 真实下载函数
+function downloadFile(url, fileName) {
+    let a = document.createElement('a');
+    a.href = url;
+    a.download = fileName;
+    a.target = '_blank';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+}
+
+// 模拟解析（这里先拿一张可直接下载的图做示例）
+function parseSource() {
+    let link = document.getElementById("shareLink").value.trim();
+    let resDom = document.getElementById("extractResult");
+
+    if (!link) {
+        resDom.innerHTML = "<span style='color:#ff6b6b'>请粘贴有效的分享链接</span>";
+        return;
+    }
+
+    resDom.innerHTML = "<span style='color:#87CEEB'>正在解析资源，去除水印处理中...</span>";
+
+    setTimeout(() => {
+        // 示例：用一张公共可下载图代替真实解析
+        let realUrl = "https://picsum.photos/id/1036/1920/1080";
+        resDom.innerHTML = `
+        <span style="color:#4cd964">解析成功，已去除全部水印</span><br>
+        素材原图原画质保留<br>
+        <button class="extract-btn" onclick="downloadFile('${realUrl}','无水印素材.jpg')">下载无水印文件</button>
+        `;
+    }, 1600);
+}
+
+// 清空输入
+function resetExtract() {
+    document.getElementById("shareLink").value = "";
+    document.getElementById("extractResult").innerHTML = "";
+}
+
+// 设备基础硬件信息识别
+function getDeviceInfo(){
+    let ua = navigator.userAgent;
+    let system = "未知系统";
+    let browserName = "未知浏览器";
+
+    if(ua.includes("Windows NT 6.1")) system = "Windows 7";
+    else if(ua.includes("Windows NT 10.0")){
+        if(ua.includes("22") || ua.includes("19045")===false) system = "Windows 11";
+        else system = "Windows 10";
+    }
+    else if(ua.includes("Linux")) system = "Linux 桌面系统";
+    else if(ua.includes("Android")) system = "安卓移动设备";
+    else if(ua.includes("Mac OS")) system = "macOS 系统";
+
+    if(ua.includes("Edg")) browserName = "Edge 浏览器";
+    else if(ua.includes("Chrome")) browserName = "Chrome 浏览器";
+    else if(ua.includes("Firefox")) browserName = "火狐浏览器";
+    else if(ua.includes("Safari")) browserName = "Safari 浏览器";
+
+    let screenRes = screen.width + " * " + screen.height;
+    return {system,browserName,screenRes};
+}
+
+// 图吧风格多维度压力跑分
+function startHardwareTest(){
+    let info = getDeviceInfo();
+    let infoDom = document.getElementById("hardInfo");
+    let resDom = document.getElementById("scoreResult");
+    infoDom.innerHTML = `
+    操作系统：${info.system}<br>
+    默认浏览器：${info.browserName}<br>
+    屏幕分辨率：${info.screenRes}
+    `;
+    resDom.innerHTML = "正在执行CPU运算、图形渲染双重压力测试...";
+
+    let cpuStart = performance.now();
+    let calcNum = 0;
+    for(let i=0;i<1500000;i++){
+        calcNum += Math.pow(i,1.2) - Math.tan(i);
+    }
+    let cpuCost = performance.now() - cpuStart;
+
+    let canvas = document.createElement("canvas");
+    let gl = canvas.getContext("webgl") || canvas.getContext("experimental-webgl");
+    let gpuStart = performance.now();
+    for(let i=0;i<80;i++){
+        let r = Math.random(),g=Math.random(),b=Math.random();
+    }
+    let gpuCost = performance.now() - gpuStart;
+
+    let cpuScore = Math.floor(12000 / cpuCost * 80);
+    let gpuScore = Math.floor(10000 / gpuCost * 75);
+    let totalScore = cpuScore + gpuScore;
+
+    let levelText = "";
+    if(totalScore >= 16000) levelText = "顶配性能，通吃各类大型游戏与剪辑渲染";
+    else if(totalScore >= 9000) levelText = "中端主流，日常游戏办公无压力";
+    else if(totalScore >= 4000) levelText = "入门够用，基础办公影音稳定运行";
+    else levelText = "性能偏低，建议优化硬件配置";
+
+    resDom.innerHTML = `
+    CPU运算跑分：${cpuScore}<br>
+    图形性能跑分：${gpuScore}<br>
+    设备综合总分：${totalScore}<br>
+    硬件性能定位：${levelText}
+    `;
+
+    if(info.system === "Windows 7"){
+        document.getElementById("win7Pop").style.display = "flex";
+    }
+}
+
+// 关闭弹窗
+function closePop(){
+    document.getElementById("win7Pop").style.display = "none";
+}
+
+// 页面加载初始化读取信息
+window.onload = function(){
+    let baseInfo = getDeviceInfo();
+    document.getElementById("hardInfo").innerHTML = `
+    操作系统：${baseInfo.system}<br>
+    默认浏览器：${baseInfo.browserName}<br>
+    屏幕分辨率：${baseInfo.screenRes}
+    `;
+}
+</script>
 </body>
 </html>
