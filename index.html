@@ -383,18 +383,5 @@ function onMouseUp(){
 }
 selectOption(dockOptions[0]);
 </script>
-<script>
-const AI_UPDATE_CYCLE = 7 * 24 * 60 * 60 * 1000;
-const AI_STORAGE_KEY = "ny_ai_last_update";
-async function aiAutoMaintain() {
-  const lastUpdate = localStorage.getItem(AI_STORAGE_KEY);
-  const now = Date.now();
-  if(lastUpdate && now - parseInt(lastUpdate) < AI_UPDATE_CYCLE) return;
-  localStorage.setItem(AI_STORAGE_KEY, now.toString());
-  console.log("AI已执行本周官网维护：自动拉取资源、优化页面布局、清理失效链接");
-  document.documentElement.style.setProperty("--auto-layout-gap", "18px");
-}
-window.addEventListener("load", aiAutoMaintain);
-</script>
 </body>
 </html>
