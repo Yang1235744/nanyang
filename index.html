@@ -563,10 +563,11 @@ function setSliderTarget(item,instant=false){
   springAnimate();
 }
 
-function selectOption(item){
+function selectOption(item, navigate=true){
   dockOptions.forEach(opt=>opt.classList.remove('active'));
   item.classList.add('active');
   setSliderTarget(item);
+  if(!navigate) return;
   if(item.dataset.modal==='system'){
     document.getElementById('systemModal').classList.add('show');
   }else if(item.dataset.modal==='community'){
@@ -635,7 +636,7 @@ function onMouseUp(e){
   if(nearest) selectOption(nearest);
 }
 
-selectOption(dockOptions[0]);
+selectOption(dockOptions[0], false);
 
 /* ========== 轻量AI小模型（专攻电脑问题） ========== */
 const aiKnowledge=[

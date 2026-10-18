@@ -334,15 +334,16 @@ function setSliderTarget(item, instant=false){
   state.targetX = tX; state.targetW = tW;
   springAnimate();
 }
-function selectOption(item){
+function selectOption(item, navigate=true){
   dockOptions.forEach(opt=>opt.classList.remove('active'));
   item.classList.add('active');
   setSliderTarget(item);
+  if(!navigate) return;
   const url = item.dataset.url;
   if(url) window.location.href = url;
 }
 dockOptions.forEach(opt=>opt.addEventListener('click',()=>selectOption(opt)));
-selectOption(dockOptions[3]);
+selectOption(dockOptions[3], false);
 </script>
 </body>
 </html>
