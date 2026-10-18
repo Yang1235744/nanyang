@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>南阳AI</title>
+<title>南阳AI - 工具聚合</title>
 <style>
 * {
   margin: 0;
@@ -125,6 +125,7 @@ body {
 .icon-text {
   font-size: 13px;
   text-shadow: 0 1px 3px #000;
+  text-align: center;
 }
 .dev-text {
   font-size: 11px;
@@ -208,7 +209,7 @@ body {
   cursor: pointer;
 }
 
-/* Dock任务栏 带回弹 */
+/* Dock任务栏 */
 .mac-dock {
   position: fixed;
   bottom: 20px;
@@ -265,8 +266,7 @@ body {
 <body>
 
 <div class="mac-top">
-  <!-- 修复：直接跳转到你的主官网地址 -->
-  <a href="https://yang1235744.github.io/nanyang/" class="back-btn">返回主页</a>
+  <a href="./index.html" class="back-btn">返回主页</a>
   <div class="opacity-group">
     <span>毛玻璃透明度</span>
     <input type="range" min="0" max="1" step="0.01" value="1" class="glass-slider" id="glassSlider">
@@ -286,9 +286,9 @@ body {
     <div class="icon-box">🔮</div>
     <div class="icon-text">Kimi</div>
   </div>
-  <div class="icon-item" data-url="http://192.168.1.133:11436/auth?redirect=%2F/" data-key="nyai">
+  <div class="icon-item" data-url="./index.html" data-key="nyai">
     <div class="icon-box">🤖</div>
-    <div class="icon-text">南阳AI<br><ass="dev-text">beta版</span></div>span cl
+    <div class="icon-text">南阳轻量AI<br><span class="dev-text">在线</span></div>
   </div>
   <div class="icon-item" data-url="https://y.qq.com/" data-key="qqmusic">
     <div class="icon-box">🎵</div>
@@ -308,7 +308,6 @@ body {
   <div class="dock-icon" id="dockYuanbao">💬</div>
   <div class="dock-icon" id="dockKimi">🔮</div>
   <div class="dock-icon" id="dockQqmusic">🎵</div>
-  <div class="dock-icon" id="dockSet">⚙️</div>
 </div>
 
 <script>
@@ -411,12 +410,11 @@ document.getElementById('rightMenu').onclick=e=>{
 };
 document.onclick=()=>document.getElementById('rightMenu').style.display='none';
 
-dockHome.onclick=()=>location.reload();
+dockHome.onclick=()=>location.href='./index.html';
 dockAi.onclick=()=>newWin('https://www.doubao.com','nyai');
 dockYuanbao.onclick=()=>newWin('https://yuanbao.tencent.com','yuanbao');
 dockKimi.onclick=()=>newWin('https://kimi.moonshot.cn','kimi');
 dockQqmusic.onclick=()=>newWin('https://y.qq.com/','qqmusic');
-dockSet.onclick=()=>newWin('','set');
 </script>
 
 </body>

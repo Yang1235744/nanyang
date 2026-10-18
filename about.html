@@ -23,7 +23,7 @@ body::before{
     background:rgba(0,0,0,0.6);
     z-index:-1;
 }
-/* 顶部Dock导航，和首页完全相同 */
+/* 顶部Dock导航 */
 .nav{
   position:fixed;
   top:0;left:0;width:100%;
@@ -66,9 +66,6 @@ body::before{
     inset 0 -2px 4px rgba(0,0,0,0.08);
   pointer-events:none;
 }
-.dock-slider.drag{
-  border-radius:22px 38px 38px 22px;
-}
 .dock-option{
   padding:8px 14px;font-size:16px;color:#ccc;
   cursor:pointer;z-index:2;user-select:none;white-space:nowrap;
@@ -76,7 +73,6 @@ body::before{
 }
 .dock-option.active{color:#ffffff;}
 
-/* 毛玻璃透明度滑块区域 */
 .slider-wrap{
   display:flex;align-items:center;gap:8px;
   padding:10px 16px;
@@ -128,6 +124,22 @@ body::before{
     line-height:2;
     font-size:17px;
 }
+.features{
+    margin-top:24px;
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+    gap:16px;
+}
+.feature-card{
+    background:rgba(255,255,255,0.06);
+    border:1px solid rgba(135,206,235,0.25);
+    border-radius:12px;
+    padding:18px;
+    text-align:center;
+}
+.feature-icon{font-size:32px;margin-bottom:8px;}
+.feature-title{color:#87CEEB;font-size:15px;font-weight:bold;margin-bottom:6px;}
+.feature-desc{font-size:13px;color:#ccc;line-height:1.5;}
 .log-box{
     margin-top:30px;
     background:rgba(0,0,0,0.4);
@@ -144,7 +156,6 @@ body::before{
     margin-bottom:16px;
     text-align:center;
 }
-/* 成员卡片通用样式 */
 .user-card{
     margin-top:30px;
     padding:25px;
@@ -197,14 +208,44 @@ body::before{
   <h1>关于我们</h1>
   <div class="about-text">
 欢迎使用南阳数码工作室官网，本站提供纯净原版Windows镜像、魔改系统镜像以及PE维护工具。本站坚持纯净无捆绑，拒绝流氓软件，所有资源可放心下载使用。<br><br>
-本网站采用液态玻璃UI风格，搭配毛玻璃效果，支持全局毛玻璃透明度自定义调节。网站托管在GitHub Pages，持续迭代更新。<br><br>
-项目正在开发配套AI功能，后续会接入大模型，敬请期待。
+本网站采用液态玻璃UI风格，搭配毛玻璃效果，支持全局毛玻璃透明度自定义调节。网站托管在GitHub Pages，持续迭代更新。
   </div>
 
-  <!-- 更新日志：全部清空重写，新版放最上面，时间倒序 -->
+  <!-- 功能特性 -->
+  <div class="features">
+    <div class="feature-card">
+      <div class="feature-icon">💧</div>
+      <div class="feature-title">液态玻璃滑块</div>
+      <div class="feature-desc">苹果风格液态滑块，弹簧物理动画，跟随文字流动变形</div>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">🤖</div>
+      <div class="feature-title">轻量AI助手</div>
+      <div class="feature-desc">专攻电脑问题的AI对话，蓝屏/装系统/驱动/卡顿一键解答</div>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">💬</div>
+      <div class="feature-title">社区互动</div>
+      <div class="feature-desc">发帖、点赞、评论，和网友交流电脑技术问题</div>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">🪟</div>
+      <div class="feature-title">纯净系统镜像</div>
+      <div class="feature-desc">官方原版+魔改版，无捆绑无篡改，附激活工具和PE</div>
+    </div>
+  </div>
+
   <div class="log-box">
     <div class="log-title">更新日志</div>
     <div>
+<b>V3.0 - 2026.10.18</b><br>
+• 首页全面重建，保留所有原有下载资源<br>
+• 新增液态玻璃滑块（苹果/Coolapk风格，SVG滤镜+弹簧物理）<br>
+• 新增轻量AI小模型，专攻电脑问题（蓝屏/装系统/驱动/卡顿/病毒等14类）<br>
+• 新增社区模块，支持发帖、点赞、评论（localStorage持久化）<br>
+• 修复Dock点击与拖拽冲突，点击精准响应<br>
+• 移动端响应式适配优化<br>
+<br>
 <b>V2.01 - 2026.10.18</b><br>
 • 重构页面布局，修复GitHub Pages刷新页面元素重叠错乱BUG<br>
 • 顶部Dock导航增加弹簧液态滑块交互效果<br>
@@ -225,7 +266,6 @@ body::before{
     </div>
   </div>
 
-  <!-- 个人信息卡片保留 -->
   <div class="user-card">
     <img src="Screenshot_20260523_083637.jpg" class="card-avatar" alt="账号头像">
     <div class="card-info">
@@ -238,10 +278,8 @@ body::before{
 <script>
 window.addEventListener('mousemove',e=>{
   const spot = document.querySelector('.nav .light-spot');
-  spot.style.left = e.clientX + 'px';
-  spot.style.top = e.clientY + 'px';
+  if(spot){spot.style.left=e.clientX+'px';spot.style.top=e.clientY+'px';}
 })
-// FOUC修复
 window.addEventListener('load',()=>{
   document.documentElement.classList.add('w-ready');
 })
@@ -257,23 +295,13 @@ slider.addEventListener('input',()=>{
 });
 setGlassOpacity(1);
 
-// ===================== SPRING弹簧动画 与首页Dock完全一致 =====================
+// 弹簧滑块
 const dockOptions = document.querySelectorAll('.dock-option');
 const dockSlider = document.getElementById('dockSlider');
 const dockTrack = document.getElementById('dockTrack');
 let isDrag = false;
-const spring = {
-  stiffness: 0.28,
-  damping: 0.32
-};
-let state = {
-  targetX: 0,
-  currentX: 0,
-  targetW: 0,
-  currentW:0,
-  vx:0,
-  vw:0
-};
+const spring = { stiffness: 0.28, damping: 0.32 };
+let state = { targetX:0, currentX:0, targetW:0, currentW:0, vx:0, vw:0 };
 let rafId = null;
 
 function springAnimate(){
@@ -283,10 +311,8 @@ function springAnimate(){
   const dw = state.targetW - state.currentW;
   state.vw += dw * spring.stiffness - state.vw * spring.damping;
   state.currentW += state.vw;
-
   dockSlider.style.left = state.currentX + "px";
   dockSlider.style.width = state.currentW + "px";
-
   if(Math.abs(state.vx)>0.05 || Math.abs(state.vw)>0.05){
     rafId = requestAnimationFrame(springAnimate);
   }else{
@@ -299,18 +325,13 @@ function setSliderTarget(item, instant=false){
   const tX = rect.left - trackRect.left;
   const tW = rect.width;
   if(instant){
-    state.currentX = tX;
-    state.currentW = tW;
+    state.currentX = tX; state.currentW = tW;
     dockSlider.style.left = state.currentX + "px";
     dockSlider.style.width = state.currentW + "px";
-    state.targetX = tX;
-    state.targetW = tW;
-    state.vx = 0;
-    state.vw =0;
-    return;
+    state.targetX = tX; state.targetW = tW;
+    state.vx = 0; state.vw =0; return;
   }
-  state.targetX = tX;
-  state.targetW = tW;
+  state.targetX = tX; state.targetW = tW;
   springAnimate();
 }
 function selectOption(item){
@@ -321,54 +342,6 @@ function selectOption(item){
   if(url) window.location.href = url;
 }
 dockOptions.forEach(opt=>opt.addEventListener('click',()=>selectOption(opt)));
-
-dockTrack.addEventListener('mousedown',(e)=>{
-  isDrag=true;
-  dockSlider.classList.add('drag');
-  cancelAnimationFrame(rafId);
-  document.addEventListener('mousemove',onMouseMove);
-  document.addEventListener('mouseup',onMouseUp);
-});
-function onMouseMove(e){
-  if(!isDrag) return;
-  const trackRect = dockTrack.getBoundingClientRect();
-  let x = e.clientX - trackRect.left;
-  x = Math.max(0, Math.min(x, trackRect.width));
-  let nearest = null;
-  let minDist = Infinity;
-  dockOptions.forEach(opt=>{
-    const r = opt.getBoundingClientRect();
-    const tr = dockTrack.getBoundingClientRect();
-    const cx = r.left - tr.left + r.width/2;
-    const d = Math.abs(cx - x);
-    if(d < minDist){
-      minDist = d;
-      nearest = opt;
-    }
-  });
-  if(nearest) setSliderTarget(nearest, true);
-}
-function onMouseUp(){
-  if(!isDrag) return;
-  isDrag=false;
-  dockSlider.classList.remove('drag');
-  document.removeEventListener('mousemove',onMouseMove);
-  document.removeEventListener('mouseup',onMouseUp);
-  let nearest = null;
-  let minDist = Infinity;
-  const trackRect = dockTrack.getBoundingClientRect();
-  dockOptions.forEach(opt=>{
-    const r = opt.getBoundingClientRect();
-    const tr = dockTrack.getBoundingClientRect();
-    const cx = r.left - tr.left + r.width/2;
-    const d = Math.abs(cx - (event.clientX - tr.left));
-    if(d < minDist){
-      minDist = d;
-      nearest = opt;
-    }
-  });
-  if(nearest) selectOption(nearest);
-}
 selectOption(dockOptions[3]);
 </script>
 </body>

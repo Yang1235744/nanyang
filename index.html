@@ -8,14 +8,14 @@
 /* 防止刷新瞬间布局错乱（FOUC修复） */
 html{visibility:hidden;}
 html.w-ready{visibility:visible;}
-*{margin:0;padding:0;box-sizing:border-box;font-family:"Microsoft YaHei",sans-serif;}
+*{margin:0;padding:0;box-sizing:border-box;font-family:"Microsoft YaHei","PingFang SC",sans-serif;}
 body{
-  /* 这里后续可以替换成mp4动态背景 */
   background:url(https://picsum.photos/id/1036/1920/1080) no-repeat center center fixed;
   background-size:cover;
   position:relative;
   min-height:100vh;
   color:#fff;
+  overflow-x:hidden;
 }
 body::before{
   content:"";
@@ -24,7 +24,15 @@ body::before{
   background:rgba(0,0,0,0.55);
   z-index:-1;
 }
-/* 顶部导航 最高层级 */
+
+/* ===== SVG 液态滤镜 ===== */
+.liquid-filter{
+  position:absolute;
+  width:0;height:0;
+  overflow:hidden;
+}
+
+/* 顶部导航 */
 .nav{
   position:fixed;
   top:0;left:0;width:100%;
@@ -32,13 +40,14 @@ body::before{
   display:flex;align-items:center;gap:20px;
   z-index:999;
 }
-.nav .logo{font-size:22px;font-weight:bold;color:#87CEEB;margin-right:auto;}
+.nav .logo{font-size:22px;font-weight:bold;color:#87CEEB;margin-right:auto;letter-spacing:1px;}
 .nav .light-spot{
-  position:absolute;width:150px;height:150px;
-  background:radial-gradient(circle,rgba(255,255,255,0.15),transparent 70%);
+  position:absolute;width:180px;height:180px;
+  background:radial-gradient(circle,rgba(255,255,255,0.18),transparent 70%);
   border-radius:50%;pointer-events:none;transform:translate(-50%,-50%);
-  z-index:0;
+  z-index:0;transition:opacity 0.3s;
 }
+
 /* Dock轨道 */
 .dock-track{
   position:relative;
@@ -55,28 +64,43 @@ body::before{
     inset 0 -1px 0 rgba(0,0,0,0.08);
   z-index:2;
 }
+/* 液态滑块 - 苹果液态玻璃风格 */
 .dock-slider{
   position:absolute;top:8px;height:36px;
-  background: linear-gradient(135deg, rgba(255,255,255,0.22), rgba(140,200,255,0.1));
+  background: linear-gradient(135deg, rgba(255,255,255,0.32), rgba(140,200,255,0.18));
   backdrop-filter:blur(30px);
   -webkit-backdrop-filter:blur(30px);
   border-radius:32px;
-  border:1px solid rgba(255,255,255,0.35);
+  border:1px solid rgba(255,255,255,0.4);
   box-shadow:
-    0 0 18px rgba(160,210,255,0.18),
-    inset 0 2px 4px rgba(255,255,255,0.45),
-    inset 0 -2px 4px rgba(0,0,0,0.08);
+    0 0 20px rgba(160,210,255,0.25),
+    inset 0 2px 4px rgba(255,255,255,0.5),
+    inset 0 -2px 4px rgba(0,0,0,0.06);
+  pointer-events:none;
+  /* 液态高光层 */
+  overflow:hidden;
+}
+.dock-slider::after{
+  content:"";
+  position:absolute;
+  top:3px;left:10%;right:10%;height:40%;
+  background:linear-gradient(to bottom, rgba(255,255,255,0.55), rgba(255,255,255,0));
+  border-radius:50%;
+  filter:blur(2px);
   pointer-events:none;
 }
-.dock-slider.drag{
-  border-radius:22px 38px 38px 22px;
+/* 液态拉伸变形状态 */
+.dock-slider.liquid-stretch{
+  border-radius:40px;
 }
 .dock-option{
   padding:8px 14px;font-size:16px;color:#ccc;
   cursor:pointer;z-index:2;user-select:none;white-space:nowrap;
   transition: color 0.24s ease;
+  position:relative;
 }
-.dock-option.active{color:#ffffff;}
+.dock-option.active{color:#ffffff;text-shadow:0 0 12px rgba(160,210,255,0.6);}
+
 /* 毛玻璃透明度滑块区域 */
 .slider-wrap{
   display:flex;align-items:center;gap:8px;
@@ -107,7 +131,8 @@ body::before{
   background:rgba(135,206,235,0.45);
   z-index:0;width:var(--fill);
 }
-/* 左侧侧边栏 z-index低于导航 */
+
+/* 左侧侧边栏 */
 .left-sidebar{
   position:fixed;top:70px;left:0;width:200px;height:calc(100vh - 70px);
   padding:20px;
@@ -115,9 +140,11 @@ body::before{
   backdrop-filter:blur(20px);
   -webkit-backdrop-filter:blur(20px);
   border-right:1px solid rgba(255,255,255,0.06);
-  overflow:hidden;
+  overflow-y:auto;
   z-index:99;
 }
+.left-sidebar::-webkit-scrollbar{width:4px;}
+.left-sidebar::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.2);border-radius:2px;}
 .left-sidebar h3{color:#87CEEB;font-size:16px;margin-bottom:10px;}
 .left-sidebar a{
   display:block;color:#fff;text-decoration:none;padding:9px 12px;margin:6px 0;cursor:pointer;font-size:14px;
@@ -127,19 +154,22 @@ body::before{
 .left-sidebar a:hover{background:rgba(255,255,255,0.12);border-color:rgba(255,255,255,0.2);}
 .sidebar-bottom-text{margin-top:15px;font-size:12px;color:#ccc;line-height:1.4;}
 .sidebar-bottom-text strong{color:#fff;}
+
 /* 主内容区域 */
 .container{
   width:100%;max-width:900px;margin:0 auto;margin-left:220px;padding:120px 20px 80px;text-align:center;
   z-index:10;position:relative;
 }
-.container h1{font-size:38px;color:#87CEEB;margin-bottom:20px;}
+.container h1{font-size:38px;color:#87CEEB;margin-bottom:20px;text-shadow:0 0 20px rgba(135,206,235,0.3);}
 .container .desc{font-size:18px;color:#eee;line-height:1.6;margin-bottom:40px;}
 .btn-box{display:flex;flex-wrap:wrap;justify-content:center;gap:15px;margin-bottom:30px;}
-.btn{padding:12px 24px;border-radius:6px;text-decoration:none;font-weight:bold;font-size:16px;color:#fff;border:none;cursor:pointer;}
+.btn{padding:12px 24px;border-radius:6px;text-decoration:none;font-weight:bold;font-size:16px;color:#fff;border:none;cursor:pointer;transition:transform 0.2s,box-shadow 0.2s;}
+.btn:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(0,0,0,0.3);}
 .btn-red{background:#dc3545;}
 .btn-blue{background:#007bff;}
 .btn-green{background:#28a745;}
 .btn-cyan{background:#00bcd4;}
+.btn-purple{background:linear-gradient(135deg,#9c27b0,#673ab7);}
 .dropdown{position:relative;display:inline-block;}
 .dropdown-content{display:none;position:absolute;top:100%;left:0;background-color:#222;min-width:220px;border-radius:6px;box-shadow:0 8px 16px rgba(0,0,0,0.3);z-index:1000;margin-top:5px;}
 .dropdown-content a{color:#fff;padding:12px 16px;text-decoration:none;display:block;text-align:left;font-size:14px;}
@@ -149,17 +179,166 @@ body::before{
 .tip{color:#ffd700;font-size:15px;line-height:1.8;margin-bottom:20px;}
 .tool-pw{color:#ffc107;font-size:16px;font-weight:bold;margin-top:10px;}
 .pe-info{color:#fff;font-size:14px;margin-top:8px;}
-/* iframe弹窗 最高层级 */
+
+/* iframe弹窗 */
 .iframe-modal{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.7);display:none;z-index:997;}
 .iframe-modal.show{display:block;}
 .iframe-modal iframe{width:100%;height:100%;border:none;}
 .modal{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.6);z-index:998;align-items:center;justify-content:center;}
 .modal.show{display:flex;}
-.modal-content{background:#1a1a1a;border:1px solid #444;border-radius:10px;width:90%;max-width:700px;padding:30px;text-align:center;}
-.ai-avatar{position:fixed;right:20px;bottom:20px;width:60px;height:60px;border-radius:50%;border:3px solid #00bcd4;object-fit:cover;cursor:pointer;z-index:999;}
+.modal-content{background:#1a1a1a;border:1px solid #444;border-radius:10px;width:90%;max-width:700px;padding:30px;text-align:center;max-height:85vh;overflow-y:auto;}
+.modal-content::-webkit-scrollbar{width:6px;}
+.modal-content::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.2);border-radius:3px;}
+
+/* AI头像 */
+.ai-avatar{position:fixed;right:20px;bottom:20px;width:60px;height:60px;border-radius:50%;border:3px solid #00bcd4;object-fit:cover;cursor:pointer;z-index:999;box-shadow:0 0 20px rgba(0,188,212,0.4);transition:transform 0.3s;}
+.ai-avatar:hover{transform:scale(1.1) rotate(5deg);}
+
+/* ===== 浮动功能按钮组 ===== */
+.float-actions{
+  position:fixed;right:20px;bottom:100px;display:flex;flex-direction:column;gap:12px;z-index:998;
+}
+.float-btn{
+  width:52px;height:52px;border-radius:50%;border:none;cursor:pointer;
+  background:rgba(255,255,255,0.12);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
+  border:1px solid rgba(255,255,255,0.2);color:#fff;font-size:22px;
+  display:flex;align-items:center;justify-content:center;
+  transition:all 0.3s ease;box-shadow:0 4px 16px rgba(0,0,0,0.25);
+}
+.float-btn:hover{transform:scale(1.1);background:rgba(255,255,255,0.2);}
+.float-btn .badge{
+  position:absolute;top:-4px;right:-4px;background:#ff4757;color:#fff;font-size:11px;
+  border-radius:10px;padding:2px 6px;font-weight:bold;
+}
+
+/* ===== 轻量AI小模型 ===== */
+.ai-modal .modal-content{background:linear-gradient(160deg,#0d1b2a,#1b2838);border:1px solid rgba(0,188,212,0.3);max-width:600px;}
+.ai-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;}
+.ai-header h2{color:#4dd0e1;font-size:20px;display:flex;align-items:center;gap:8px;}
+.ai-status{font-size:12px;color:#4dd0e1;background:rgba(0,188,212,0.1);padding:3px 10px;border-radius:10px;border:1px solid rgba(0,188,212,0.2);}
+.ai-chat{
+  height:360px;overflow-y:auto;padding:8px;background:rgba(0,0,0,0.2);border-radius:12px;
+  border:1px solid rgba(255,255,255,0.06);margin-bottom:12px;
+}
+.ai-chat::-webkit-scrollbar{width:5px;}
+.ai-chat::-webkit-scrollbar-thumb{background:rgba(0,188,212,0.4);border-radius:3px;}
+.ai-msg{margin-bottom:12px;display:flex;gap:8px;}
+.ai-msg.user{flex-direction:row-reverse;}
+.ai-bubble{
+  max-width:78%;padding:10px 14px;border-radius:14px;font-size:14px;line-height:1.6;word-break:break-word;
+}
+.ai-msg.bot .ai-bubble{background:rgba(0,188,212,0.12);border:1px solid rgba(0,188,212,0.2);border-top-left-radius:4px;color:#e0f7fa;}
+.ai-msg.user .ai-bubble{background:rgba(135,206,235,0.18);border:1px solid rgba(135,206,235,0.3);border-top-right-radius:4px;color:#fff;}
+.ai-avatar-sm{
+  width:30px;height:30px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;
+  font-size:15px;background:linear-gradient(135deg,#00bcd4,#0097a7);
+}
+.ai-msg.user .ai-avatar-sm{background:linear-gradient(135deg,#87ceeb,#5dade2);}
+.ai-typing{display:inline-flex;gap:4px;padding:8px 0;}
+.ai-typing span{width:7px;height:7px;border-radius:50%;background:#4dd0e1;animation:aiBounce 1.2s infinite;}
+.ai-typing span:nth-child(2){animation-delay:0.2s;}
+.ai-typing span:nth-child(3){animation-delay:0.4s;}
+@keyframes aiBounce{0%,60%,100%{transform:translateY(0);opacity:0.4;}30%{transform:translateY(-6px);opacity:1;}}
+.ai-quick{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px;}
+.ai-quick span{
+  font-size:12px;padding:6px 12px;border-radius:16px;background:rgba(0,188,212,0.08);
+  border:1px solid rgba(0,188,212,0.2);color:#80deea;cursor:pointer;transition:all 0.2s;
+}
+.ai-quick span:hover{background:rgba(0,188,212,0.18);color:#fff;}
+.ai-input-row{display:flex;gap:8px;}
+.ai-input{
+  flex:1;padding:11px 14px;border-radius:12px;border:1px solid rgba(0,188,212,0.3);
+  background:rgba(255,255,255,0.06);color:#fff;font-size:14px;outline:none;resize:none;min-height:44px;max-height:100px;font-family:inherit;
+}
+.ai-input:focus{border-color:#4dd0e1;box-shadow:0 0 0 3px rgba(0,188,212,0.15);}
+.ai-send-btn{
+  padding:0 20px;border-radius:12px;border:none;background:linear-gradient(135deg,#00bcd4,#0097a7);
+  color:#fff;font-weight:bold;cursor:pointer;transition:transform 0.2s;font-size:16px;
+}
+.ai-send-btn:hover{transform:scale(1.05);}
+
+/* ===== 社区模块 ===== */
+.community-modal .modal-content{background:linear-gradient(160deg,#0f1f2e,#1a2a3a);border:1px solid rgba(0,188,212,0.3);max-width:620px;}
+.community-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px;}
+.community-header h2{color:#4dd0e1;font-size:22px;}
+.community-post-row{display:flex;gap:8px;margin-bottom:18px;}
+.community-post-input{
+  flex:1;padding:11px 14px;border-radius:10px;border:1px solid rgba(0,188,212,0.3);
+  background:rgba(255,255,255,0.06);color:#fff;font-size:14px;outline:none;resize:none;min-height:44px;
+}
+.community-post-input:focus{border-color:#4dd0e1;box-shadow:0 0 0 3px rgba(0,188,212,0.15);}
+.community-post-btn{
+  padding:0 18px;border-radius:10px;border:none;background:linear-gradient(135deg,#00bcd4,#0097a7);
+  color:#fff;font-weight:bold;cursor:pointer;transition:transform 0.2s;
+}
+.community-post-btn:hover{transform:scale(1.05);}
+.community-feed{max-height:400px;overflow-y:auto;}
+.community-feed::-webkit-scrollbar{width:5px;}
+.community-feed::-webkit-scrollbar-thumb{background:rgba(0,188,212,0.4);border-radius:3px;}
+.post-card{
+  background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.08);border-radius:12px;
+  padding:14px;margin-bottom:12px;text-align:left;
+}
+.post-meta{display:flex;align-items:center;gap:10px;margin-bottom:8px;}
+.post-avatar{
+  width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;
+  font-weight:bold;color:#fff;font-size:14px;
+}
+.post-author{font-weight:bold;font-size:14px;color:#4dd0e1;}
+.post-time{font-size:12px;color:#888;margin-left:auto;}
+.post-content{font-size:14px;line-height:1.5;color:#eee;margin-bottom:10px;word-break:break-word;}
+.post-actions{display:flex;gap:16px;}
+.post-action{
+  background:none;border:none;color:#888;cursor:pointer;font-size:13px;display:flex;align-items:center;gap:4px;
+  transition:color 0.2s;
+}
+.post-action:hover{color:#4dd0e1;}
+.post-action.liked{color:#ff6b81;}
+.post-comments{margin-top:10px;padding-top:10px;border-top:1px solid rgba(255,255,255,0.08);}
+.comment-input-row{display:flex;gap:6px;margin-top:8px;}
+.comment-input{
+  flex:1;padding:8px 12px;border-radius:8px;border:1px solid rgba(255,255,255,0.1);
+  background:rgba(255,255,255,0.04);color:#fff;font-size:13px;outline:none;
+}
+.comment-send{padding:6px 12px;border-radius:8px;border:none;background:#00bcd4;color:#fff;cursor:pointer;font-size:12px;}
+.comment-item{display:flex;gap:8px;margin-top:8px;font-size:13px;}
+.comment-author{color:#4dd0e1;font-weight:bold;flex-shrink:0;}
+.comment-text{color:#ddd;line-height:1.4;}
+.community-empty{text-align:center;color:#888;padding:40px 0;font-size:14px;}
+
+/* 关闭按钮 */
+.modal-close{
+  position:absolute;top:14px;right:18px;background:none;border:none;color:#aaa;
+  font-size:24px;cursor:pointer;transition:color 0.2s;line-height:1;
+}
+.modal-close:hover{color:#fff;}
+.modal-content{position:relative;}
+
+/* 响应式 */
+@media(max-width:768px){
+  .nav{padding:10px 12px;gap:8px;flex-wrap:wrap;}
+  .nav .logo{font-size:16px;}
+  .dock-option{padding:6px 10px;font-size:13px;}
+  .slider-wrap{padding:8px 12px;}
+  .glass-opacity-slider{width:80px;}
+  .left-sidebar{display:none;}
+  .container{margin-left:0;padding:130px 16px 60px;}
+  .container h1{font-size:28px;}
+}
 </style>
 </head>
 <body>
+
+<!-- SVG 液态滤镜定义 -->
+<svg class="liquid-filter">
+  <defs>
+    <filter id="liquidFilter">
+      <feTurbulence type="fractalNoise" baseFrequency="0.012" numOctaves="2" seed="3" result="noise"/>
+      <feDisplacementMap in="SourceGraphic" in2="noise" scale="0" xChannelSelector="R" yChannelSelector="G" result="liquid"/>
+    </filter>
+  </defs>
+</svg>
+
 <div class="nav">
   <div class="light-spot"></div>
   <div class="logo">南阳数码工作室</div>
@@ -167,7 +346,8 @@ body::before{
     <div class="dock-slider" id="dockSlider"></div>
     <div class="dock-option active" data-url="./index.html">首页</div>
     <div class="dock-option" data-url="https://www.microsoft.com">微软官方地址</div>
-    <div class="dock-option" data-modal="true">系统更新下载</div>
+    <div class="dock-option" data-modal="system">系统更新下载</div>
+    <div class="dock-option" data-modal="community">社区</div>
     <div class="dock-option" data-url="./about.html">关于我们</div>
     <div class="dock-option" data-url="./ai.html">AI 助手</div>
   </div>
@@ -176,6 +356,8 @@ body::before{
     <input type="range" min="0" max="1" step="0.01" value="1" class="glass-opacity-slider" id="glassOpacitySlider">
   </div>
 </div>
+
+<!-- 左侧侧边栏 -->
 <div class="left-sidebar">
   <h3>下载区</h3>
   <a onclick="openFrame('https://www.microsoft.com/zh-cn/software-download/windows11')">Windows 11 官方</a>
@@ -187,15 +369,22 @@ body::before{
   <a onclick="openFrame('https://firpe.cn/page-247')">FIRPE 维护系统（神通Win11 PE）</a>
   <a onclick="openFrame('https://www.huorong.cn')">火绒官网</a>
   <a onclick="openFrame('https://newsupport.lenovo.com.cn/')">联想官网</a>
-  <!-- 这里已经替换成南阳触摸修复工具官网，等你把链接填进去 -->
   <a onclick="openFrame('填写你的触摸修复工具官网链接')">南阳触摸修复工具官网</a>
   <div class="sidebar-bottom-text">
     <strong>说明：</strong>本官网已更新，请在关于我们观看官网说明<br>
     © 2026 南阳数码工作室
   </div>
 </div>
-<div class="modal" id="modal">
+
+<!-- 浮动功能按钮 -->
+<div class="float-actions">
+  <button class="float-btn" onclick="openAIChat()" title="轻量AI助手">🤖</button>
+</div>
+
+<!-- 系统下载弹窗 -->
+<div class="modal" id="systemModal">
   <div class="modal-content">
+    <button class="modal-close" onclick="closeModal('systemModal')">×</button>
     <h2 style="margin-bottom:20px">系统镜像下载</h2>
     <div class="btn-box">
       <a href="https://www.microsoft.com/zh-cn/software-download/windows11" class="btn btn-red" target="_blank">微软 Windows 11 官方下载</a>
@@ -207,7 +396,6 @@ body::before{
           <a href="#" target="_blank">Windows 11 魔改优化版</a>
           <a href="#" target="_blank">Windows XP 怀旧版</a>
           <a href="#" target="_blank">Windows Server 2019 服务器版</a>
-          <div class="divider"></div>
           <a href="https://www123684.com/s/s9H3Td-6tQg" target="_blank">123云盘下载</a>
           <a href="https://pan.xunlei.com/s/VOlQYgS0mqDUNwzd6BEig76UA1#" target="_blank">迅雷云盘下载（提取码：6h6d）</a>
         </div>
@@ -221,9 +409,51 @@ body::before{
     <p class="pe-info">新手小白不会安装PE，可直接点击上方「新手PE下载」</p>
   </div>
 </div>
+
+<!-- 轻量AI小模型弹窗 -->
+<div class="modal ai-modal" id="aiModal">
+  <div class="modal-content">
+    <button class="modal-close" onclick="closeModal('aiModal')">×</button>
+    <div class="ai-header">
+      <h2>🤖 南阳轻量AI助手</h2>
+      <span class="ai-status">● 在线 · 专攻电脑问题</span>
+    </div>
+    <div class="ai-quick">
+      <span onclick="askAI('电脑蓝屏了怎么办')">💻 蓝屏怎么办</span>
+      <span onclick="askAI('怎么安装Windows系统')">💿 安装系统</span>
+      <span onclick="askAI('系统激活失败')">🔑 激活问题</span>
+      <span onclick="askAI('电脑卡顿怎么优化')">⚡ 电脑卡顿</span>
+      <span onclick="askAI('驱动安装失败')">🔧 驱动问题</span>
+    </div>
+    <div class="ai-chat" id="aiChat"></div>
+    <div class="ai-input-row">
+      <textarea class="ai-input" id="aiInput" placeholder="输入你的电脑问题..." onkeydown="handleAIKey(event)"></textarea>
+      <button class="ai-send-btn" onclick="sendAIMessage()">发送</button>
+    </div>
+  </div>
+</div>
+
+<!-- 社区弹窗 -->
+<div class="modal community-modal" id="communityModal">
+  <div class="modal-content">
+    <button class="modal-close" onclick="closeModal('communityModal')">×</button>
+    <div class="community-header">
+      <h2>💬 南阳社区</h2>
+    </div>
+    <div class="community-post-row">
+      <textarea class="community-post-input" id="postInput" placeholder="说点什么吧...（Enter发送，Shift+Enter换行）" onkeydown="handlePostKey(event)"></textarea>
+      <button class="community-post-btn" onclick="publishPost()">发布</button>
+    </div>
+    <div class="community-feed" id="communityFeed"></div>
+  </div>
+</div>
+
+<!-- iframe弹窗 -->
 <div class="iframe-modal" id="iframeModal">
   <iframe id="showFrame"></iframe>
 </div>
+
+<!-- 主内容 -->
 <div class="container">
   <h1>南阳数码工作室</h1>
   <p class="desc">专注电脑维修、系统魔改、刷机、服务器搭建<br>提供纯净Windows系统镜像，无捆绑、无篡改</p>
@@ -231,157 +461,328 @@ body::before{
   <p class="tool-pw">激活工具解压密码：c2xm</p>
   <p class="pe-info">新手小白不会安装PE，可直接点击上方「新手PE下载」</p>
 </div>
-<img src="https://picsum.photos/id/1036/80/80" class="ai-avatar" onclick="location.href='./ai.html'">
+
+<img src="https://picsum.photos/id/1036/80/80" class="ai-avatar" onclick="location.href='./ai.html'" title="AI助手">
+
 <script>
+/* ========== 基础功能 ========== */
 window.addEventListener('mousemove',e=>{
   const spot = document.querySelector('.nav .light-spot');
-  spot.style.left = e.clientX + 'px';
-  spot.style.top = e.clientY + 'px';
-})
-// 修复FOUC，加载完CSS再显示页面
+  if(spot){spot.style.left=e.clientX+'px';spot.style.top=e.clientY+'px';}
+});
 window.addEventListener('load',()=>{
   document.documentElement.classList.add('w-ready');
-})
+});
+
 const slider=document.getElementById('glassOpacitySlider');
 const nav=document.querySelector('.nav');
 const sidebar=document.querySelector('.left-sidebar');
-function setGlassOpacity(val) {
+function setGlassOpacity(val){
   nav.style.background=`rgba(255,255,255,${0.05*val})`;
   sidebar.style.background=`rgba(255,255,255,${0.03*val})`;
   nav.style.backdropFilter=`blur(${20*val}px)`;
   sidebar.style.backdropFilter=`blur(${18*val}px)`;
-  slider.style.setProperty('--fill', `${val*100}%`);
+  slider.style.setProperty('--fill',`${val*100}%`);
 }
-slider.addEventListener('input',()=>{
-  setGlassOpacity(parseFloat(slider.value));
-});
+slider.addEventListener('input',()=>setGlassOpacity(parseFloat(slider.value)));
 setGlassOpacity(1);
-function openModal(){document.getElementById('modal').classList.add('show');}
-document.getElementById('modal').addEventListener('click',function(e){
-  if(e.target === this) this.classList.remove('show');
-});
+
 function openFrame(url){
-  document.getElementById('showFrame').src = url;
+  document.getElementById('showFrame').src=url;
   document.getElementById('iframeModal').classList.add('show');
 }
-// ===================== SPRING 弹簧物理动画 =====================
-const dockOptions = document.querySelectorAll('.dock-option');
-const dockSlider = document.getElementById('dockSlider');
-const dockTrack = document.getElementById('dockTrack');
-let isDrag = false;
-const spring = {
-  stiffness: 0.28,
-  damping: 0.32
-};
-let state = {
-  targetX: 0,
-  currentX: 0,
-  targetW: 0,
-  currentW:0,
-  vx:0,
-  vw:0
-};
-let rafId = null;
+document.getElementById('iframeModal').addEventListener('click',function(e){
+  if(e.target===this){this.classList.remove('show');document.getElementById('showFrame').src='';}
+});
+function closeModal(id){document.getElementById(id).classList.remove('show');}
+
+/* ========== 液态滑块（苹果液态玻璃风格） ========== */
+const dockOptions=document.querySelectorAll('.dock-option');
+const dockSlider=document.getElementById('dockSlider');
+const dockTrack=document.getElementById('dockTrack');
+const liquidFilter=document.querySelector('#liquidFilter feDisplacementMap');
+
+let isDrag=false;
+let hasMoved=false;
+let dragStartX=0,dragStartY=0;
+const spring={stiffness:0.22,damping:0.28};
+let state={targetX:0,currentX:0,targetW:0,currentW:0,vx:0,vw:0};
+let rafId=null;
+let lastX=0,lastTime=0;
+
+// 计算速度并应用液态变形
+function applyLiquidEffect(){
+  const now=performance.now();
+  const dt=Math.max(1,now-lastTime);
+  const speed=Math.abs(state.vx);
+  // 速度越快，液态变形越强（模拟液体拉伸）
+  const liquidScale=Math.min(speed*8,18);
+  if(liquidFilter) liquidFilter.setAttribute('scale',liquidScale.toFixed(2));
+  // 高速时滑块变椭圆（拉伸感）
+  if(speed>0.5){
+    dockSlider.classList.add('liquid-stretch');
+  }else{
+    dockSlider.classList.remove('liquid-stretch');
+  }
+  lastTime=now;
+}
+
 function springAnimate(){
-  const dx = state.targetX - state.currentX;
-  state.vx += dx * spring.stiffness - state.vx * spring.damping;
-  state.currentX += state.vx;
-  const dw = state.targetW - state.currentW;
-  state.vw += dw * spring.stiffness - state.vw * spring.damping;
-  state.currentW += state.vw;
-  dockSlider.style.left = state.currentX + "px";
-  dockSlider.style.width = state.currentW + "px";
-  if(Math.abs(state.vx)>0.05 || Math.abs(state.vw)>0.05){
-    rafId = requestAnimationFrame(springAnimate);
+  const dx=state.targetX-state.currentX;
+  state.vx+=dx*spring.stiffness-state.vx*spring.damping;
+  state.currentX+=state.vx;
+  const dw=state.targetW-state.currentW;
+  state.vw+=dw*spring.stiffness-state.vw*spring.damping;
+  state.currentW+=state.vw;
+  dockSlider.style.left=state.currentX+'px';
+  dockSlider.style.width=state.currentW+'px';
+  applyLiquidEffect();
+  if(Math.abs(state.vx)>0.03||Math.abs(state.vw)>0.03){
+    rafId=requestAnimationFrame(springAnimate);
   }else{
     cancelAnimationFrame(rafId);
+    if(liquidFilter) liquidFilter.setAttribute('scale','0');
+    dockSlider.classList.remove('liquid-stretch');
   }
 }
-function setSliderTarget(item, instant=false){
-  const rect = item.getBoundingClientRect();
-  const trackRect = dockTrack.getBoundingClientRect();
-  const tX = rect.left - trackRect.left;
-  const tW = rect.width;
+
+function setSliderTarget(item,instant=false){
+  const rect=item.getBoundingClientRect();
+  const trackRect=dockTrack.getBoundingClientRect();
+  const tX=rect.left-trackRect.left;
+  const tW=rect.width;
   if(instant){
-    state.currentX = tX;
-    state.currentW = tW;
-    dockSlider.style.left = state.currentX + "px";
-    dockSlider.style.width = state.currentW + "px";
-    state.targetX = tX;
-    state.targetW = tW;
-    state.vx = 0;
-    state.vw =0;
+    state.currentX=tX;state.currentW=tW;
+    dockSlider.style.left=state.currentX+'px';
+    dockSlider.style.width=state.currentW+'px';
+    state.targetX=tX;state.targetW=tW;
+    state.vx=0;state.vw=0;
     return;
   }
-  state.targetX = tX;
-  state.targetW = tW;
+  state.targetX=tX;state.targetW=tW;
   springAnimate();
 }
+
 function selectOption(item){
   dockOptions.forEach(opt=>opt.classList.remove('active'));
   item.classList.add('active');
   setSliderTarget(item);
-  if(item.dataset.modal === "true"){
-    openModal();
+  if(item.dataset.modal==='system'){
+    document.getElementById('systemModal').classList.add('show');
+  }else if(item.dataset.modal==='community'){
+    openCommunity();
   }else if(item.dataset.url){
-    const url = item.dataset.url;
-    // 判断：本地html页面直接跳转，外部网址打开iframe弹窗
-    if(url.startsWith("./")){
-      window.location.href = url;
-    }else{
-      openFrame(url);
-    }
+    const url=item.dataset.url;
+    if(url.startsWith('./')){window.location.href=url;}
+    else{openFrame(url);}
   }
 }
+
 dockOptions.forEach(opt=>opt.addEventListener('click',()=>selectOption(opt)));
+
+// 拖拽液态滑块
 dockTrack.addEventListener('mousedown',(e)=>{
   isDrag=true;
-  dockSlider.classList.add('drag');
+  hasMoved=false;
+  dragStartX=e.clientX;
+  dragStartY=e.clientY;
+  dockSlider.classList.add('liquid-stretch');
   cancelAnimationFrame(rafId);
   document.addEventListener('mousemove',onMouseMove);
   document.addEventListener('mouseup',onMouseUp);
 });
 function onMouseMove(e){
-  if(!isDrag) return;
-  const trackRect = dockTrack.getBoundingClientRect();
-  let x = e.clientX - trackRect.left;
-  x = Math.max(0, Math.min(x, trackRect.width));
-  let nearest = null;
-  let minDist = Infinity;
+  if(!isDrag)return;
+  // 判断是否真正拖拽（移动超过5px）
+  if(Math.abs(e.clientX-dragStartX)>5||Math.abs(e.clientY-dragStartY)>5){
+    hasMoved=true;
+  }
+  const trackRect=dockTrack.getBoundingClientRect();
+  let x=e.clientX-trackRect.left;
+  x=Math.max(0,Math.min(x,trackRect.width));
+  let nearest=null,minDist=Infinity;
   dockOptions.forEach(opt=>{
-    const r = opt.getBoundingClientRect();
-    const tr = dockTrack.getBoundingClientRect();
-    const cx = r.left - tr.left + r.width/2;
-    const d = Math.abs(cx - x);
-    if(d < minDist){
-      minDist = d;
-      nearest = opt;
-    }
+    const r=opt.getBoundingClientRect();
+    const tr=dockTrack.getBoundingClientRect();
+    const cx=r.left-tr.left+r.width/2;
+    const d=Math.abs(cx-x);
+    if(d<minDist){minDist=d;nearest=opt;}
   });
-  if(nearest) setSliderTarget(nearest, true);
+  if(nearest){
+    setSliderTarget(nearest,true);
+    if(liquidFilter) liquidFilter.setAttribute('scale','12');
+  }
 }
-function onMouseUp(){
-  if(!isDrag) return;
+function onMouseUp(e){
+  if(!isDrag)return;
   isDrag=false;
-  dockSlider.classList.remove('drag');
+  dockSlider.classList.remove('liquid-stretch');
   document.removeEventListener('mousemove',onMouseMove);
   document.removeEventListener('mouseup',onMouseUp);
-  let nearest = null;
-  let minDist = Infinity;
-  const trackRect = dockTrack.getBoundingClientRect();
+  if(liquidFilter) liquidFilter.setAttribute('scale','0');
+  // 只有真正拖拽时才在这里选择；普通点击交给 click 事件处理
+  if(!hasMoved) return;
+  let nearest=null,minDist=Infinity;
+  const trackRect=dockTrack.getBoundingClientRect();
+  const mx=(e.clientX||0)-trackRect.left;
   dockOptions.forEach(opt=>{
-    const r = opt.getBoundingClientRect();
-    const tr = dockTrack.getBoundingClientRect();
-    const cx = r.left - tr.left + r.width/2;
-    const d = Math.abs(cx - (event.clientX - tr.left));
-    if(d < minDist){
-      minDist = d;
-      nearest = opt;
-    }
+    const r=opt.getBoundingClientRect();
+    const tr=dockTrack.getBoundingClientRect();
+    const cx=r.left-tr.left+r.width/2;
+    const d=Math.abs(cx-mx);
+    if(d<minDist){minDist=d;nearest=opt;}
   });
   if(nearest) selectOption(nearest);
 }
+
 selectOption(dockOptions[0]);
+
+/* ========== 轻量AI小模型（专攻电脑问题） ========== */
+const aiKnowledge=[
+  {keys:['蓝屏','blue screen','死机','0x0000'],ans:'电脑蓝屏常见原因及解决：\n1. 记录蓝屏代码（如0x0000007B），去微软官网查询对应含义\n2. 最近新装的硬件/驱动不兼容→进安全模式卸载\n3. 内存故障→用Windows内存诊断工具检测\n4. 硬盘坏道→用chkdsk /f扫描修复\n5. 系统文件损坏→以管理员运行 sfc /scannow\n6. 超频导致→恢复BIOS默认设置\n如果频繁蓝屏，建议重装系统或联系专业维修。'},
+  {keys:['安装系统','装系统','重装系统','装win','装windows','安装win'],ans:'安装Windows系统步骤：\n1. 准备8G以上U盘，下载官方镜像（本站侧边栏有Win11官方链接）\n2. 用Rufus或微软官方工具制作启动U盘\n3. 插入U盘，开机按F12/F11/Del选择U盘启动\n4. 进入安装界面→选择语言→现在安装→我没有产品密钥\n5. 选择版本→自定义安装→选择系统盘（一般是C盘）格式化→下一步\n6. 等待安装完成，设置用户名密码\n新手建议用本站的「新手PE」工具，更简单。'},
+  {keys:['激活','密匙','密钥','product key','激活码'],ans:'系统激活方法：\n1. 购买正版密钥（推荐，最稳定）\n2. 使用本站提供的激活工具（侧边栏可下载）\n   注意：使用前请临时关闭Windows Defender和安全管家，避免被误删\n   解压密码：c2xm\n3. 激活后在 设置→系统→激活 查看状态\n如果激活失败，可能是密钥已被使用，换一个密钥或工具即可。'},
+  {keys:['卡顿','慢','卡','优化','流畅','变慢'],ans:'电脑卡顿优化方案：\n1. 关闭开机自启：任务管理器→启动→禁用不需要的程序\n2. 清理C盘：设置→系统→存储→临时文件清理\n3. 卸载无用软件：控制面板→程序和功能\n4. 磁盘碎片整理（机械硬盘）：优化驱动器\n5. 增加虚拟内存：高级系统设置→性能→设置→高级→虚拟内存\n6. 终极方案：加装SSD固态硬盘，效果立竿见影\n7. 重装纯净版系统（本站提供无捆绑镜像）'},
+  {keys:['驱动','driver','装驱动','驱动精灵','显卡驱动'],ans:'驱动问题解决：\n1. 优先去品牌官网（联想/戴尔/惠普等）下载对应型号驱动\n2. 显卡驱动：NVIDIA去英伟达官网，AMD去AMD官网\n3. 通用方案：用驱动总裁/360驱动大师（注意取消捆绑安装）\n4. 驱动装错导致蓝屏→进安全模式卸载后重装\n5. 未知设备：设备管理器→右键→更新驱动→自动搜索\n6. 重装系统后务必先装：芯片组→显卡→声卡→网卡→其他'},
+  {keys:['pe','微pe','firpe','维护系统','pe工具'],ans:'PE系统说明：\nPE是一个精简版Windows，用于系统维护、装机、数据恢复\n本站推荐：\n• 微PE (wepe.com.cn) - 纯净无广告，老牌稳定\n• FIRPE - 神通Win11 PE，功能强大\n• 小白PE - 适合新手\n使用方法：制作PE启动U盘→开机选U盘启动→进入PE桌面→用装机工具安装系统或修复引导'},
+  {keys:['刷机','root','手机刷机','线刷','卡刷'],ans:'手机刷机注意事项：\n1. 刷机有风险，可能变砖，务必先备份数据\n2. 确认手机型号和刷机包完全匹配\n3. 电量保持50%以上\n4. 解锁Bootloader（部分品牌需申请）\n5. 线刷用官方工具（如小米用MiFlash）\n6. 卡刷需先刷入第三方Recovery（如TWRP）\n变砖急救：找到对应机型的救砖包/线刷包重刷。建议新手找专业人士。'},
+  {keys:['病毒','木马','杀毒','中毒','恶意软件'],ans:'电脑中毒处理：\n1. 断网！防止病毒扩散和数据外传\n2. 进入安全模式（开机按F8）\n3. 用火绒/卡巴斯基等杀毒软件全盘扫描\n4. 顽固病毒：用PE启动盘查杀，或重装系统（最彻底）\n5. 检查浏览器主页和快捷方式是否被篡改\n6. 修改所有重要账号密码\n预防：用火绒安全（本站侧边栏有官网），不随便下载破解软件。'},
+  {keys:['开不了机','无法开机','开不了','黑屏','点不亮'],ans:'电脑无法开机排查：\n1. 检查电源插座和电源线是否插好\n2. 台式机：看电源风扇转不转，不转可能是电源坏了\n3. 笔记本：拔掉电源，长按开机键30秒放电，再插电试试\n4. 开机有声音但黑屏：可能是显卡/内存/显示器问题，插拔内存试试\n5. 开机蓝屏/重启：系统损坏，用PE修复或重装\n6. 完全无反应：主板/电源故障，需送修'},
+  {keys:['硬盘','ssd','固态','机械硬盘','硬盘坏'],ans:'硬盘相关问题：\n1. 系统盘建议用SSD，速度快10倍以上\n2. 硬盘异响/卡顿→可能有坏道，用CrystalDiskInfo检测健康度\n3. 重要数据定期备份到移动硬盘或云盘\n4. SSD注意：不要碎片整理，4K对齐，预留10%空间\n5. 硬盘突然不识别：换数据线/接口，或送数据恢复\n6. 加装SSD后需在BIOS里设置为第一启动项'},
+  {keys:['内存','ram','加内存','内存不足'],ans:'内存相关：\n1. 现在主流建议16G起步，办公8G够用，游戏/设计32G\n2. 加内存前确认主板支持的最大容量和频率\n3. 尽量买同品牌同频率同容量的内存条组双通道\n4. 内存不兼容会蓝屏→换槽或换条\n5. 用CPU-Z查看内存详细信息'},
+  {keys:['网络','上不了网','断网','wifi连不上','网卡'],ans:'网络问题排查：\n1. 先重启路由器和电脑\n2. 检查右下角网络图标，红叉是网线/网卡问题，感叹号是配置问题\n3. 运行网络疑难解答（右键网络图标）\n4. 重置网络：管理员CMD运行 netsh winsock reset\n5. 更新网卡驱动\n6. WiFi能连但不能上网→检查路由器DNS，可改用 114.114.114.114'},
+  {keys:['你好','在吗','hi','hello','您好'],ans:'你好！我是南阳数码轻量AI助手，专门解答电脑相关问题。你可以问我：\n• 系统安装/重装\n• 蓝屏死机\n• 驱动安装\n• 电脑卡顿优化\n• 病毒查杀\n• 硬件选购\n直接输入你的问题即可～'},
+  {keys:['你能干什么','会什么','功能','帮助','help'],ans:'我可以帮你解决以下电脑问题：\n💻 系统安装与重装（Windows全系）\n🔧 驱动安装与故障排除\n💥 蓝屏/死机/开不了机诊断\n⚡ 电脑卡顿优化提速\n🦠 病毒查杀与系统修复\n💾 硬盘/内存/SSD选购建议\n📱 手机刷机指导\n🌐 网络故障排查\n直接描述你的问题，我会给出详细方案！'}
+];
+
+function aiMatch(question){
+  const q=question.toLowerCase();
+  for(const item of aiKnowledge){
+    if(item.keys.some(k=>q.includes(k.toLowerCase()))) return item.ans;
+  }
+  return '抱歉，这个问题我暂时不太确定。建议你：\n1. 把问题描述得更详细些（比如蓝屏代码、报错截图）\n2. 点击上方快捷问题查看常见解决方案\n3. 到「社区」发帖求助，会有热心网友解答\n4. 联系南阳数码工作室获取专业维修服务\n\n我主要擅长：系统安装、蓝屏、驱动、卡顿优化、病毒查杀、硬件问题等。';
+}
+
+function appendAIMsg(role,html){
+  const chat=document.getElementById('aiChat');
+  const div=document.createElement('div');
+  div.className='ai-msg '+role;
+  div.innerHTML=`<div class="ai-avatar-sm">${role==='bot'?'🤖':'我'}</div><div class="ai-bubble">${html}</div>`;
+  chat.appendChild(div);
+  chat.scrollTop=chat.scrollHeight;
+}
+function showTyping(){
+  const chat=document.getElementById('aiChat');
+  const div=document.createElement('div');
+  div.className='ai-msg bot';
+  div.id='aiTyping';
+  div.innerHTML=`<div class="ai-avatar-sm">🤖</div><div class="ai-bubble"><div class="ai-typing"><span></span><span></span><span></span></div></div>`;
+  chat.appendChild(div);
+  chat.scrollTop=chat.scrollHeight;
+}
+function removeTyping(){const t=document.getElementById('aiTyping');if(t)t.remove();}
+
+function sendAIMessage(){
+  const input=document.getElementById('aiInput');
+  const text=input.value.trim();
+  if(!text)return;
+  appendAIMsg('user',escapeHtml(text));
+  input.value='';
+  showTyping();
+  setTimeout(()=>{
+    removeTyping();
+    appendAIMsg('bot',escapeHtml(aiMatch(text)).replace(/\n/g,'<br>'));
+  },600+Math.random()*600);
+}
+function askAI(q){document.getElementById('aiInput').value=q;sendAIMessage();}
+function handleAIKey(e){if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendAIMessage();}}
+function openAIChat(){
+  const chat=document.getElementById('aiChat');
+  if(!chat.dataset.init){
+    appendAIMsg('bot','你好！我是南阳轻量AI助手 🤖<br>专门解决电脑问题：系统安装、蓝屏、驱动、卡顿、病毒等。<br>有什么可以帮你的？');
+    chat.dataset.init='1';
+  }
+  document.getElementById('aiModal').classList.add('show');
+}
+
+/* ========== 社区模块 ========== */
+let posts=JSON.parse(localStorage.getItem('ny_posts')||'[]');
+const avatarColors=['#00bcd4','#9c27b0','#ff6b6b','#51cf66','#ffd43b','#74c0fc','#f783ac'];
+function avatarFor(name){const c=avatarColors[name.charCodeAt(0)%avatarColors.length];return `<div class="post-avatar" style="background:${c}">${name.charAt(0).toUpperCase()}</div>`;}
+function escapeHtml(s){const d=document.createElement('div');d.textContent=s;return d.innerHTML;}
+function timeAgo(ts){
+  const diff=Date.now()-ts;
+  if(diff<60000)return '刚刚';
+  if(diff<3600000)return Math.floor(diff/60000)+'分钟前';
+  if(diff<86400000)return Math.floor(diff/3600000)+'小时前';
+  return Math.floor(diff/86400000)+'天前';
+}
+function renderCommunity(){
+  const feed=document.getElementById('communityFeed');
+  if(posts.length===0){
+    feed.innerHTML='<div class="community-empty">还没有帖子，快来发布第一条吧 🎉</div>';
+    return;
+  }
+  feed.innerHTML=posts.map((p,i)=>`
+    <div class="post-card">
+      <div class="post-meta">
+        ${avatarFor(p.author)}
+        <span class="post-author">${escapeHtml(p.author)}</span>
+        <span class="post-time">${timeAgo(p.time)}</span>
+      </div>
+      <div class="post-content">${escapeHtml(p.content)}</div>
+      <div class="post-actions">
+        <button class="post-action ${p.liked?'liked':''}" onclick="likePost(${i})">❤️ ${p.likes||0}</button>
+        <button class="post-action" onclick="toggleComments(${i})">💬 ${(p.comments||[]).length}</button>
+      </div>
+      <div class="post-comments" id="comments-${i}" style="display:none;">
+        ${(p.comments||[]).map(c=>`<div class="comment-item"><span class="comment-author">${escapeHtml(c.author)}:</span><span class="comment-text">${escapeHtml(c.text)}</span></div>`).join('')}
+        <div class="comment-input-row">
+          <input type="text" class="comment-input" id="commentInput-${i}" placeholder="写下评论..." onkeydown="if(event.key==='Enter')addComment(${i})">
+          <button class="comment-send" onclick="addComment(${i})">发送</button>
+        </div>
+      </div>
+    </div>
+  `).join('');
+}
+function publishPost(){
+  const input=document.getElementById('postInput');
+  const content=input.value.trim();
+  if(!content)return;
+  posts.unshift({author:'游客'+Math.floor(Math.random()*1000),content,time:Date.now(),likes:0,liked:false,comments:[]});
+  input.value='';
+  savePosts();renderCommunity();
+}
+function handlePostKey(e){if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();publishPost();}}
+function likePost(i){
+  if(posts[i].liked){posts[i].likes--;posts[i].liked=false;}
+  else{posts[i].likes++;posts[i].liked=true;}
+  savePosts();renderCommunity();
+}
+function toggleComments(i){
+  const el=document.getElementById('comments-'+i);
+  el.style.display=el.style.display==='none'?'block':'none';
+}
+function addComment(i){
+  const input=document.getElementById('commentInput-'+i);
+  const text=input.value.trim();
+  if(!text)return;
+  posts[i].comments=posts[i].comments||[];
+  posts[i].comments.push({author:'游客'+Math.floor(Math.random()*1000),text,time:Date.now()});
+  input.value='';
+  savePosts();renderCommunity();
+  document.getElementById('comments-'+i).style.display='block';
+}
+function savePosts(){localStorage.setItem('ny_posts',JSON.stringify(posts));}
+function openCommunity(){renderCommunity();document.getElementById('communityModal').classList.add('show');}
+
+// 点击遮罩关闭弹窗
+document.querySelectorAll('.modal').forEach(m=>{
+  m.addEventListener('click',e=>{if(e.target===m)m.classList.remove('show');});
+});
+
+// 初始化
+// AI助手在打开时才初始化欢迎语
 </script>
 </body>
 </html>
